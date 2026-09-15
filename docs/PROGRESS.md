@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-065 (Conflict resolution)
+- Current Task: TASK-066 (Rescheduling)
 - Current Epic: EPIC-007 Scheduling
 
 ## Completed
@@ -701,6 +701,23 @@
   materialized as and from Execution, and replacing placements never
   rewrites the Plan ("Schedule and Replanning are distinct",
   docs/03). 19 tests.
+- TASK-065 — Conflict resolution (2026-09-16): the deterministic half
+  of docs/06's principle — "Conflict should first be resolved
+  through rescheduling; escalate to replanning only when Plan-level
+  feasibility is affected" — `domain/conflict_resolution.py` with the
+  frozen `Displacement` (schedule + the exact blocked interval) and
+  `ConflictResolution` (action + surviving slots). Who yields follows
+  the docs/05 hierarchy: `displace_for_commitments` — an existing
+  commitment always displaces a placement (commitments are facts,
+  placements are plans); `displace_between_placements` — between two
+  placements the later-starting one yields (ties by later end, then
+  later id), and a task's own placements overlapping is an invariant
+  violation, an error, never quietly "resolved". What happens next:
+  `resolve_displacement` — non-empty surviving candidates mean the
+  conflict resolves through rescheduling (the slots are where the
+  task re-places); empty means no placement exists anywhere, Plan-
+  level feasibility is affected, and the action escalates to
+  replanning. 19 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
