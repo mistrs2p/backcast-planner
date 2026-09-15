@@ -12,5 +12,8 @@ Development, validation, and automation scripts for the repository.
   ISO dates) and its consistency with `tasks/TASK-MANIFEST.json` and task-file
   statuses. Run with `python scripts/project_state.py validate`.
 
-Scripts for progress system maintenance (TASK-004) and CI support (TASK-006)
-will be added by their respective tasks.
+- `progress.py` — Progress system foundation (TASK-004): `report` aggregates
+  task statuses per epic from the manifest and task files; `check` detects
+  drift between docs/PROGRESS.md and PROJECT_STATE.json.
+
+Scripts for CI support (TASK-006) will be added by their respective tasks.

@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-004 (Progress system foundation)
+- Current Task: TASK-005 (Git workflow foundation)
 - Current Epic: EPIC-001 Foundation
 
 ## Completed
@@ -21,6 +21,12 @@
   task becomes current, last completed task really marked COMPLETED). Resolved spec
   conflict: stale "verified by TASK-003" references corrected to TASK-009 (see
   SESSION-LOG).
+- TASK-004 — Progress system foundation (2026-09-15): added `scripts/progress.py`
+  with a backlog `report` command (per-epic status aggregation from the task
+  manifest and task files) and a `check` command detecting drift between
+  docs/PROGRESS.md and PROJECT_STATE.json (current task/epic identifiers,
+  required sections, SESSION-LOG presence). 15 tests covering aggregation,
+  unknown-status handling, and drift detection.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
