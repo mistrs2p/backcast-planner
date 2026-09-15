@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-013 (Current State)
+- Current Task: TASK-014 (Future State)
 - Current Epic: EPIC-002 Core Domain
 
 ## Completed
@@ -80,6 +80,12 @@
   in DRAFT; `create_goal`/`revise_goal` factories with injectable id/clock.
   Transition rules deliberately deferred to the goal-lifecycle task.
   22 tests.
+- TASK-013 — Current State (2026-09-15): immutable snapshot of present
+  reality per goal — `apps/api/src/backcasting/domain/current_state.py` with
+  the frozen `CurrentState` entity (UUID identity, goal reference,
+  non-empty stripped narrative ≤5000, timezone-aware UTC `captured_at`) and
+  `capture_current_state` factory. Snapshots accumulate rather than mutate,
+  matching the replanning model's "new Current State" re-run. 13 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
