@@ -35,4 +35,7 @@
   spec lifecycle states (DRAFT → ACTIVE → PAUSED → COMPLETED/CANCELLED/
   ARCHIVED), and create/revise factories; lifecycle transition rules
   deferred to the goal-lifecycle task (TASK-012).
+- Current State domain model: immutable per-goal snapshot of present reality
+  with UTC capture time; snapshots accumulate for replanning instead of
+  mutating (TASK-013).
 - Initial execution pack created.
