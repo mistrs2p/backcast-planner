@@ -94,4 +94,7 @@
 - Recurrence rules: DAILY/WEEKLY patterns with intervals and weekday
   sets expanding deterministically into calendar events, preserving
   local time of day across DST transitions (TASK-031).
+- Recurrence exceptions: occurrences addressed by original start —
+  cancelled or rescheduled (optionally re-durationed) — applied
+  deterministically over a rule's expansion (TASK-032).
 - Initial execution pack created.
