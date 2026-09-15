@@ -1,7 +1,7 @@
 # TASK-028 — Backcasting integration
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-003-backcasting — Backcasting
