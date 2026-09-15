@@ -249,6 +249,9 @@
   windows (accelerating / steady / decelerating, strict comparison)
   and the completion projection — remaining workload at the observed
   pace (TASK-074).
+- Goal health: on-time rate (completion moment vs deadline) and the
+  categorical roll-up — on track / at risk / off track — with every
+  trigger carrying a machine-readable reason (TASK-075).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
