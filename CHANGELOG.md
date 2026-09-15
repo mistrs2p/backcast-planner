@@ -133,4 +133,7 @@
   the plan adjusted by the aggregate observed/planned ratio of
   `CapacitySample` history, with cold-start and zero-plan fallbacks;
   uncapped, since conservatism is the buffer's job (TASK-040).
+- Capacity pool: the split of a period's effective capacity across
+  goals — unique-goal allocations that never exceed the pool, with the
+  remainder left unallocated for the scheduler (TASK-041).
 - Initial execution pack created.

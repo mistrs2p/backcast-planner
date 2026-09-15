@@ -1,7 +1,7 @@
 # TASK-041 — Capacity pool
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-005-capacity — Capacity
