@@ -10,9 +10,8 @@ name: backcasting-planner
 
 services:
   postgres:
-    # Major tag only; the exact version is verified and pinned by
-    # TASK-009 (technology verification) before lockfiles are finalized.
-    image: postgres:18
+    # Exact version verified by TASK-009 (see docs/adr/ADR-007-technology-versions.md).
+    image: postgres:18.4
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-app}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-app}
@@ -31,8 +30,8 @@ services:
       retries: 10
 
   redis:
-    # Major tag only; exact version verified and pinned by TASK-009.
-    image: redis:7-alpine
+    # Exact version verified by TASK-009 (see docs/adr/ADR-007-technology-versions.md).
+    image: redis:7.4.11-alpine
     ports:
       - "${REDIS_PORT:-6379}:6379"
     healthcheck:

@@ -76,6 +76,7 @@ REQUIRED_ADRS = [
     "docs/adr/ADR-004-rolling-horizon.md",
     "docs/adr/ADR-005-tailwind.md",
     "docs/adr/ADR-006-llm-provider-abstraction.md",
+    "docs/adr/ADR-007-technology-versions.md",
 ]
 
 

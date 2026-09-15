@@ -1,5 +1,5 @@
 # Development/test dependencies for repository-level tooling.
-# Versions remain unpinned until TASK-009 (technology verification) verifies
-# them against official release documentation.
-pytest
-pyyaml
+# Versions verified and pinned by TASK-009; see
+# docs/adr/ADR-007-technology-versions.md for rationale and sources.
+pytest==9.1.1
+pyyaml==6.0.3

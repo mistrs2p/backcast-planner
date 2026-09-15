@@ -2,8 +2,8 @@
   "project": "backcasting-planner",
   "phase": "implementation",
   "current_epic": "EPIC-001-foundation",
-  "current_task": "TASK-009",
-  "last_completed_task": "TASK-008",
+  "current_task": "TASK-010",
+  "last_completed_task": "TASK-009",
   "task_status": "ready",
   "blocked_tasks": [],
   "open_bugs": [],
@@ -15,12 +15,14 @@
     "build": "not_applicable"
   },
   "technology_baseline": {
-    "frontend": "Next.js 16.x + TypeScript + Tailwind CSS 4.x",
-    "backend": "FastAPI 0.141.x + Python",
-    "database": "PostgreSQL 18.x",
-    "orm": "SQLAlchemy 2.x",
-    "migrations": "Alembic",
-    "cache_queue": "Redis + worker; exact library verified by TASK-009"
+    "python": "3.12",
+    "frontend": "Next.js 16.3.5 + TypeScript 5.9.3 + Tailwind CSS 4.3.3",
+    "backend": "FastAPI 0.141.1 + Python 3.12",
+    "database": "PostgreSQL 18.4",
+    "orm": "SQLAlchemy 2.0.53",
+    "migrations": "Alembic 1.20.0",
+    "cache_queue": "Redis 7.4.11 + redis-py 8.1.0; worker framework deferred until justified",
+    "verified_by": "TASK-009; see docs/adr/ADR-007-technology-versions.md"
   },
   "updated_at": "2026-09-15"
 }
