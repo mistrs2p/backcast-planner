@@ -139,4 +139,8 @@
 - Constraints: hard scheduling restrictions — fixed blocked UTC ranges
   and weekly wall-clock exclusions (DST-aware), with blocked-interval
   expansion and half-open overlap checking (TASK-042).
+- Preferences: the soft scheduling layer — weekly wall-clock windows
+  with a `PREFER`/`AVOID` direction and a 1–5 weight; DST-aware
+  window expansion and a boolean applicability check (a preference
+  ranks candidates, it never rejects a slot) (TASK-043).
 - Initial execution pack created.
