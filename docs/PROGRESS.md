@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-005 (Git workflow foundation)
+- Current Task: TASK-006 (CI baseline)
 - Current Epic: EPIC-001 Foundation
 
 ## Completed
@@ -27,6 +27,11 @@
   docs/PROGRESS.md and PROJECT_STATE.json (current task/epic identifiers,
   required sections, SESSION-LOG presence). 15 tests covering aggregation,
   unknown-status handling, and drift detection.
+- TASK-005 — Git workflow foundation (2026-09-15): added `scripts/git_workflow.py`
+  enforcing AGENTS.md §9 statically — `check-branch` rejects protected branches and
+  malformed task-branch names (feature|fix|chore|docs/TASK-###-short-name);
+  `check-commits` requires Conventional Commit style for non-merge commits on a
+  branch. 33 tests against temporary git repositories.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

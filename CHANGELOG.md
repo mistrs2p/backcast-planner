@@ -13,4 +13,7 @@
   version-verification references corrected (TASK-003).
 - Progress system foundation: `scripts/progress.py` reports backlog status per
   epic and checks docs/PROGRESS.md stays synchronized with PROJECT_STATE.json (TASK-004).
+- Git workflow foundation: `scripts/git_workflow.py` enforces task-branch naming,
+  rejects development on protected branches, and validates Conventional Commit
+  messages (TASK-005).
 - Initial execution pack created.
