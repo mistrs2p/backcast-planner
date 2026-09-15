@@ -1,7 +1,7 @@
 # TASK-051 — Task dependencies
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-006-planning — Planning
