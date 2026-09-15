@@ -66,4 +66,7 @@
   input references (goal, snapshot, destination, gap), a one-shot
   RUNNING → COMPLETED/FAILED lifecycle, and gap-provenance guards
   (TASK-022).
+- Strategy model: candidate strategies bound to a running backcasting
+  run with a one-shot CANDIDATE → SELECTED/REJECTED decision lifecycle
+  (TASK-023).
 - Initial execution pack created.

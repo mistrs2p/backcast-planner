@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-023 (Strategy model)
+- Current Task: TASK-024 (Strategy generation)
 - Current Epic: EPIC-003 Backcasting
 
 ## Completed
@@ -164,6 +164,14 @@
   `start_run` guards context validity and gap provenance (the gap must be
   computed from exactly this snapshot and destination). Pipeline
   orchestration itself is the backcasting-integration task. 29 tests.
+- TASK-023 — Strategy model (2026-09-15): the method of movement
+  (docs/02; pipeline steps 8–9) — `domain/strategy.py` with the frozen
+  `Strategy` entity (UUID identity, run + goal references, bounded
+  name/rationale, UTC stamps) and a CANDIDATE → SELECTED/REJECTED
+  one-shot lifecycle via `decide_strategy` (terminal statuses final,
+  `InvalidStrategyTransition` on illegal moves). `propose_strategy`
+  binds candidates to a RUNNING run only — strategies are generated
+  during the pipeline. 29 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
