@@ -29,6 +29,7 @@ from typing import Sequence
 
 from backcasting.domain.calendar import Calendar
 from backcasting.domain.calendar_event import CalendarEvent
+from backcasting.domain.feedback import Feedback
 from backcasting.domain.current_state import CurrentState
 from backcasting.domain.future_state import FutureState
 from backcasting.domain.goal import Goal
@@ -205,3 +206,28 @@ class ProgressSnapshotRepository(ABC):
     @abstractmethod
     def list_for_plan(self, plan_id: uuid.UUID) -> Sequence[ProgressSnapshot]:
         """Return the plan's snapshots, earliest ``taken_at`` first."""
+
+
+class FeedbackRepository(ABC):
+    """Persistence port for :class:`~backcasting.domain.feedback.Feedback`.
+
+    "Feedback: explicit or implicit signals" (docs/02): the
+    adaptation layer's other input, recorded verbatim and never
+    revised — a correction is a new statement.
+    """
+
+    @abstractmethod
+    def save(self, feedback: Feedback) -> None:
+        """Insert or replace the feedback keyed by ``feedback_id``."""
+
+    @abstractmethod
+    def get(self, feedback_id: uuid.UUID) -> Feedback | None:
+        """Return the feedback with ``feedback_id``, or ``None``."""
+
+    @abstractmethod
+    def list_for_subject(self, subject_id: uuid.UUID) -> Sequence[Feedback]:
+        """Return the subject's feedback, earliest ``created_at`` first."""
+
+    @abstractmethod
+    def list_all(self) -> Sequence[Feedback]:
+        """Return every feedback, earliest ``created_at`` first."""
