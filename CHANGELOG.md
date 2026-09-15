@@ -245,6 +245,10 @@
   differences — progress, time, capacity, schedule — one record with
   a single sign convention and inherent favorability per kind
   (TASK-073).
+- Trend analysis: the pace direction across consecutive velocity
+  windows (accelerating / steady / decelerating, strict comparison)
+  and the completion projection — remaining workload at the observed
+  pace (TASK-074).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-074 (Trend analysis)
+- Current Task: TASK-075 (Goal health)
 - Current Epic: EPIC-008 Progress
 
 ## Completed
@@ -864,6 +864,23 @@
   direction-aware reading covers metric-typed values; here the
   direction is inherent in the signal. What to *do* about a
   variance is docs/08's ladder, upstream. 27 tests.
+- TASK-074 — Trend analysis (2026-09-16): the docs/07 "trend"
+  signal on top of velocity — `domain/trend.py` with
+  `TrendDirection` (ACCELERATING/STEADY/DECELERATING), the frozen
+  `Trend` (direction, recent, previous; post-init enforces
+  consecutive equal-length windows and that the direction matches
+  the rates), `analyze_trend(velocities)` (the last two windows
+  decide; fewer than two cannot show a direction), and
+  `project_completion(snapshot, velocity)` — remaining workload
+  scaled by the window's work-to-span ratio, added to the snapshot's
+  moment; None when already complete or at zero pace (observations,
+  not errors). Composition decisions: the direction is a strict
+  rate comparison — no smoothing or tolerance band, a trend
+  statement is only as good as its windows are honest; the
+  projection scales by remaining/worked × span rather than dividing
+  by the derived per-day rate (algebraically identical, but the
+  single division avoids compounding float error into the ETA).
+  17 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
