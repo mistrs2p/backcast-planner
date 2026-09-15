@@ -97,4 +97,7 @@
 - Recurrence exceptions: occurrences addressed by original start —
   cancelled or rescheduled (optionally re-durationed) — applied
   deterministically over a rule's expansion (TASK-032).
+- Floating rest: weekday-free weekly rest quota with satisfaction
+  measured from arbitrary intervals, overlaps merged so rest time is
+  never double-counted (TASK-033).
 - Initial execution pack created.

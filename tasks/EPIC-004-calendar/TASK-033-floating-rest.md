@@ -1,7 +1,7 @@
 # TASK-033 — Floating rest
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-004-calendar — Calendar
