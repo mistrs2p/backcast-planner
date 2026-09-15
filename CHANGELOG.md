@@ -170,6 +170,9 @@
   (TASK-051).
 - Resources: standalone catalog entities linked to tasks through an
   idempotent N:M requirement (`resource_ids` on Task) (TASK-052).
+- Task estimation: append-only estimate records with provenance and
+  rationale, validated application onto the owning task, and a
+  workload sum that refuses unestimated tasks (TASK-053).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

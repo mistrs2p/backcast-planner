@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-053 (Task estimation)
+- Current Task: TASK-054 (Task decomposition contract)
 - Current Epic: EPIC-006 Planning
 
 ## Completed
@@ -525,6 +525,21 @@
   same resource. `RESOURCE_UNAVAILABLE` (docs/06) stays with the
   scheduling epic — this module only records the requirement.
   25 tests.
+- TASK-053 — Task estimation (2026-09-15): the task-level half of
+  pipeline step 6, "Estimate workload" (docs/04) —
+  `domain/task_estimation.py` with the frozen `TaskEstimation`: an
+  append-only estimate record carrying duration, provenance
+  (`EstimationSource` MANUAL/AI, per ADR-002's
+  propose-then-validate split), and a rationale ≤500 chars.
+  `apply_estimation` moves a record's duration onto its task (and
+  only its task — foreign estimates are rejected), making it
+  schedulable; `latest_estimation` resolves the current estimate
+  from history (re-estimation appends, ties break toward the later
+  position); `estimate_workload` sums a plan's task durations and
+  refuses to sum silently over unestimated tasks — a missing
+  estimate is surfaced, never hidden as a zero. The estimate
+  records themselves are pure history; persistence is EPIC-008.
+  29 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
