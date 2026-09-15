@@ -1,7 +1,7 @@
 # TASK-053 — Task estimation
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-006-planning — Planning
