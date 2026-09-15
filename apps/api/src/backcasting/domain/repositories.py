@@ -32,6 +32,7 @@ from backcasting.domain.calendar_event import CalendarEvent
 from backcasting.domain.current_state import CurrentState
 from backcasting.domain.future_state import FutureState
 from backcasting.domain.goal import Goal
+from backcasting.domain.schedule import Schedule
 from backcasting.domain.user import Email, User
 
 
@@ -138,3 +139,24 @@ class CalendarEventRepository(ABC):
     @abstractmethod
     def list_for_calendar(self, calendar_id: uuid.UUID) -> Sequence[CalendarEvent]:
         """Return the calendar's events, earliest start first."""
+
+
+class ScheduleRepository(ABC):
+    """Persistence port for :class:`~backcasting.domain.schedule.Schedule`.
+
+    "Task 1:N Schedules" (docs/03-DOMAIN-MODEL.md): a task's
+    placements — one record per placed part, a split task (TASK-063)
+    therefore has several.
+    """
+
+    @abstractmethod
+    def save(self, schedule: Schedule) -> None:
+        """Insert or replace the schedule keyed by ``schedule_id``."""
+
+    @abstractmethod
+    def get(self, schedule_id: uuid.UUID) -> Schedule | None:
+        """Return the schedule with ``schedule_id``, or ``None``."""
+
+    @abstractmethod
+    def list_for_task(self, task_id: uuid.UUID) -> Sequence[Schedule]:
+        """Return the task's placements, earliest start first."""

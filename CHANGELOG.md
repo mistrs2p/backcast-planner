@@ -207,6 +207,9 @@
   holds flows greedily through the ranked slots in 15-minute
   granularity multiples; parts sum exactly, insufficient capacity
   returns empty (NO_AVAILABLE_SLOT) (TASK-063).
+- Schedule persistence: the placement record — `Schedule` +
+  `place_task` (deadline-respecting, non-overlapping per task) and
+  the `ScheduleRepository` port (TASK-064).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
