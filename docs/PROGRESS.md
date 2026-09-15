@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-061 (Deadline handling)
+- Current Task: TASK-062 (Preference scoring)
 - Current Epic: EPIC-007 Scheduling
 
 ## Completed
@@ -641,6 +641,20 @@
   `DEPENDENCY_BLOCKED` (docs/06) and the result is empty; an
   unplaced prerequisite is a fact to resolve upstream, never
   quietly routed around. 13 tests.
+- TASK-061 — Deadline handling (2026-09-16): the deadline layer of
+  the hierarchy (docs/05) — `domain/deadline_filter.py` with
+  `filter_slots_by_deadline`: a task carrying a deadline must *finish*
+  by it. The rule as slot arithmetic: a slot's usable part ends no
+  later than the deadline — slots are clipped, not destroyed — and a
+  remainder shorter than the task's duration is dropped. Half-open
+  semantics: finishing exactly at the deadline is on time. A task
+  without a deadline has no deadline layer to apply; its candidates
+  pass through untouched. When every candidate falls to the clip the
+  task is the `DEADLINE_CONFLICT` failure reason (docs/06) — the fact
+  surfaces upstream, the filter simply returns an empty list. The
+  final subtractive layer before preference ranking: the hierarchy is
+  hard constraints → commitments → dependencies → deadline, and what
+  survives is what preferences get to rank. 11 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
