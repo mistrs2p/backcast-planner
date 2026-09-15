@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-060 (Dependency filtering)
+- Current Task: TASK-061 (Deadline handling)
 - Current Epic: EPIC-007 Scheduling
 
 ## Completed
@@ -628,6 +628,19 @@
   period is backed by no analysis. A budget that fits keeps every
   in-period candidate: which one hosts the task is the placement
   step's decision. 12 tests.
+- TASK-060 — Dependency filtering (2026-09-15): the dependency layer
+  of the hierarchy (docs/05) — `domain/dependency_filter.py` with
+  `filter_slots_by_dependencies`: finish-to-start as slot
+  arithmetic. Given the finish times of already-placed tasks, a
+  slot's usable part begins no earlier than the last direct
+  prerequisite's finish — slots are clipped, not destroyed. Only
+  direct prerequisites gate: a transitive prerequisite's constraint
+  is embodied in its dependent's own placement, so chaining through
+  the graph would double-count (documented decision). A prerequisite
+  with no finish time is unplaced — the task is
+  `DEPENDENCY_BLOCKED` (docs/06) and the result is empty; an
+  unplaced prerequisite is a fact to resolve upstream, never
+  quietly routed around. 13 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

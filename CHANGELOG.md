@@ -194,6 +194,9 @@
 - Capacity filtering: the goal's remaining budget gates the task
   (NO_CAPACITY when it cannot hold the duration) and slots are
   clipped to the analyzed-capacity period (TASK-059).
+- Dependency filtering: finish-to-start as slot arithmetic — slots
+  clip to the last direct prerequisite's finish; an unplaced
+  prerequisite blocks the task (DEPENDENCY_BLOCKED) (TASK-060).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
