@@ -61,6 +61,21 @@ class TestRecurrenceRule:
         assert rule.timezone is LONDON
         assert rule.calendar_id == calendar.calendar_id
 
+    def test_created_at_defaults_to_now(self, calendar: Calendar) -> None:
+        # regression: the `timezone` parameter used to shadow the
+        # datetime.timezone import inside create_rule, so the default
+        # clock crashed with AttributeError
+        before = datetime.now(timezone.utc)
+        rule = create_rule(
+            calendar,
+            "Evening walk",
+            Frequency.DAILY,
+            MONDAY_9AM,
+            HOUR,
+        )
+        after = datetime.now(timezone.utc)
+        assert before <= rule.created_at <= after
+
     def test_title_is_stripped_and_bounded(self, calendar: Calendar) -> None:
         assert _rule(calendar, title="  Run  ").title == "Run"
         with pytest.raises(RecurrenceError):

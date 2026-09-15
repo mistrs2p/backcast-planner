@@ -108,4 +108,10 @@
   (fold-aware), local-time classification (unambiguous/ambiguous/
   nonexistent), and Monday-anchored week bounds; duplicated per-module
   UTC checks consolidated onto it (TASK-035).
+- Calendar conflict detection: deterministic overlap sweep over a
+  calendar's events reporting each clashing pair once with its shared
+  interval; touching events do not conflict. Fixed latent
+  `timezone`-parameter shadowing that crashed the default clock in
+  `create_calendar`, `create_rule`, and `create_availability_window`
+  when `created_at` was omitted (TASK-036).
 - Initial execution pack created.

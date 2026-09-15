@@ -153,6 +153,17 @@ class TestCreateAvailabilityWindow:
         assert window.timezone is LONDON  # defaults to the calendar's zone
         assert window.created_at == CREATED
 
+    def test_created_at_defaults_to_now(self, calendar: Calendar) -> None:
+        # regression: the `timezone` parameter used to shadow the
+        # datetime.timezone import inside create_availability_window,
+        # so the default clock crashed with AttributeError
+        before = datetime.now(timezone.utc)
+        window = create_availability_window(
+            calendar, {0, 1, 2, 3, 4}, time(18, 0), time(21, 0)
+        )
+        after = datetime.now(timezone.utc)
+        assert before <= window.created_at <= after
+
     def test_explicit_timezone_overrides_calendar(self, calendar: Calendar) -> None:
         window = create_availability_window(
             calendar,

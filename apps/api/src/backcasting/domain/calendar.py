@@ -26,6 +26,8 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
+from backcasting.domain.timezone import UTC
+
 #: The MVP planning granularity (docs/05-CALENDAR-MODEL.md).
 PLANNING_GRANULARITY = timedelta(minutes=15)
 
@@ -77,7 +79,7 @@ def create_calendar(
     """
     if not isinstance(user_id, uuid.UUID):
         raise CalendarError("user_id must be a UUID")
-    now = created_at if created_at is not None else datetime.now(timezone.utc)
+    now = created_at if created_at is not None else datetime.now(UTC)
     return Calendar(
         calendar_id=calendar_id if calendar_id is not None else uuid.uuid4(),
         user_id=user_id,

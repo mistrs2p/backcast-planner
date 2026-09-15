@@ -1,7 +1,7 @@
 # TASK-036 — Calendar conflict detection
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-004-calendar — Calendar
