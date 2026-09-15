@@ -226,6 +226,9 @@
   deadline, preferences, splitting, placement — with docs/06 failure
   reasons surfacing at the layer that caused them and the budget
   consumed in order; EPIC-007 complete (TASK-068).
+- Execution model: the Actual of "Planned ≠ Actual ≠ Progress" —
+  one record per sitting, facts recorded without deadline judgment
+  or rounding, summed by actual_duration (TASK-069).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
