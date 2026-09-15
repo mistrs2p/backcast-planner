@@ -1,7 +1,7 @@
 # TASK-049 — Outcome model
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-006-planning — Planning

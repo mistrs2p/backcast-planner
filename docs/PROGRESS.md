@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-049 (Outcome model)
+- Current Task: TASK-050 (Task model)
 - Current Epic: EPIC-006 Planning
 
 ## Completed
@@ -472,6 +472,19 @@
   versions are append-only history, not state (the Plan value holds
   the current state); lifecycle moves are excluded from change sets —
   they flow through `transition_plan` with their own rules. 25 tests.
+- TASK-049 — Outcome model (2026-09-15): the "achieved state/result"
+  (docs/02, Planning Layer) — `domain/outcome.py` with the frozen
+  `Outcome`: plan-owned (Plan 1:N Outcomes, docs/03), optionally
+  bound to one milestone (Milestone 1:N Outcomes — a plan-level
+  outcome without a milestone is legitimate: milestones are
+  checkpoints, not the only way to state what "done" means),
+  non-empty stripped title ≤ 200, description ≤ 5000. "Outcome may
+  exist without Tasks" (docs/03) is honored structurally: no task
+  reference lives here; the N:M link arrives with the task model. Like
+  a milestone, an outcome carries no lifecycle of its own —
+  achievement is measured (progress epic), not flagged.
+  `revise_outcome` moves descriptive fields only; re-binding to
+  another milestone is a different outcome, not a revision. 17 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
