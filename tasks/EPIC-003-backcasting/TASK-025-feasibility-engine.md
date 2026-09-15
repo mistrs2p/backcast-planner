@@ -1,7 +1,7 @@
 # TASK-025 — Feasibility engine
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-003-backcasting — Backcasting

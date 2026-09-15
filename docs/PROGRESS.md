@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-025 (Feasibility engine)
+- Current Task: TASK-026 (Milestone model)
 - Current Epic: EPIC-003 Backcasting
 
 ## Completed
@@ -179,6 +179,13 @@
   turns a proposal batch into run candidates only when the run is
   RUNNING, the batch is non-empty (empty generation is a failed step),
   and names are unique. 16 tests.
+- TASK-025 — Feasibility engine (2026-09-15): `domain/feasibility.py`
+  implementing the spec rule "Required Workload + Buffer ≤ usable
+  Capacity" (docs/04, pipeline step 7) as a deterministic comparison of
+  non-negative timedeltas — `evaluate_feasibility` returns a
+  `FeasibilityResult` with `feasible` (boundary equality counts as
+  feasible), `total_required`, and signed `slack`. Durations only; where
+  capacity comes from is the calendar/capacity epics. 15 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
