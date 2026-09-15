@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-070 (Measurement model)
+- Current Task: TASK-071 (Progress snapshots)
 - Current Epic: EPIC-008 Progress
 
 ## Completed
@@ -788,6 +788,26 @@
   consistency demand against placements (executing outside the
   placed time is a schedule variance, recorded by both records
   simply existing). 15 tests.
+- TASK-070 — Measurement model (2026-09-16): the observation half of
+  docs/02's "Measurement: observed data" — `domain/measurement.py`
+  with the frozen `Measurement` (measurement_id, metric held by
+  value, value, measured_at, optional subject_id),
+  `record_measurement`, `measurements_for_subject`, and
+  `latest_measurement` (ties to the last in input order; empty is
+  None). The Metric (TASK-015) is the definition; a Measurement is
+  one observed value of it, taken at one moment about one subject —
+  "intermediate measurable checkpoint" (docs/02) means a milestone
+  becomes measurable by being observed. Invariants: the value is
+  validated against the metric's kind and score scale (out-of-type
+  is a recording error, not a deviation to interpret); the
+  measurement is an immutable fact of history like ObservedCapacity
+  — no updated_at, corrections arrive as new records. Association
+  decision: docs/03 fixes Milestone/Outcome without a metric link,
+  so the optional subject_id (milestone or outcome UUID) lives on
+  the measurement side; a subjectless measurement is a free-standing
+  observation of the metric itself. `MeasurementRepository` port
+  added (save / get / list_for_subject, earliest measured_at first).
+  24 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
