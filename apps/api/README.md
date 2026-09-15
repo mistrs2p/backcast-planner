@@ -18,6 +18,7 @@ Rules:
 - Database changes require Alembic migrations.
 
 Current contents: `src/backcasting/config.py` — the validated environment
-configuration layer (TASK-008). Dependency manifests and Docker wiring are
-introduced by subsequent EPIC-001 tasks (technology verification, Docker
-services).
+configuration layer (TASK-008); `src/backcasting/app.py` — the FastAPI
+application factory whose OpenAPI schema is the shared API contract
+(TASK-010, ADR-008). Docker wiring for the api service is added with the
+application's container build.

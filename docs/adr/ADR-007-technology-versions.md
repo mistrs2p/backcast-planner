@@ -18,7 +18,9 @@ highest version number.
 
 - Python packages: PyPI (`pip index versions`) — fastapi 0.141.1, uvicorn
   0.53.0, sqlalchemy 2.0.53, alembic 1.20.0, psycopg 3.3.5, redis 8.1.0,
-  pytest 9.1.1, pyyaml 6.0.3.
+  pytest 9.1.1, pyyaml 6.0.3, httpx2 2.13.0 (added by TASK-010 for FastAPI's
+  TestClient; starlette 1.6.0 deprecates the original httpx for TestClient,
+  so the httpx2 line is the forward-compatible choice).
 - Node packages: npm registry (`registry.npmjs.org`) — next 16.3.5,
   react 19.3.0, tailwindcss 4.3.3, typescript latest = 7.0.2, newest 5.x =
   5.9.3 (5.9.4+ do not exist).
