@@ -1,7 +1,7 @@
 # TASK-026 — Milestone model
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-003-backcasting — Backcasting
