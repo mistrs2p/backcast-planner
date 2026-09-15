@@ -62,4 +62,8 @@
 - Gap calculation: deterministic service that validates the goal context
   before recording a gap from (metric, current, target) measurements
   (TASK-021).
+- Backcasting run: record of one pipeline execution per goal with exact
+  input references (goal, snapshot, destination, gap), a one-shot
+  RUNNING → COMPLETED/FAILED lifecycle, and gap-provenance guards
+  (TASK-022).
 - Initial execution pack created.

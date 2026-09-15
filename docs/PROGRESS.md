@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-022 (Backcasting run)
+- Current Task: TASK-023 (Strategy model)
 - Current Epic: EPIC-003 Backcasting
 
 ## Completed
@@ -155,6 +155,15 @@
   (metric, current, target) triples with per-metric validation and
   no duplicates, and records the gap with an injectable id/clock.
   13 tests.
+- TASK-022 — Backcasting run (2026-09-15): `domain/backcasting_run.py` —
+  the record of one pipeline execution per goal ("Goal 1:N Backcasting
+  Runs"; replanning produces a new run). `BackcastingRun` ties the run to
+  its exact inputs (goal, current state, future state, gap) with a
+  RUNNING → COMPLETED/FAILED lifecycle completed exactly once
+  (`completed_at` UTC ≥ `started_at`, coupled to terminal status).
+  `start_run` guards context validity and gap provenance (the gap must be
+  computed from exactly this snapshot and destination). Pipeline
+  orchestration itself is the backcasting-integration task. 29 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
