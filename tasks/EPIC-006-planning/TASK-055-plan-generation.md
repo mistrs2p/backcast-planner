@@ -1,7 +1,7 @@
 # TASK-055 — Plan generation
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-006-planning — Planning
