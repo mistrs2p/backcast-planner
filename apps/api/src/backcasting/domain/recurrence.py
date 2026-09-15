@@ -44,7 +44,7 @@ from backcasting.domain.calendar_event import (
     CalendarEvent,
     create_event,
 )
-from backcasting.domain.timezone import require_utc
+from backcasting.domain.timezone import UTC, require_utc
 
 VALID_WEEKDAYS = frozenset(range(7))
 
@@ -159,7 +159,7 @@ def create_rule(
     """
     if not isinstance(calendar, Calendar):
         raise TypeError("calendar must be a Calendar")
-    now = created_at if created_at is not None else datetime.now(timezone.utc)
+    now = created_at if created_at is not None else datetime.now(UTC)
     return RecurrenceRule(
         rule_id=rule_id if rule_id is not None else uuid.uuid4(),
         calendar_id=calendar.calendar_id,

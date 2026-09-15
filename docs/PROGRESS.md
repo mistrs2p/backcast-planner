@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-036 (Calendar conflict detection)
+- Current Task: TASK-037 (Calendar API)
 - Current Epic: EPIC-004 Calendar
 
 ## Completed
@@ -287,6 +287,21 @@
   `_require_utc` copies in recurrence, recurrence exception, floating
   rest, and availability were consolidated onto the shared helper.
   24 tests.
+- TASK-036 — Calendar conflict detection (2026-09-15): the deterministic
+  side of "conflict should first be resolved through rescheduling"
+  (docs/06) — `domain/conflict.py` with `detect_conflicts`, a sweep
+  over a calendar's events reporting each overlapping pair exactly
+  once as a frozen `Conflict` carrying both events and the shared
+  interval. Semantics: half-open intervals, so back-to-back events do
+  not conflict; all events must belong to the one calendar; output is
+  deterministic regardless of input order. Bug found and fixed (latent,
+  never hit by existing tests): the `timezone` parameter of
+  `create_calendar`, `create_rule`, and `create_availability_window`
+  shadowed the `datetime.timezone` import, crashing the default clock
+  with `AttributeError` whenever `created_at` was omitted — the three
+  factories now use the shared `UTC` constant, with regression tests
+  in each module. Resolution (rescheduling/replanning escalation) is
+  the planning epic's concern. 20 tests (+3 regression).
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

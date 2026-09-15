@@ -98,6 +98,15 @@ class TestCreateCalendar:
         calendar = create_calendar(uuid.uuid4(), created_at=CREATED)
         assert calendar.timezone == ZoneInfo("UTC")
 
+    def test_created_at_defaults_to_now(self) -> None:
+        # regression: the `timezone` parameter used to shadow the
+        # datetime.timezone import inside create_calendar, so the
+        # default clock crashed with AttributeError
+        before = datetime.now(timezone.utc)
+        calendar = create_calendar(uuid.uuid4())
+        after = datetime.now(timezone.utc)
+        assert before <= calendar.created_at <= after
+
     def test_injectable_id_and_clock(self) -> None:
         calendar_id = uuid.uuid4()
         calendar = create_calendar(

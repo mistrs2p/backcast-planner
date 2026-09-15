@@ -33,7 +33,7 @@ from datetime import date, datetime, time, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 from backcasting.domain.calendar import Calendar
-from backcasting.domain.timezone import require_utc
+from backcasting.domain.timezone import UTC, require_utc
 
 MAX_TITLE_LENGTH = 200
 VALID_WEEKDAYS = frozenset(range(7))
@@ -125,7 +125,7 @@ def create_availability_window(
     """
     if not isinstance(calendar, Calendar):
         raise TypeError("calendar must be a Calendar")
-    now = created_at if created_at is not None else datetime.now(timezone.utc)
+    now = created_at if created_at is not None else datetime.now(UTC)
     return AvailabilityWindow(
         window_id=window_id if window_id is not None else uuid.uuid4(),
         calendar_id=calendar.calendar_id,
