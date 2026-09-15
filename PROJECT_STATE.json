@@ -1,9 +1,9 @@
 {
   "project": "backcasting-planner",
   "phase": "implementation",
-  "current_epic": "EPIC-004-calendar",
-  "current_task": "TASK-037",
-  "last_completed_task": "TASK-036",
+  "current_epic": "EPIC-005-capacity",
+  "current_task": "TASK-038",
+  "last_completed_task": "TASK-037",
   "task_status": "ready",
   "blocked_tasks": [],
   "open_bugs": [],
