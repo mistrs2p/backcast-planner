@@ -59,4 +59,7 @@
   ordering guarantees; the domain stays free of ORM imports (TASK-019).
 - Gap model: the distance between a current state and a future state as
   validated metric dimensions with an optional narrative (TASK-020).
+- Gap calculation: deterministic service that validates the goal context
+  before recording a gap from (metric, current, target) measurements
+  (TASK-021).
 - Initial execution pack created.

@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-021 (Gap calculation)
+- Current Task: TASK-022 (Backcasting run)
 - Current Epic: EPIC-003 Backcasting
 
 ## Completed
@@ -147,6 +147,14 @@
   narrative, unique metric names per gap, and a UTC `calculated_at`.
   Value derivation (the calculation itself) is the following task.
   21 tests. EPIC-003 started.
+- TASK-021 — Gap calculation (2026-09-15): `calculate_gap` in
+  `domain/gap.py` — the deterministic backcasting step 4. Validates the
+  assembled context through TASK-017's cross-entity validator first (a gap
+  is only recorded for a context that hangs together: matching ownership,
+  target after snapshot), then builds `GapDimension`s from
+  (metric, current, target) triples with per-metric validation and
+  no duplicates, and records the gap with an injectable id/clock.
+  13 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

@@ -1,7 +1,7 @@
 # TASK-021 — Gap calculation
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-003-backcasting — Backcasting
