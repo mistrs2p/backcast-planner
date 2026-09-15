@@ -1,7 +1,7 @@
 # TASK-072 — Velocity
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-008-progress — Progress
