@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-026 (Milestone model)
+- Current Task: TASK-027 (Milestone generator)
 - Current Epic: EPIC-003 Backcasting
 
 ## Completed
@@ -186,6 +186,16 @@
   `FeasibilityResult` with `feasible` (boundary equality counts as
   feasible), `total_required`, and signed `slack`. Durations only; where
   capacity comes from is the calendar/capacity epics. 15 tests.
+- TASK-026 — Milestone model (2026-09-15): the intermediate measurable
+  checkpoint (docs/02, pipeline step 10) — `domain/milestone.py` with
+  the frozen `Milestone` entity (UUID identity, run + goal references —
+  the Plan 1:N Milestones link is established when the Plan model
+  exists, bounded title/description, UTC `target_date` strictly after
+  creation) and `define_milestone` bound to a RUNNING run. Design
+  decision within spec latitude: a milestone carries no lifecycle of
+  its own — as a *measurable* checkpoint its achievement is expressed
+  through its Outcomes (Milestone 1:N Outcomes, docs/03) rather than a
+  status flag. 28 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

@@ -74,4 +74,7 @@
   (TASK-024).
 - Feasibility engine: required workload + buffer ≤ usable capacity over
   non-negative timedeltas, with signed slack exposed (TASK-025).
+- Milestone model: intermediate measurable checkpoint bound to a running
+  backcasting run, with a target date strictly after creation and no
+  lifecycle of its own — achievement flows through outcomes (TASK-026).
 - Initial execution pack created.
