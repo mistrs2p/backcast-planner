@@ -147,4 +147,8 @@
   fraction of usable capacity held in reserve (0 ≤ ratio < 1), with
   reserved/usable computation and `apply_buffer` pairing a buffer
   with the matching effective-capacity record (TASK-044).
+- Capacity analysis: pipeline step 5 — `analyze_time_environment`
+  composes availability, constraints, commitments, history, and buffer
+  into the `CapacityAnalysis` record whose `usable_amount` feeds the
+  feasibility rule (TASK-045).
 - Initial execution pack created.

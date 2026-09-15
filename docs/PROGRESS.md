@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-045 (Capacity analysis)
+- Current Task: TASK-046 (Capacity integration tests)
 - Current Epic: EPIC-005 Capacity
 
 ## Completed
@@ -406,6 +406,24 @@
   feasibility rule consumes. Completes the split of labor fixed in
   TASK-040: effective capacity may exceed the plan when history
   over-delivers; conservatism lives here. 32 tests.
+- TASK-045 — Capacity analysis (2026-09-15): pipeline step 5
+  "Analyze time environment" (docs/04) — `domain/capacity_analysis.py`
+  with `analyze_time_environment`, the deterministic composition of
+  the epic's chain: merged availability windows → hard-constraint
+  blocks (constraints remove availability the way commitments do) →
+  occupying commitments (only the part landing on available time
+  consumes capacity) → planned → effective (history-adjusted via
+  `compute_effective_capacity`) → usable (buffer reserve via
+  `apply_buffer`), returning the frozen `CapacityAnalysis` record
+  (availability/commitment/constrained/occupying/planned/effective/
+  reserved/usable amounts, sample count, buffer ratio). The analysis's
+  `usable_amount` is exactly the `usable_capacity` input
+  `execute_backcasting` expects — the step-5 output now has a
+  producer. Design decisions within spec latitude: preferences are
+  deliberately absent (the soft layer ranks slots, it never reduces
+  capacity); constraint-blocked availability is subtracted at this
+  analysis level while `derive_planned_capacity` keeps its TASK-038
+  record semantics (availability − occupying commitments). 27 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
