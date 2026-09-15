@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-058 (Hard constraint filtering)
+- Current Task: TASK-059 (Capacity filtering)
 - Current Epic: EPIC-007 Scheduling
 
 ## Completed
@@ -601,6 +601,19 @@
   `NO_AVAILABLE_SLOT` downstream, not an error. Reuses
   planned_capacity's interval primitives (same package). 17 tests.
   EPIC-007 started.
+- TASK-058 — Hard constraint filtering (2026-09-15): the scheduling
+  hierarchy's first layer (docs/05) —
+  `domain/constraint_filter.py` with
+  `filter_slots_by_constraints`: each candidate slot has every
+  constraint's blocked intervals subtracted (merged first, so
+  overlapping constraints count once), and the surviving pieces are
+  kept only when still at least the task's duration. Subtractive and
+  absolute ("Hard constraints are never violated", docs/13);
+  half-open boundaries allowed; weekly blocks honor their timezone
+  anchor. Semantics mirror `analyze_time_environment`'s treatment of
+  constraints (blocks remove availability). A task losing its last
+  slot surfaces as `HARD_CONSTRAINT` (docs/06) upstream; here the
+  fact is simply a shorter list. 13 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

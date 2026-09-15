@@ -188,6 +188,9 @@
   availability minus in-window commitments) a task of a given
   duration fits into — the raw material the scheduling hierarchy
   filters and ranks (TASK-057).
+- Hard constraint filtering: constraints subtract their blocked
+  intervals from candidate slots, keeping only pieces that still fit
+  the task's duration (TASK-058).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
