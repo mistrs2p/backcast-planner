@@ -1,7 +1,7 @@
 # TASK-060 — Dependency filtering
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-007-scheduling — Scheduling
