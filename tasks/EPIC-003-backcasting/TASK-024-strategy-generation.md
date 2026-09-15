@@ -1,7 +1,7 @@
 # TASK-024 — Strategy generation
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-003-backcasting — Backcasting

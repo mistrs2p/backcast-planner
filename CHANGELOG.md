@@ -69,4 +69,7 @@
 - Strategy model: candidate strategies bound to a running backcasting
   run with a one-shot CANDIDATE → SELECTED/REJECTED decision lifecycle
   (TASK-023).
+- Strategy generation: deterministic acceptance of AI-proposed strategy
+  batches as run candidates — non-empty, unique names, running run only
+  (TASK-024).
 - Initial execution pack created.

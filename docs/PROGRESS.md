@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-024 (Strategy generation)
+- Current Task: TASK-025 (Feasibility engine)
 - Current Epic: EPIC-003 Backcasting
 
 ## Completed
@@ -172,6 +172,13 @@
   `InvalidStrategyTransition` on illegal moves). `propose_strategy`
   binds candidates to a RUNNING run only — strategies are generated
   during the pipeline. 29 tests.
+- TASK-024 — Strategy generation (2026-09-15): the deterministic side of
+  pipeline step 8 per docs/09 / ADR-002 ("the LLM proposes; the Domain
+  validates and enforces") — `StrategyProposal` (validated raw proposal
+  as an AI adapter emits it) and `accept_proposed_strategies`, which
+  turns a proposal batch into run candidates only when the run is
+  RUNNING, the batch is non-empty (empty generation is a failed step),
+  and names are unique. 16 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

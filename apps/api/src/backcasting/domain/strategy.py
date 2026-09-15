@@ -165,3 +165,84 @@ def decide_strategy(
         raise InvalidStrategyTransition(strategy.status, to_status)
     decided_at = at if at is not None else datetime.now(timezone.utc)
     return replace(strategy, status=to_status, updated_at=decided_at)
+
+
+@dataclass(frozen=True)
+class StrategyProposal:
+    """A raw strategy proposal as an AI adapter emits it.
+
+    The domain does not generate strategies (``docs/09-AI-ARCHITECTURE.md``:
+    "The LLM proposes and reasons; the Domain validates and enforces");
+    it accepts proposals through :func:`accept_proposed_strategies`, which
+    applies the deterministic rules.
+    """
+
+    name: str
+    rationale: str = ""
+
+    def __post_init__(self) -> None:
+        name = self.name
+        if not isinstance(name, str) or not name.strip():
+            raise StrategyError("proposal name must be a non-empty string")
+        if len(name.strip()) > MAX_NAME_LENGTH:
+            raise StrategyError(
+                f"proposal name must be at most {MAX_NAME_LENGTH} characters"
+            )
+        object.__setattr__(self, "name", name.strip())
+        rationale = self.rationale
+        if rationale is None:
+            rationale = ""
+        if not isinstance(rationale, str):
+            raise StrategyError("proposal rationale must be a string")
+        if len(rationale) > MAX_RATIONALE_LENGTH:
+            raise StrategyError(
+                f"proposal rationale must be at most {MAX_RATIONALE_LENGTH} characters"
+            )
+        object.__setattr__(self, "rationale", rationale)
+
+
+def accept_proposed_strategies(
+    run: BackcastingRun,
+    proposals: tuple[StrategyProposal, ...],
+    *,
+    at: datetime | None = None,
+) -> tuple[Strategy, ...]:
+    """Accept AI-proposed strategies as run candidates (pipeline step 8).
+
+    Deterministic rules enforced here:
+
+    - The run must be RUNNING (strategies are generated during the run).
+    - At least one proposal must be supplied — an empty generation is a
+      failed step, not a valid outcome.
+    - Candidate names must be unique within the batch.
+    - Every proposal must itself be valid (bounded, non-empty name).
+
+    Returns the recorded candidates in proposal order, sharing ``at`` as
+    their creation time.
+    """
+    if not isinstance(run, BackcastingRun):
+        raise TypeError("run must be a BackcastingRun")
+    if not isinstance(proposals, tuple):
+        raise StrategyError("proposals must be a tuple of StrategyProposal")
+    if run.status is not BackcastingRunStatus.RUNNING:
+        raise StrategyError(
+            f"cannot accept strategies for a run with status {run.status.value}"
+        )
+    if not proposals:
+        raise StrategyError("at least one strategy proposal is required")
+    names: set[str] = set()
+    for proposal in proposals:
+        if not isinstance(proposal, StrategyProposal):
+            raise StrategyError("proposals must be StrategyProposal instances")
+        if proposal.name in names:
+            raise StrategyError(f"duplicate strategy name: {proposal.name}")
+        names.add(proposal.name)
+    return tuple(
+        propose_strategy(
+            run,
+            proposal.name,
+            rationale=proposal.rationale,
+            created_at=at,
+        )
+        for proposal in proposals
+    )
