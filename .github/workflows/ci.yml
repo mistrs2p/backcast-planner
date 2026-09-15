@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Tests and repository validators
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          # Full history so commit-message checks can diff against the base.
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependencies
+        # Versions stay unpinned until TASK-009 (technology verification).
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Run tests
+        run: python -m pytest
+
+      - name: AGENTS.md rule enforcement
+        run: python scripts/check_rules.py
+
+      - name: PROJECT_STATE validation
+        run: python scripts/project_state.py validate
+
+      - name: Progress docs check
+        run: python scripts/progress.py check
+
+      - name: Conventional commit check (pull requests)
+        if: github.event_name == 'pull_request'
+        run: python scripts/git_workflow.py check-commits --base origin/main

@@ -1,0 +1,5 @@
+# Development/test dependencies for repository-level tooling.
+# Versions remain unpinned until TASK-009 (technology verification) verifies
+# them against official release documentation.
+pytest
+pyyaml

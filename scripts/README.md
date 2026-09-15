@@ -20,4 +20,4 @@ Development, validation, and automation scripts for the repository.
   enforces task-branch naming and rejects protected branches;
   `check-commits` validates Conventional Commit style for non-merge commits.
 
-Scripts for CI support (TASK-006) will be added by their respective tasks.
+All four validators run in CI (`.github/workflows/ci.yml`, TASK-006).

@@ -16,4 +16,6 @@
 - Git workflow foundation: `scripts/git_workflow.py` enforces task-branch naming,
   rejects development on protected branches, and validates Conventional Commit
   messages (TASK-005).
+- CI baseline: GitHub Actions workflow runs the test suite and all repository
+  validators on pushes/PRs to main; `requirements-dev.txt` added (TASK-006).
 - Initial execution pack created.
