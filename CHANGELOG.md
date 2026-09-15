@@ -161,6 +161,9 @@
 - Outcome model: the "achieved state/result" — plan-owned, optionally
   milestone-bound, taskless by design, with descriptive-only revision
   (TASK-049).
+- Task model: the "actionable unit of work" — plan-owned, optionally
+  deadlined, schedulable only with a duration, outcome links kept
+  inside one plan (TASK-050).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

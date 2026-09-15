@@ -1,7 +1,7 @@
 # TASK-050 — Task model
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-006-planning — Planning

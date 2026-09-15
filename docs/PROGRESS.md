@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-050 (Task model)
+- Current Task: TASK-051 (Task dependencies)
 - Current Epic: EPIC-006 Planning
 
 ## Completed
@@ -485,6 +485,20 @@
   achievement is measured (progress epic), not flagged.
   `revise_outcome` moves descriptive fields only; re-binding to
   another milestone is a different outcome, not a revision. 17 tests.
+- TASK-050 — Task model (2026-09-15): the "actionable unit of work"
+  (docs/02, Execution Layer) — `domain/task.py` with the frozen
+  `Task`: plan-owned (Plan 1:N Tasks, docs/03), optional strictly
+  positive `duration` (the estimated time to execute — absent until
+  estimated, and `is_schedulable` is False until it lands), optional
+  UTC `deadline` strictly after creation (the deadline layer of the
+  docs/05 scheduling hierarchy), and `outcome_ids` — the Outcome N:M
+  Tasks link, established by `serve_outcomes`, which keeps the link
+  inside one plan and is idempotent ("Task may serve multiple
+  Outcomes", docs/03). Schedules, executions, and resources stay out
+  (each their own task/epic); "Calendar Event is not necessarily a
+  Task" is honored by separation — a schedule places a task, it does
+  not turn it into an event. `revise_task` moves editable fields;
+  passing None keeps them. 29 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
