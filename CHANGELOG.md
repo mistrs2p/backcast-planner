@@ -54,4 +54,7 @@
 - Domain events: immutable typed event envelope with read-only payloads,
   an in-memory collector, and constructors for current domain operations;
   publication deferred to infrastructure (TASK-018).
+- Repository interfaces: abstract persistence ports for User, Goal,
+  Current State, and Future State — insert-or-replace by identity with
+  ordering guarantees; the domain stays free of ORM imports (TASK-019).
 - Initial execution pack created.

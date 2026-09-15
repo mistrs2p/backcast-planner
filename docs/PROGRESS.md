@@ -2,8 +2,8 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-019 (Repository interfaces)
-- Current Epic: EPIC-002 Core Domain
+- Current Task: TASK-020 (Gap model)
+- Current Epic: EPIC-003 Backcasting
 
 ## Completed
 - Product/domain design baseline completed before implementation pack generation.
@@ -130,6 +130,15 @@
   created/revised/status-changed, current state captured, future state
   defined/revised). Persistence/publication deferred to infrastructure
   tasks, keeping the domain free of delivery mechanisms. 22 tests.
+- TASK-019 — Repository interfaces (2026-09-15): the domain's persistence
+  ports — `domain/repositories.py` with abstract `UserRepository`,
+  `GoalRepository`, `CurrentStateRepository`, and `FutureStateRepository`
+  (insert-or-replace `save` keyed by entity id, `None` for absence,
+  ordering guarantees for list methods, `get_for_goal` for the MVP's 1:1
+  destination, `RepositoryError` for infrastructure failures). Dependency
+  direction points inward: infrastructure will implement these with
+  SQLAlchemy; the domain imports nothing from it. Contract pinned by 23
+  tests including in-memory fakes. EPIC-002 complete.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

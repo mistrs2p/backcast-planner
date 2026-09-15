@@ -1,7 +1,7 @@
 # TASK-019 — Repository interfaces
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-002-core-domain — Core Domain
