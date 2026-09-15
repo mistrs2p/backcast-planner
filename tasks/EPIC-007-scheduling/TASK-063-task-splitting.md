@@ -1,7 +1,7 @@
 # TASK-063 — Task splitting
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-007-scheduling — Scheduling
