@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-057 (Candidate slot generation)
+- Current Task: TASK-058 (Hard constraint filtering)
 - Current Epic: EPIC-007 Scheduling
 
 ## Completed
@@ -586,6 +586,21 @@
   competing active plan must be superseded or archived first. A
   failed validation leaves the candidate a candidate: the domain
   reports, it does not destroy. 23 tests. EPIC-006 complete.
+- TASK-057 — Candidate slot generation (2026-09-15): first piece of
+  EPIC-007, the raw material of scheduling ("places schedulable
+  tasks into feasible time slots", docs/06) —
+  `domain/candidate_slot.py` with the frozen `CandidateSlot` (a
+  maximal free UTC interval, `can_fit` for placement checks).
+  `generate_candidate_slots` mirrors `workable_time`'s semantics
+  exactly — merged availability minus occupying commitments, clipped
+  to the horizon, touching intervals merged so no time is offered
+  twice, in-window-only commitment consumption, DST-safe expansion —
+  and keeps only intervals at least the task's duration. Slots stay
+  maximal: where inside a slot a task lands is the placement step's
+  decision. Empty generation (no slot fits) is a fact reported as
+  `NO_AVAILABLE_SLOT` downstream, not an error. Reuses
+  planned_capacity's interval primitives (same package). 17 tests.
+  EPIC-007 started.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

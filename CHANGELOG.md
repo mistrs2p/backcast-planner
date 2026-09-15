@@ -184,6 +184,10 @@
   estimation, workload drift, dependency health, and feasibility
   issues returned together; `activate_plan` enforces CANDIDATE-only
   promotion and the max-one-active-plan rule (TASK-056).
+- Candidate slot generation: maximal free intervals (merged
+  availability minus in-window commitments) a task of a given
+  duration fits into — the raw material the scheduling hierarchy
+  filters and ranks (TASK-057).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

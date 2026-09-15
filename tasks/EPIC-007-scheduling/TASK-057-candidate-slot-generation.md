@@ -1,7 +1,7 @@
 # TASK-057 — Candidate slot generation
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-007-scheduling — Scheduling
