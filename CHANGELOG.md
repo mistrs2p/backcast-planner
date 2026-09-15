@@ -214,6 +214,10 @@
   later-starting placement yields between placements, and a displaced
   task with no surviving candidates escalates to replanning
   (docs/06 principle) (TASK-065).
+- Rescheduling: level 1 of the adaptation ladder — displaced
+  placements withdraw and the same workload re-places into fresh
+  allocations; kept placements stay put, workload preserved to the
+  tick (docs/08) (TASK-066).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

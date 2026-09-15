@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-066 (Rescheduling)
+- Current Task: TASK-067 (Rolling horizon)
 - Current Epic: EPIC-007 Scheduling
 
 ## Completed
@@ -718,6 +718,23 @@
   task re-places); empty means no placement exists anywhere, Plan-
   level feasibility is affected, and the action escalates to
   replanning. 19 tests.
+- TASK-066 — Rescheduling (2026-09-16): level 1 of the adaptation
+  ladder (docs/08) — "Reschedule — move time only" —
+  `domain/rescheduling.py` with `reschedule_task` and the frozen
+  `RescheduleResult` (removed / kept / placed: delete by id, leave,
+  save). The displaced placements (TASK-065) are withdrawn and the
+  same work re-places into fresh slot allocations, while the
+  untouched placements stay exactly where they are — the minimum-
+  change principle (docs/08) made structural: only displaced time
+  moves. Invariants: the re-placed workload equals the withdrawn
+  workload to the tick (a change in amount is a re-estimation and
+  belongs to replanning); new placements respect the task's deadline
+  (via place_task, whose ScheduleError propagates — inner-error
+  precedent) and overlap neither one another nor the kept placements
+  (one task, one place at a time); all new placements share the
+  reschedule instant as created_at. The Plan, tasks, and workload
+  are untouched — "Schedule and Replanning are distinct" (docs/03).
+  16 tests, including the conflict-to-reschedule end-to-end path.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

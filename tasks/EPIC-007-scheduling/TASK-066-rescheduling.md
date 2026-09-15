@@ -1,7 +1,7 @@
 # TASK-066 — Rescheduling
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-007-scheduling — Scheduling
