@@ -91,4 +91,7 @@
 - Calendar event: time-blocked entry with UTC start/end (end > start),
   deliberately unaligned to planning granularity and task-free — an
   event is not necessarily a task (TASK-030).
+- Recurrence rules: DAILY/WEEKLY patterns with intervals and weekday
+  sets expanding deterministically into calendar events, preserving
+  local time of day across DST transitions (TASK-031).
 - Initial execution pack created.

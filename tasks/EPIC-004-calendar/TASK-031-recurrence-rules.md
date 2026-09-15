@@ -1,7 +1,7 @@
 # TASK-031 — Recurrence rules
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-004-calendar — Calendar

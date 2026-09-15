@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-031 (Recurrence rules)
+- Current Task: TASK-032 (Exceptions)
 - Current Epic: EPIC-004 Calendar
 
 ## Completed
@@ -235,6 +235,16 @@
   granularity (that governs task placement; existing commitments arrive
   at reality's times) and an event carries no task link — "Calendar
   Event is not necessarily a Task" (docs/03). 29 tests.
+- TASK-031 — Recurrence rules (2026-09-15): `domain/recurrence.py` with
+  the frozen `RecurrenceRule` (DAILY/WEEKLY MVP frequencies, interval ≥ 1,
+  optional weekday set for weekly rules, optional `until`, positive
+  duration, event-template title/description) plus `occurrences` (pure
+  start-instant computation over a window) and `expand_rule` (binds
+  occurrences to a calendar as events). Expansion preserves the anchor's
+  *local* time of day in the rule's zone — wall-clock semantics, so a
+  9:00 London occurrence stays 9:00 across DST while its UTC instant
+  shifts (ambiguous fall-back times resolve to fold=0). Exceptions that
+  override individual occurrences are the next task. 36 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
