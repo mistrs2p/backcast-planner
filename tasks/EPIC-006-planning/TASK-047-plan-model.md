@@ -1,7 +1,7 @@
 # TASK-047 — Plan model
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-006-planning — Planning
