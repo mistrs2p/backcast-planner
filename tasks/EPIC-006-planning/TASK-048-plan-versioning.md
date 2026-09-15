@@ -1,7 +1,7 @@
 # TASK-048 — Plan versioning
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-006-planning — Planning

@@ -155,6 +155,9 @@
   run provenance, the DRAFT/CANDIDATE → ACTIVE →
   SUPERSEDED/ARCHIVED/INVALID lifecycle, routine revision, and the
   max-one-active-plan-per-goal rule (TASK-047).
+- Plan versioning: traceable replan history — per-plan strictly
+  increasing versions with reason, source-run provenance, and a
+  content change set; no-op replans rejected (TASK-048).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
