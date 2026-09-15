@@ -1,0 +1,45 @@
+name: backcasting-planner
+
+# Docker-first local development baseline (TASK-007).
+# Application services (api, web, worker) are added together with their
+# Dockerfiles when the applications are scaffolded; this baseline provides
+# the infrastructure dependencies with health checks so `docker compose up`
+# yields a working PostgreSQL + Redis environment.
+#
+# Usage: docker compose -f infra/docker-compose.yml up -d
+
+services:
+  postgres:
+    # Major tag only; the exact version is verified and pinned by
+    # TASK-009 (technology verification) before lockfiles are finalized.
+    image: postgres:18
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-app}
+      POSTGRES_DB: ${POSTGRES_DB:-backcasting}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      # PostgreSQL 18+ expects the mount at /var/lib/postgresql and keeps
+      # data in a subdirectory so pg_upgrade can work across mount points
+      # (docker-library/postgres#37).
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-app} -d ${POSTGRES_DB:-backcasting}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    # Major tag only; exact version verified and pinned by TASK-009.
+    image: redis:7-alpine
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  postgres-data:
