@@ -2,8 +2,8 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-028 (Backcasting integration)
-- Current Epic: EPIC-003 Backcasting
+- Current Task: TASK-029 (Calendar model)
+- Current Epic: EPIC-004 Calendar
 
 ## Completed
 - Product/domain design baseline completed before implementation pack generation.
@@ -205,6 +205,19 @@
   increasing, and every checkpoint lies strictly between acceptance and
   the destination's target date (intermediate — never the destination
   itself). 24 tests.
+- TASK-028 — Backcasting integration (2026-09-15): `domain/backcasting.py`
+  with `execute_backcasting`, the deterministic orchestration of EPIC-003's
+  steps — calculate gap → start run → evaluate feasibility → accept
+  proposed strategies → select the named candidate (others rejected) →
+  accept proposed milestones → complete the run — returning a
+  `BackcastingResult`. Steps 5–6 (time environment, workload) arrive as
+  caller-supplied inputs until the calendar/capacity epics; steps 11–15
+  are deferred to the planning epic. Failure semantics: the run starts
+  before the first fallible step and ends exactly once — infeasibility
+  raises `InfeasibleBackcasting` (carrying the FAILED run and the
+  feasibility numbers) and any step failure raises `BackcastingStepError`
+  (carrying the FAILED run and the step name). 18 tests. EPIC-003
+  complete.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

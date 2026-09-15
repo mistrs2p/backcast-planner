@@ -81,4 +81,8 @@
   batches — unique titles, strictly increasing target dates strictly
   inside the acceptance-to-destination window, exact destination
   provenance (TASK-027).
+- Backcasting integration: `execute_backcasting` orchestrates the
+  deterministic pipeline (gap → feasibility → strategies → selection →
+  milestones) with one-shot run semantics; failures carry the FAILED run
+  and the failing step (TASK-028). EPIC-003 complete.
 - Initial execution pack created.
