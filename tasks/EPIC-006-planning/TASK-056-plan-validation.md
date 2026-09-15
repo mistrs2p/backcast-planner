@@ -1,7 +1,7 @@
 # TASK-056 — Plan validation
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-006-planning — Planning

@@ -180,6 +180,10 @@
 - Plan generation: `begin_plan` opens a run-provenanced DRAFT from a
   COMPLETED run; `publish_plan` closes it into a CANDIDATE with the
   workload computed from task estimates (TASK-055).
+- Plan validation: whole-plan gate before activation — ownership,
+  estimation, workload drift, dependency health, and feasibility
+  issues returned together; `activate_plan` enforces CANDIDATE-only
+  promotion and the max-one-active-plan rule (TASK-056).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
