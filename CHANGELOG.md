@@ -255,6 +255,10 @@
 - Sustainability: the observed pace against the workable time over
   the same window — utilization vs a ceiling, work beyond declared
   availability unsustainable whatever the ceiling (TASK-076).
+- Explicit feedback: user statements recorded verbatim and
+  unclassified — validation and storage only, interpretation left
+  to the reasoning layer per ADR-002; FeedbackRepository port added
+  (TASK-077).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

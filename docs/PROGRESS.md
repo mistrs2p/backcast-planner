@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-077 (Explicit feedback)
+- Current Task: TASK-078 (Implicit feedback)
 - Current Epic: EPIC-008 Progress
 
 ## Completed
@@ -925,6 +925,23 @@
   13 tests, including the wiring where a plan completes on time
   via an evening sprint: progress ON_TRACK and pace UNSUSTAINABLE —
   both readings stand.
+- TASK-077 — Explicit feedback (2026-09-16): "explicit user
+  statements" (docs/07) — `domain/feedback.py` with `FeedbackKind`
+  (EXPLICIT/IMPLICIT, docs/02's split; implicit arrives in
+  TASK-078), the frozen `Feedback` (feedback_id, kind, statement,
+  created_at, optional subject_id; statement stripped and bounded
+  at 5000 chars), `record_feedback` (default kind EXPLICIT), and
+  `feedback_for_subject`. The statement is kept verbatim and
+  deliberately unclassified — no sentiment, no category, no parsed
+  intent: a statement the domain has pre-classified is one the
+  reasoning layer can no longer see honestly (ADR-002 — the LLM
+  proposes and reasons, the Domain validates and enforces);
+  interpretation happens upstream of replanning (docs/08), where
+  the statement and the signals meet. Immutable like every
+  observation (measurement precedent): no updated_at, corrections
+  are new statements. `FeedbackRepository` port added (save / get /
+  list_for_subject / list_all, earliest created_at first).
+  18 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
