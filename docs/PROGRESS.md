@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-017 (Domain validation)
+- Current Task: TASK-018 (Domain events)
 - Current Epic: EPIC-002 Core Domain
 
 ## Completed
@@ -115,6 +115,13 @@
   beyond the literal spec chain: PAUSED→ACTIVE resume, since a pause that
   could never resume would be indistinguishable from cancellation.
   47 tests.
+- TASK-017 — Domain validation (2026-09-15): cross-entity validation seam
+  per docs/09 / ADR-002 ("the Domain validates and enforces") —
+  `domain/validation.py` with `ValidationIssue`, `validate_goal_context`
+  (ownership matching for Future/Current State; target date must lie after
+  the current-state snapshot), and `require_valid` aggregating all issues
+  into a `DomainValidationError`. Entity-local invariants remain in their
+  constructors; this layer sees what they cannot. 14 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

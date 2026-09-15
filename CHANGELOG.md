@@ -47,4 +47,8 @@
 - Goal lifecycle: transition table enforcing DRAFT → ACTIVE, pause/resume,
   and terminal finality (COMPLETED/CANCELLED/ARCHIVED) with
   InvalidGoalTransition on illegal moves (TASK-016).
+- Domain validation: cross-entity rules for a goal's assembled context
+  (ownership matching, target-after-snapshot) with aggregated issue
+  reporting — the deterministic validation seam required by the AI
+  architecture (TASK-017).
 - Initial execution pack created.
