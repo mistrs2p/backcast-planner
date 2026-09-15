@@ -143,4 +143,8 @@
   with a `PREFER`/`AVOID` direction and a 1–5 weight; DST-aware
   window expansion and a boolean applicability check (a preference
   ranks candidates, it never rejects a slot) (TASK-043).
+- Buffer: the conservatism layer of feasibility — a per-period
+  fraction of usable capacity held in reserve (0 ≤ ratio < 1), with
+  reserved/usable computation and `apply_buffer` pairing a buffer
+  with the matching effective-capacity record (TASK-044).
 - Initial execution pack created.
