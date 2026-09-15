@@ -241,6 +241,10 @@
 - Velocity: the observed work rate over a calendar window — sittings
   clipped to the window edges, a dimensionless rate plus a per-day
   timedelta for projections (TASK-072).
+- Variance signals: the four time-denominated planned-vs-actual
+  differences — progress, time, capacity, schedule — one record with
+  a single sign convention and inherent favorability per kind
+  (TASK-073).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

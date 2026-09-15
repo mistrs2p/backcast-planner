@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-073 (Variance)
+- Current Task: TASK-074 (Trend analysis)
 - Current Epic: EPIC-008 Progress
 
 ## Completed
@@ -843,6 +843,27 @@
   snapshot). The empty window reads zero: no work recorded is
   itself the observation. Computed, not stored — like Variance, no
   repository. 13 tests.
+- TASK-073 — Variance signals (2026-09-16): the four
+  time-denominated instances of docs/02's "Variance: planned vs
+  actual difference" — `domain/variance.py` with `VarianceKind`
+  (PROGRESS/TIME/CAPACITY/SCHEDULE), the frozen `Variance` (kind,
+  planned, actual, delta, favorable; delta must equal
+  actual − planned — one sign convention for all four), and four
+  constructors. `progress_variance(snapshot)`: workload done vs
+  planned, more is favorable. `time_variance(task, executions)`:
+  actual duration vs estimate, less is favorable; unestimated task
+  errors (no planned side). `capacity_variance(windows, events,
+  observed)`: the planned side is recomputed with workable_time over
+  the observed record's own period, so both sides always describe
+  the same range; more observed capacity is favorable.
+  `schedule_variance(schedules, executions)`: placed time vs the
+  part actually worked inside the placements (per matching task,
+  clipped at the edges); work outside placements is a timing fact
+  the other signals carry — this one measures adherence. The
+  timedelta sibling of metric.interpret_variance (TASK-015), whose
+  direction-aware reading covers metric-typed values; here the
+  direction is inherent in the signal. What to *do* about a
+  variance is docs/08's ladder, upstream. 27 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
