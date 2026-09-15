@@ -252,6 +252,9 @@
 - Goal health: on-time rate (completion moment vs deadline) and the
   categorical roll-up — on track / at risk / off track — with every
   trigger carrying a machine-readable reason (TASK-075).
+- Sustainability: the observed pace against the workable time over
+  the same window — utilization vs a ceiling, work beyond declared
+  availability unsustainable whatever the ceiling (TASK-076).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
