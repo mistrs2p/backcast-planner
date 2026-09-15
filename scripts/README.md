@@ -16,4 +16,8 @@ Development, validation, and automation scripts for the repository.
   task statuses per epic from the manifest and task files; `check` detects
   drift between docs/PROGRESS.md and PROJECT_STATE.json.
 
+- `git_workflow.py` — Git workflow foundation (TASK-005): `check-branch`
+  enforces task-branch naming and rejects protected branches;
+  `check-commits` validates Conventional Commit style for non-merge commits.
+
 Scripts for CI support (TASK-006) will be added by their respective tasks.

@@ -1,7 +1,7 @@
 # TASK-005 — Git workflow foundation
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-001-foundation — Foundation
