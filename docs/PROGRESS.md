@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-048 (Plan versioning)
+- Current Task: TASK-049 (Outcome model)
 - Current Epic: EPIC-006 Planning
 
 ## Completed
@@ -457,6 +457,21 @@
   single ACTIVE plan of a goal and raises on the corrupted
   more-than-one state ("Goal max 1 Active Plan", docs/03). 33 tests.
   EPIC-006 started.
+- TASK-048 — Plan versioning (2026-09-15): the traceable replan
+  history — "Every meaningful replan produces a traceable plan
+  version with reason, source run and change set" (docs/08) —
+  `domain/plan_version.py` with the frozen `PlanVersion` (per-plan
+  strictly increasing version numbers, stripped non-empty reason
+  ≤ 500, optional `source_run_id` provenance, immutable
+  `PlanChangeSet` of the content fields a replan may move:
+  title/workload) and `apply_plan_version`, which returns the next
+  Plan value plus its version record — rejecting no-op change sets (a
+  version must be a *meaningful* replan), foreign histories, and
+  duplicate version numbers. `latest_version` reads the trail's head,
+  order-independently. Design decisions within spec latitude:
+  versions are append-only history, not state (the Plan value holds
+  the current state); lifecycle moves are excluded from change sets —
+  they flow through `transition_plan` with their own rules. 25 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
