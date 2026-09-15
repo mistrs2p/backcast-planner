@@ -1,7 +1,7 @@
 # TASK-045 — Capacity analysis
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-005-capacity — Capacity
