@@ -129,4 +129,8 @@
   semantics over a period that has ended (`measured_at ≥ period_end`),
   an immutable historical fact with no revision path; the computation
   is shared via `workable_time` (TASK-039).
+- Effective capacity: the usable capacity for the feasibility rule —
+  the plan adjusted by the aggregate observed/planned ratio of
+  `CapacitySample` history, with cold-start and zero-plan fallbacks;
+  uncapped, since conservatism is the buffer's job (TASK-040).
 - Initial execution pack created.

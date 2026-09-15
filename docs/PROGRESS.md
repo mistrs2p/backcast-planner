@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-040 (Effective capacity)
+- Current Task: TASK-041 (Capacity pool)
 - Current Epic: EPIC-005 Capacity
 
 ## Completed
@@ -345,6 +345,19 @@
   historical fact — no `updated_at`, no revision path; a corrected
   measurement is a new record. This planned/observed contrast is what
   makes capacity variance (docs/07) meaningful. 24 tests.
+- TASK-040 — Effective capacity (2026-09-15): the *usable* capacity
+  the feasibility rule trusts (docs/04 step 7 "Required Workload +
+  Buffer ≤ usable Capacity") — `domain/effective_capacity.py` with the
+  frozen `EffectiveCapacity` record (amount plus the planned/observed
+  totals and sample count it derives from), `CapacitySample` (pairing
+  one past period's planned and observed records — same calendar, same
+  period), and `compute_effective_capacity`: no history → the plan is
+  trusted (cold start); zero total planned across history → the ratio
+  is undefined, plan trusted; otherwise the plan scaled by the
+  aggregate Σobserved/Σplanned ratio. Design decision within spec
+  latitude: the result is *not* capped at the plan — over-delivery is
+  real signal, and conservatism is the buffer's job (its own task).
+  24 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
