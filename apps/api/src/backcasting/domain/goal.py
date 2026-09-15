@@ -5,10 +5,8 @@ The Goal is the user's intention — the root of the planning aggregate
 (`docs/03-DOMAIN-MODEL.md` "User 1:N Goals"); each goal relates 1:1 to a
 Desired Future State in the MVP and anchors backcasting runs and plans.
 
-This module defines the entity, its ownership, and the lifecycle *states*.
-The rules governing transitions between states are deliberately not here —
-they are implemented by the goal lifecycle task (see the task backlog,
-EPIC-002) so that this module stays a pure data + invariant definition.
+This module defines the entity, its ownership, the lifecycle states, and
+the :data:`GOAL_TRANSITIONS` rules governing movement between them.
 
 Rules:
 
@@ -47,6 +45,57 @@ class GoalStatus(str, Enum):
     COMPLETED = "completed"
     CANCELLED = "cancelled"
     ARCHIVED = "archived"
+
+
+#: Allowed status transitions, per the spec lifecycle
+#: ``DRAFT → ACTIVE → PAUSED → COMPLETED/CANCELLED/ARCHIVED``
+#: (docs/03-DOMAIN-MODEL.md): a goal becomes active, may be paused, and
+#: ends in one of the three terminal states. The terminal states are also
+#: reachable directly from ACTIVE, and PAUSED may resume to ACTIVE — a
+#: pause that could never resume would be indistinguishable from
+#: cancellation. Terminal states have no outgoing transitions.
+GOAL_TRANSITIONS: dict[GoalStatus, frozenset[GoalStatus]] = {
+    GoalStatus.DRAFT: frozenset({GoalStatus.ACTIVE}),
+    GoalStatus.ACTIVE: frozenset(
+        {
+            GoalStatus.PAUSED,
+            GoalStatus.COMPLETED,
+            GoalStatus.CANCELLED,
+            GoalStatus.ARCHIVED,
+        }
+    ),
+    GoalStatus.PAUSED: frozenset(
+        {
+            GoalStatus.ACTIVE,
+            GoalStatus.COMPLETED,
+            GoalStatus.CANCELLED,
+            GoalStatus.ARCHIVED,
+        }
+    ),
+    GoalStatus.COMPLETED: frozenset(),
+    GoalStatus.CANCELLED: frozenset(),
+    GoalStatus.ARCHIVED: frozenset(),
+}
+
+#: Statuses with no outgoing transitions.
+TERMINAL_GOAL_STATUSES = frozenset(
+    {
+        GoalStatus.COMPLETED,
+        GoalStatus.CANCELLED,
+        GoalStatus.ARCHIVED,
+    }
+)
+
+
+class InvalidGoalTransition(GoalError):
+    """Raised when a Goal status transition violates the lifecycle rules."""
+
+    def __init__(self, from_status: GoalStatus, to_status: GoalStatus) -> None:
+        self.from_status = from_status
+        self.to_status = to_status
+        super().__init__(
+            f"illegal goal transition: {from_status.value} -> {to_status.value}"
+        )
 
 
 @dataclass(frozen=True)
@@ -130,7 +179,7 @@ def revise_goal(
 
     The Goal's identity, ownership, status, and ``created_at`` are carried
     over unchanged; only the editable fields move. Status changes are not
-    allowed here — they belong to the lifecycle rules.
+    allowed here — they belong to :func:`transition_goal`.
     """
     return replace(
         goal,
@@ -140,3 +189,38 @@ def revise_goal(
         ),
         updated_at=updated_at,
     )
+
+
+def can_transition(goal: Goal, to_status: GoalStatus) -> bool:
+    """Whether ``goal`` may move to ``to_status`` under the lifecycle rules."""
+    if not isinstance(to_status, GoalStatus):
+        raise GoalError("to_status must be a GoalStatus")
+    return to_status in GOAL_TRANSITIONS[goal.status]
+
+
+def is_terminal(status: GoalStatus) -> bool:
+    """Whether ``status`` is a terminal lifecycle state."""
+    if not isinstance(status, GoalStatus):
+        raise GoalError("status must be a GoalStatus")
+    return status in TERMINAL_GOAL_STATUSES
+
+
+def transition_goal(
+    goal: Goal,
+    to_status: GoalStatus,
+    *,
+    at: datetime | None = None,
+) -> Goal:
+    """Return ``goal`` moved to ``to_status``, advancing ``updated_at``.
+
+    Raises :class:`InvalidGoalTransition` for any transition not present in
+    :data:`GOAL_TRANSITIONS` (including same-status transitions and any
+    move out of a terminal state). Identity, ownership, and ``created_at``
+    are carried over unchanged.
+    """
+    if not isinstance(to_status, GoalStatus):
+        raise GoalError("to_status must be a GoalStatus")
+    if to_status not in GOAL_TRANSITIONS[goal.status]:
+        raise InvalidGoalTransition(goal.status, to_status)
+    moved_at = at if at is not None else datetime.now(timezone.utc)
+    return replace(goal, status=to_status, updated_at=moved_at)

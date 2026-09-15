@@ -44,4 +44,7 @@
 - Metric abstraction: five measurement kinds with per-kind validation,
   maximize/minimize/target directions, and direction-aware variance
   interpretation (TASK-015).
+- Goal lifecycle: transition table enforcing DRAFT → ACTIVE, pause/resume,
+  and terminal finality (COMPLETED/CANCELLED/ARCHIVED) with
+  InvalidGoalTransition on illegal moves (TASK-016).
 - Initial execution pack created.
