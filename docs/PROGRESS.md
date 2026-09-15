@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-020 (Gap model)
+- Current Task: TASK-021 (Gap calculation)
 - Current Epic: EPIC-003 Backcasting
 
 ## Completed
@@ -139,6 +139,14 @@
   direction points inward: infrastructure will implement these with
   SQLAlchemy; the domain imports nothing from it. Contract pinned by 23
   tests including in-memory fakes. EPIC-002 complete.
+- TASK-020 — Gap model (2026-09-15): the shape of the "distance between
+  present and destination" (docs/02, docs/04 step 4) —
+  `domain/gap.py` with `GapDimension` (a metric plus validated
+  current/target values) and the frozen `Gap` entity tying one current
+  state snapshot to one future state for a goal, with an optional bounded
+  narrative, unique metric names per gap, and a UTC `calculated_at`.
+  Value derivation (the calculation itself) is the following task.
+  21 tests. EPIC-003 started.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
