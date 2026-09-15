@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-059 (Capacity filtering)
+- Current Task: TASK-060 (Dependency filtering)
 - Current Epic: EPIC-007 Scheduling
 
 ## Completed
@@ -614,6 +614,20 @@
   constraints (blocks remove availability). A task losing its last
   slot surfaces as `HARD_CONSTRAINT` (docs/06) upstream; here the
   fact is simply a shorter list. 13 tests.
+- TASK-059 — Capacity filtering (2026-09-15): the capacity layer of
+  the hierarchy (docs/05) — `domain/capacity_filter.py` with
+  `filter_slots_by_capacity`, two capacity facts narrowing the
+  candidates. The budget gate: a task consumes its duration from the
+  goal's pool share (`CapacityPool.allocation_for`); a budget that
+  cannot hold the duration empties the list — the `NO_CAPACITY`
+  fact (docs/06), the slot-level face of the feasibility rule (a
+  feasible plan can still run out of pool share mid-execution when
+  other goals consumed theirs). The period window: usable capacity
+  is analyzed over a period, so slots are clipped to it (half-open)
+  and only in-period pieces ≥ duration survive — time outside the
+  period is backed by no analysis. A budget that fits keeps every
+  in-period candidate: which one hosts the task is the placement
+  step's decision. 12 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
