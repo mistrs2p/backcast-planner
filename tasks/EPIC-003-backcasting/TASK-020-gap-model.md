@@ -1,7 +1,7 @@
 # TASK-020 — Gap model
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-003-backcasting — Backcasting
