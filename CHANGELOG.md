@@ -197,6 +197,9 @@
 - Dependency filtering: finish-to-start as slot arithmetic — slots
   clip to the last direct prerequisite's finish; an unplaced
   prerequisite blocks the task (DEPENDENCY_BLOCKED) (TASK-060).
+- Deadline handling: slots clip their ends to the task's deadline —
+  finishing exactly at it is on time, shorter remainders drop, and an
+  emptied list is the DEADLINE_CONFLICT fact (TASK-061).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

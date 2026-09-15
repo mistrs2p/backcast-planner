@@ -1,7 +1,7 @@
 # TASK-061 — Deadline handling
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-007-scheduling — Scheduling
