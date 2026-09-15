@@ -218,6 +218,9 @@
   placements withdraw and the same workload re-places into fresh
   allocations; kept placements stay put, workload preserved to the
   tick (docs/08) (TASK-066).
+- Rolling horizon: the two-week operational window (docs/06) and the
+  exact/approximate split — due tasks, near-milestone outcome tasks,
+  and their prerequisite chains go to exact scheduling (TASK-067).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

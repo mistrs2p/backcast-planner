@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-067 (Rolling horizon)
+- Current Task: TASK-068 (Scheduler integration)
 - Current Epic: EPIC-007 Scheduling
 
 ## Completed
@@ -735,6 +735,22 @@
   reschedule instant as created_at. The Plan, tasks, and workload
   are untouched — "Schedule and Replanning are distinct" (docs/03).
   16 tests, including the conflict-to-reschedule end-to-end path.
+- TASK-067 — Rolling horizon (2026-09-16): the operational window
+  and what it exacts — `domain/rolling_horizon.py` with `Horizon`
+  (half-open [start, end), `contains`), `operational_horizon`
+  (default two weeks, docs/06; each call re-derives the window from
+  the current instant — that re-derivation is the rolling), and
+  `split_tasks_by_horizon` → `HorizonSplit` (exact /
+  approximate, input order preserved). Classification: a task is
+  *due* when its deadline falls no later than the horizon's end
+  (overdue counts as due); a milestone is *near* when its target
+  date does, and a task serving a near milestone's outcome is
+  *anchored* into the exact zone (long-term milestones keep
+  approximate allocation); due and anchored tasks pull their
+  transitive prerequisites in with them — an exact task is
+  unplaceable while its prerequisites are unplaced (docs/05 puts
+  dependencies above deadline). Everything else stays approximate
+  until the window rolls over it. 20 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

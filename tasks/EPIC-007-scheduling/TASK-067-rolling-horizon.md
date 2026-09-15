@@ -1,7 +1,7 @@
 # TASK-067 — Rolling horizon
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-007-scheduling — Scheduling
