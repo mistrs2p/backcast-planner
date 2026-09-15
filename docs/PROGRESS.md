@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-072 (Velocity)
+- Current Task: TASK-073 (Variance)
 - Current Epic: EPIC-008 Progress
 
 ## Completed
@@ -827,6 +827,22 @@
   `ProgressSnapshotRepository` port added (save / get /
   list_for_plan, earliest taken_at first) — an append-only history,
   the progress counterpart of CurrentState snapshots. 18 tests.
+- TASK-072 — Velocity (2026-09-16): the base rate beneath the
+  docs/07 signals — `domain/velocity.py` with the frozen `Velocity`
+  (window_start, window_end, worked, rate) and
+  `compute_velocity(executions, *, at, window)`. Semantics: the
+  window is calendar time, not workable time — velocity says how
+  much work materialized per calendar day at the observed pace, and
+  comparing that against capacity is the sustainability layer's
+  judgment; a sitting contributes only the part inside the window,
+  clipped at both edges (a straddler's pre-window tail and
+  post-`at` overhang do not count); `rate` is the dimensionless
+  window fraction, `per_day` restates it as a timedelta of work per
+  calendar day — the form projections consume (remaining ÷ per_day
+  = time to finish, demonstrated in wiring with a progress
+  snapshot). The empty window reads zero: no work recorded is
+  itself the observation. Computed, not stored — like Variance, no
+  repository. 13 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

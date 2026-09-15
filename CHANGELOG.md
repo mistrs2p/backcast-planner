@@ -238,6 +238,9 @@
   planned/actual/remaining workload, progress and completion rate
   capped at done (overruns belong to variance); per-task completion;
   ProgressSnapshotRepository port added (TASK-071).
+- Velocity: the observed work rate over a calendar window — sittings
+  clipped to the window edges, a dimensionless rate plus a per-day
+  timedelta for projections (TASK-072).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
