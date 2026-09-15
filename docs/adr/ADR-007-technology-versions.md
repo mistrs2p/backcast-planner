@@ -46,6 +46,7 @@ highest version number.
 | alembic | 1.20.0 | Migration tool per baseline; latest. |
 | psycopg[binary] | 3.3.5 | psycopg 3 (not legacy psycopg2) — matches the `postgresql+psycopg://` URLs already used in `.env.example` and infra. |
 | redis | 8.1.0 | Official Python client for Redis. |
+| tzdata | 2026.4 | IANA timezone database for the stdlib `zoneinfo` module. Required on Windows (no system tz database) and the portable fallback elsewhere; added by TASK-011 when the User model introduced `ZoneInfo` validation. |
 
 ### Frontend (recorded; manifests land with the web scaffold)
 

@@ -58,6 +58,7 @@ class TestBackendPins:
             "alembic": "1.20.0",
             "psycopg[binary]": "3.3.5",
             "redis": "8.1.0",
+            "tzdata": "2026.4",
         }
         assert pins == expected
 
