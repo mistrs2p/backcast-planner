@@ -121,4 +121,8 @@
   REST endpoints for calendars, events, and conflict detection (404/409
   /422 mapping, UTC normalization on input). OpenAPI contract
   regenerated (TASK-037).
+- Planned capacity: the workable time over a period — availability
+  windows merged (DST-aware, clipped to the period) minus the existing
+  commitments occupying them, recorded per calendar as an immutable
+  `PlannedCapacity` (TASK-038).
 - Initial execution pack created.

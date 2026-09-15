@@ -1,7 +1,7 @@
 # TASK-038 — Planned capacity
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-005-capacity — Capacity

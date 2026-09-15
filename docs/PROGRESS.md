@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-038 (Planned capacity)
+- Current Task: TASK-039 (Observed capacity)
 - Current Epic: EPIC-005 Capacity
 
 ## Completed
@@ -319,6 +319,20 @@
   calendar / 409 second calendar / 422 domain violations. `create_app`
   gained injectable repositories (in-memory defaults); the OpenAPI
   contract regenerated (ADR-008). 40 tests. EPIC-004 complete.
+- TASK-038 — Planned capacity (2026-09-15): EPIC-005 started — the
+  forward-looking answer to "Availability ≠ Capacity" (docs/00) —
+  `domain/planned_capacity.py` with the frozen `PlannedCapacity`
+  record (calendar, UTC period bounds, non-negative amount) and
+  `derive_planned_capacity`: the deterministic computation merging a
+  calendar's availability windows over a period (TASK-034 wall-clock
+  semantics, clipped to the period) and subtracting the existing
+  commitments *occupying* them — overlapping windows and events are
+  merged first so no time is double-counted, and commitments outside
+  the windows consume none of the workable time. Design decision
+  within spec latitude: commitments reduce planned capacity where they
+  overlap availability (a meeting at 22:00 doesn't eat an 18–21
+  window); what actually happened is Observed Capacity (next task).
+  33 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
