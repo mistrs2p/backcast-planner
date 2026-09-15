@@ -1,7 +1,7 @@
 # TASK-023 — Strategy model
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-003-backcasting — Backcasting
