@@ -1,7 +1,7 @@
 # TASK-075 — Goal health
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-008-progress — Progress

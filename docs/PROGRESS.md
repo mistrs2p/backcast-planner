@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-075 (Goal health)
+- Current Task: TASK-076 (Sustainability)
 - Current Epic: EPIC-008 Progress
 
 ## Completed
@@ -881,6 +881,30 @@
   by the derived per-day rate (algebraically identical, but the
   single division avoids compounding float error into the ETA).
   17 tests.
+- TASK-075 — Goal health (2026-09-16): the roll-up where docs/07's
+  signals meet — `domain/goal_health.py` with
+  `on_time_rate(tasks, executions, *, at)` (the last signal on the
+  list: of finished deadline-bearing tasks, the fraction finished
+  by deadline; the completion moment is when cumulative actual
+  first reaches the estimate, so overwork sittings after an
+  on-time finish are not lateness; deadlineless tasks are not
+  counted; unestimated deadline tasks make the rate unknown, the
+  estimate_workload stance; None when nothing finished — no
+  evidence either way), `GoalHealthStatus`
+  (ON_TRACK/AT_RISK/OFF_TRACK), the frozen `GoalHealth` (status,
+  reasons; a non-on-track reading must carry reasons), and
+  `assess_goal_health(snapshot, *, variances, trend, deadline,
+  projected_completion, on_time)`. Every rule explicit with a
+  machine-readable reason slug: complete plan → ON_TRACK
+  ("plan-complete", outranking everything — nothing left to
+  project); projected completion past the deadline → OFF_TRACK
+  ("projected-deadline-miss"); any unfavorable variance
+  ("unfavorable-<kind>-variance"), decelerating trend
+  ("decelerating-trend"), or late completions
+  ("late-completions") → AT_RISK; nothing triggered → ON_TRACK
+  with no reasons. Ordering off-track > at-risk > on-track is
+  fixed; what to do about a poor reading is docs/08's ladder,
+  upstream. 27 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
