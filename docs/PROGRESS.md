@@ -2,8 +2,8 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-068 (Scheduler integration)
-- Current Epic: EPIC-007 Scheduling
+- Current Task: TASK-069 (Execution model)
+- Current Epic: EPIC-008 Progress
 
 ## Completed
 - Product/domain design baseline completed before implementation pack generation.
@@ -751,6 +751,28 @@
   unplaceable while its prerequisites are unplaced (docs/05 puts
   dependencies above deadline). Everything else stays approximate
   until the window rolls over it. 20 tests.
+- TASK-068 — Scheduler integration (2026-09-16, EPIC-007 complete):
+  the epic-closing composition — `domain/scheduler.py` with
+  `schedule_tasks` → `SchedulingResult` (placements + failures in
+  dependency order, remaining budget; `placed_task_ids`,
+  `failure_reasons`). Per task, in topological order: generate
+  candidates → subtract constraints → capacity gate → dependency
+  clip → deadline clip → preference ranking → split → place, with
+  each placement's finish gating its dependents and consuming from
+  the budget the next task sees. Composition decision (documented):
+  the subtractive layers receive the granularity as their minimum
+  piece — the splitter's quantum — not the task's full duration;
+  a layer handed the full duration would keep only whole-task-sized
+  pieces and starve the splitter (a 10-hour task against 8-hour
+  days would find nothing instead of flowing 8 + 2 across two
+  days), while the budget gate stays on the full duration (a
+  placement consumes its whole estimate from the pool). Failures
+  surface with the docs/06 reason of the layer that caused them
+  (`FailureReason`: NO_CAPACITY, NO_AVAILABLE_SLOT, HARD_CONSTRAINT,
+  DEPENDENCY_BLOCKED, DEADLINE_CONFLICT, plus UNESTIMATED_TASK from
+  plan validation) and propagate down the dependency chain as
+  DEPENDENCY_BLOCKED without retry loops. EPIC-007 complete;
+  EPIC-008 started. 21 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
