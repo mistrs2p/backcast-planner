@@ -100,4 +100,7 @@
 - Floating rest: weekday-free weekly rest quota with satisfaction
   measured from arbitrary intervals, overlaps merged so rest time is
   never double-counted (TASK-033).
+- Availability windows: weekly wall-clock patterns on a calendar
+  expanding into UTC intervals over a range — DST-aware local times,
+  clipped to the range (TASK-034).
 - Initial execution pack created.
