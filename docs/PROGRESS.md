@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-047 (Plan model)
+- Current Task: TASK-048 (Plan versioning)
 - Current Epic: EPIC-006 Planning
 
 ## Completed
@@ -441,6 +441,22 @@
   hour through the whole chain; and the analysis's planned amount
   cross-checked against `workable_time`/`derive_planned_capacity`.
   8 tests. EPIC-005 complete.
+- TASK-047 — Plan model (2026-09-15): first piece of EPIC-006 —
+  `domain/plan.py` with the frozen `Plan`: the executable shape of a
+  goal ("what must happen and the workload required", docs/06), owned
+  by the goal (Goal 1:N Plans, docs/03), carrying the total
+  `workload` (non-negative timedelta), optional `run_id` provenance
+  (the backcasting run it was born from — a plan may also be authored
+  directly), and the spec lifecycle
+  DRAFT/CANDIDATE → ACTIVE → SUPERSEDED/ARCHIVED/INVALID via the
+  `PLAN_TRANSITIONS` table (only a CANDIDATE may go ACTIVE; only an
+  ACTIVE plan may be SUPERSEDED or INVALID — replacement happens to
+  plans that were once in force; pre-active states may be ARCHIVED).
+  `revise_plan` moves title/workload without touching identity or
+  status (plans are adaptive, docs/00); `active_plan` reads back the
+  single ACTIVE plan of a goal and raises on the corrupted
+  more-than-one state ("Goal max 1 Active Plan", docs/03). 33 tests.
+  EPIC-006 started.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
