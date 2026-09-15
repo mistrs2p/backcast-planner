@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-032 (Exceptions)
+- Current Task: TASK-033 (Floating rest)
 - Current Epic: EPIC-004 Calendar
 
 ## Completed
@@ -245,6 +245,15 @@
   9:00 London occurrence stays 9:00 across DST while its UTC instant
   shifts (ambiguous fall-back times resolve to fold=0). Exceptions that
   override individual occurrences are the next task. 36 tests.
+- TASK-032 — Exceptions (2026-09-15): "recurring rules may have
+  exceptions" (docs/05) — `domain/recurrence_exception.py` with the
+  frozen `RecurrenceException` addressing an occurrence by its original
+  start instant (CANCELLED drops it; RESCHEDULED moves it, optionally
+  overriding duration), `cancel_occurrence`/`reschedule_occurrence`
+  factories, and `expand_with_exceptions` applying a batch to a rule's
+  expansion. Non-matching exceptions are ignored (windows clip
+  occurrences); conflicting exceptions for the same instant are
+  rejected. 32 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
