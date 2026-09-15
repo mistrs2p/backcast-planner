@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-041 (Capacity pool)
+- Current Task: TASK-042 (Constraints)
 - Current Epic: EPIC-005 Capacity
 
 ## Completed
@@ -358,6 +358,15 @@
   latitude: the result is *not* capped at the plan — over-delivery is
   real signal, and conservatism is the buffer's job (its own task).
   24 tests.
+- TASK-041 — Capacity pool (2026-09-15): splitting a period's usable
+  capacity across a user's competing goals —
+  `domain/capacity_pool.py` with the frozen `CapacityAllocation`
+  (goal + non-negative amount; zero holds a place without consuming
+  capacity) and `CapacityPool` (the split of an effective-capacity
+  record: unique goals, `allocated_amount` equals the allocation sum,
+  `unallocated_amount` is the non-negative remainder the scheduler may
+  still commit), plus `allocate_capacity` and the `allocation_for`
+  lookup. 23 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
