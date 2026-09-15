@@ -114,4 +114,11 @@
   `timezone`-parameter shadowing that crashed the default clock in
   `create_calendar`, `create_rule`, and `create_availability_window`
   when `created_at` was omitted (TASK-036).
+- Calendar API: first HTTP surface — layered as Presentation →
+  Application → Domain → Infrastructure. Calendar/event repository
+  ports in the domain, a `CalendarService` use-case layer, thread-safe
+  in-memory repositories until the production persistence epic, and
+  REST endpoints for calendars, events, and conflict detection (404/409
+  /422 mapping, UTC normalization on input). OpenAPI contract
+  regenerated (TASK-037).
 - Initial execution pack created.

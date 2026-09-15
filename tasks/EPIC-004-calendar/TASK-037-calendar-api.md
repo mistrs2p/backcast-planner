@@ -1,7 +1,7 @@
 # TASK-037 — Calendar API
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-004-calendar — Calendar

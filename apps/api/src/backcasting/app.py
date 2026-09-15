@@ -16,6 +16,16 @@ from __future__ import annotations
 from fastapi import FastAPI
 
 from backcasting import __version__
+from backcasting.api.calendars import router as calendars_router
+from backcasting.application.calendars import CalendarService
+from backcasting.domain.repositories import (
+    CalendarEventRepository,
+    CalendarRepository,
+)
+from backcasting.infrastructure.memory import (
+    InMemoryCalendarEventRepository,
+    InMemoryCalendarRepository,
+)
 
 API_TITLE = "Backcasting Planner API"
 API_DESCRIPTION = (
@@ -25,13 +35,28 @@ API_DESCRIPTION = (
 )
 
 
-def create_app() -> FastAPI:
-    """Create and configure the FastAPI application."""
+def create_app(
+    *,
+    calendar_repository: CalendarRepository | None = None,
+    event_repository: CalendarEventRepository | None = None,
+) -> FastAPI:
+    """Create and configure the FastAPI application.
+
+    Repositories default to in-memory implementations; production wiring
+    (SQLAlchemy + PostgreSQL per ADR-007) injects its own. The use cases
+    are composed in ``backcasting.application`` and exposed by the
+    routers in ``backcasting.api``.
+    """
     app = FastAPI(
         title=API_TITLE,
         description=API_DESCRIPTION,
         version=__version__,
     )
+    app.state.calendar_service = CalendarService(
+        calendar_repository or InMemoryCalendarRepository(),
+        event_repository or InMemoryCalendarEventRepository(),
+    )
+    app.include_router(calendars_router)
 
     @app.get("/health", tags=["system"], operation_id="getHealth")
     def health() -> dict[str, str]:

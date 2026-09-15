@@ -27,6 +27,8 @@ import uuid
 from abc import ABC, abstractmethod
 from typing import Sequence
 
+from backcasting.domain.calendar import Calendar
+from backcasting.domain.calendar_event import CalendarEvent
 from backcasting.domain.current_state import CurrentState
 from backcasting.domain.future_state import FutureState
 from backcasting.domain.goal import Goal
@@ -103,3 +105,36 @@ class FutureStateRepository(ABC):
     @abstractmethod
     def get_for_goal(self, goal_id: uuid.UUID) -> FutureState | None:
         """Return the goal's destination (1:1 in the MVP), or ``None``."""
+
+
+class CalendarRepository(ABC):
+    """Persistence port for :class:`~backcasting.domain.calendar.Calendar`.
+
+    A user owns one calendar in the MVP ("User owns calendar",
+    docs/03-DOMAIN-MODEL.md); ``get_by_user`` therefore returns the
+    user's single calendar or ``None``.
+    """
+
+    @abstractmethod
+    def save(self, calendar: Calendar) -> None:
+        """Insert or replace the calendar keyed by ``calendar_id``."""
+
+    @abstractmethod
+    def get(self, calendar_id: uuid.UUID) -> Calendar | None:
+        """Return the calendar with ``calendar_id``, or ``None``."""
+
+    @abstractmethod
+    def get_by_user(self, user_id: uuid.UUID) -> Calendar | None:
+        """Return the user's calendar, or ``None``."""
+
+
+class CalendarEventRepository(ABC):
+    """Persistence port for :class:`~backcasting.domain.calendar_event.CalendarEvent`."""
+
+    @abstractmethod
+    def save(self, event: CalendarEvent) -> None:
+        """Insert or replace the event keyed by ``event_id``."""
+
+    @abstractmethod
+    def list_for_calendar(self, calendar_id: uuid.UUID) -> Sequence[CalendarEvent]:
+        """Return the calendar's events, earliest start first."""

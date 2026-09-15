@@ -2,8 +2,8 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-037 (Calendar API)
-- Current Epic: EPIC-004 Calendar
+- Current Task: TASK-038 (Planned capacity)
+- Current Epic: EPIC-005 Capacity
 
 ## Completed
 - Product/domain design baseline completed before implementation pack generation.
@@ -302,6 +302,23 @@
   factories now use the shared `UTC` constant, with regression tests
   in each module. Resolution (rescheduling/replanning escalation) is
   the planning epic's concern. 20 tests (+3 regression).
+- TASK-037 — Calendar API (2026-09-15): the layered architecture
+  materializes (docs/10 Presentation → Application → Domain →
+  Infrastructure) — `CalendarRepository`/`CalendarEventRepository`
+  ports added to the domain ("User owns calendar" read as 1:1 in the
+  MVP: `get_by_user` returns the user's single calendar);
+  `application/calendars.py` with `CalendarService` composing the
+  calendar use cases (create calendar, place event with UTC
+  normalization per the persistence rule, list events, detect
+  conflicts) and application-level errors (not-found, one-per-user,
+  invalid timezone); `infrastructure/memory.py` with thread-safe
+  in-memory repository implementations until the production
+  persistence epic; `api/calendars.py` exposing
+  POST/GET /calendars, POST/GET /calendars/{id}/events, and
+  GET /calendars/{id}/conflicts with the status mapping 404 unknown
+  calendar / 409 second calendar / 422 domain violations. `create_app`
+  gained injectable repositories (in-memory defaults); the OpenAPI
+  contract regenerated (ADR-008). 40 tests. EPIC-004 complete.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
