@@ -1,7 +1,7 @@
 # TASK-016 — Goal lifecycle
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-002-core-domain — Core Domain

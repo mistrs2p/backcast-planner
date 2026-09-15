@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-016 (Goal lifecycle)
+- Current Task: TASK-017 (Domain validation)
 - Current Epic: EPIC-002 Core Domain
 
 ## Completed
@@ -105,6 +105,16 @@
   kind requires an explicit min<max scale, `False` is a valid boolean
   target), and `interpret_variance` producing a `Variance` with the
   actual−planned delta and direction-aware favourability. 54 tests.
+- TASK-016 — Goal lifecycle (2026-09-15): transition rules added to
+  `domain/goal.py` — `GOAL_TRANSITIONS` (DRAFT→ACTIVE; ACTIVE and PAUSED →
+  PAUSED/ACTIVE respectively or any terminal state; COMPLETED/CANCELLED/
+  ARCHIVED terminal with no outgoing edges), `TERMINAL_GOAL_STATUSES`,
+  `can_transition`/`is_terminal` inspection helpers, `transition_goal`
+  (returns a new instance advancing `updated_at`, raises
+  `InvalidGoalTransition` carrying from/to statuses). One inferred edge
+  beyond the literal spec chain: PAUSED→ACTIVE resume, since a pause that
+  could never resume would be indistinguishable from cancellation.
+  47 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
