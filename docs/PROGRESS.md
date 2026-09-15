@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-034 (Availability)
+- Current Task: TASK-035 (Timezone handling)
 - Current Epic: EPIC-004 Calendar
 
 ## Completed
@@ -263,6 +263,16 @@
   touching intervals so the same rest time is never counted twice
   (over-rest keeps `satisfied` true with negative `remaining`). Where
   rest is *placed* is the scheduler's concern. 32 tests.
+- TASK-034 — Availability (2026-09-15): the Availability Window concept
+  (docs/05) — `domain/availability.py` with the frozen
+  `AvailabilityWindow` (non-empty weekday set, naive local wall-clock
+  start/end within one day — no cross-midnight windows in MVP, a
+  ZoneInfo anchor defaulting to the calendar's zone, optional title)
+  and `available_intervals`, which expands the weekly pattern into UTC
+  intervals over a range, preserving local times across DST and
+  clipping to the range bounds. Availability ≠ capacity (docs/00):
+  capacity is computed from these windows in the capacity epic.
+  35 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
