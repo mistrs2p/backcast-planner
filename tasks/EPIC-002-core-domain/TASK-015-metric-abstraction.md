@@ -1,7 +1,7 @@
 # TASK-015 — Metric abstraction
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-002-core-domain — Core Domain

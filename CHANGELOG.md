@@ -41,4 +41,7 @@
 - Future State domain model: immutable destination with a UTC target date
   anchored after creation; changed only through explicit revision per the
   replanning model (TASK-014).
+- Metric abstraction: five measurement kinds with per-kind validation,
+  maximize/minimize/target directions, and direction-aware variance
+  interpretation (TASK-015).
 - Initial execution pack created.

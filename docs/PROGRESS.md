@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-015 (Metric abstraction)
+- Current Task: TASK-016 (Goal lifecycle)
 - Current Epic: EPIC-002 Core Domain
 
 ## Completed
@@ -96,6 +96,15 @@
   State, not the Goal, so replanning preserves the destination exactly as
   docs/08 requires while Goal Revision is the only sanctioned mutation.
   20 tests.
+- TASK-015 — Metric abstraction (2026-09-15):
+  `apps/api/src/backcasting/domain/metric.py` implementing docs/07's
+  measurement requirements — `MetricKind` (count/duration/percentage/
+  boolean/score with per-kind value validation; composite metrics noted as
+  future work per spec), `MetricDirection` (maximize/minimize/target),
+  the `Metric` definition (target direction requires a target value, score
+  kind requires an explicit min<max scale, `False` is a valid boolean
+  target), and `interpret_variance` producing a `Variance` with the
+  actual−planned delta and direction-aware favourability. 54 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
