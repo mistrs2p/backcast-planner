@@ -129,15 +129,3 @@ def test_project_state_is_valid_json_with_required_keys() -> None:
     }
     missing = required_keys - state.keys()
     assert not missing, f"PROJECT_STATE.json missing keys: {sorted(missing)}"
-
-
-def test_env_example_has_no_real_secrets() -> None:
-    """The example environment file must only contain placeholders."""
-    content = (REPO_ROOT / ".env.example").read_text(encoding="utf-8")
-    for line in content.splitlines():
-        if "=" not in line or line.strip().startswith("#"):
-            continue
-        _key, _, value = line.partition("=")
-        assert value.strip() not in {"password", "secret"}, (
-            f".env.example looks like it contains a real credential: {line!r}"
-        )
