@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-033 (Floating rest)
+- Current Task: TASK-034 (Availability)
 - Current Epic: EPIC-004 Calendar
 
 ## Completed
@@ -254,6 +254,15 @@
   expansion. Non-matching exceptions are ignored (windows clip
   occurrences); conflicting exceptions for the same instant are
   rejected. 32 tests.
+- TASK-033 — Floating rest (2026-09-15): "floating rest supports quotas
+  without fixed weekdays" (docs/05) — `domain/floating_rest.py` with the
+  frozen `FloatingRest` weekly quota (positive timedelta bound to a
+  calendar; the week is the accrual window since the spec contrasts
+  floating rest with fixed weekdays) and `evaluate_rest`, which measures
+  satisfaction from arbitrary rest intervals, merging overlapping and
+  touching intervals so the same rest time is never counted twice
+  (over-rest keeps `satisfied` true with negative `remaining`). Where
+  rest is *placed* is the scheduler's concern. 32 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
