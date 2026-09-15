@@ -164,6 +164,10 @@
 - Task model: the "actionable unit of work" — plan-owned, optionally
   deadlined, schedulable only with a duration, outcome links kept
   inside one plan (TASK-050).
+- Task dependencies: finish-to-start links with write-time cycle,
+  duplicate, self, and cross-plan rejection; direct/transitive
+  prerequisite queries and a deterministic topological order
+  (TASK-051).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
