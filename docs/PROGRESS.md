@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-014 (Future State)
+- Current Task: TASK-015 (Metric abstraction)
 - Current Epic: EPIC-002 Core Domain
 
 ## Completed
@@ -86,6 +86,16 @@
   non-empty stripped narrative ≤5000, timezone-aware UTC `captured_at`) and
   `capture_current_state` factory. Snapshots accumulate rather than mutate,
   matching the replanning model's "new Current State" re-run. 13 tests.
+- TASK-014 — Future State (2026-09-15): destination state a Goal backcasts
+  from — `apps/api/src/backcasting/domain/future_state.py` with the frozen
+  `FutureState` entity (UUID identity, goal reference — 1:1 in MVP enforced
+  at the repository layer, non-empty description ≤5000, UTC-aware
+  `target_date` strictly after `created_at`) and the
+  `define_future_state`/`revise_future_state` factories. Design decision
+  within spec latitude: the time anchor (target date) lives on the Future
+  State, not the Goal, so replanning preserves the destination exactly as
+  docs/08 requires while Goal Revision is the only sanctioned mutation.
+  20 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

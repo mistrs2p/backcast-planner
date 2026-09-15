@@ -38,4 +38,7 @@
 - Current State domain model: immutable per-goal snapshot of present reality
   with UTC capture time; snapshots accumulate for replanning instead of
   mutating (TASK-013).
+- Future State domain model: immutable destination with a UTC target date
+  anchored after creation; changed only through explicit revision per the
+  replanning model (TASK-014).
 - Initial execution pack created.
