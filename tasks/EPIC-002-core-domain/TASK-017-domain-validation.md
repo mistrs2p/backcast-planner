@@ -1,7 +1,7 @@
 # TASK-017 — Domain validation
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-002-core-domain — Core Domain
