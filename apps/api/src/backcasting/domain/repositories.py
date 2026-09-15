@@ -33,6 +33,7 @@ from backcasting.domain.current_state import CurrentState
 from backcasting.domain.future_state import FutureState
 from backcasting.domain.goal import Goal
 from backcasting.domain.measurement import Measurement
+from backcasting.domain.progress import ProgressSnapshot
 from backcasting.domain.schedule import Schedule
 from backcasting.domain.user import Email, User
 
@@ -183,3 +184,24 @@ class MeasurementRepository(ABC):
     @abstractmethod
     def list_for_subject(self, subject_id: uuid.UUID) -> Sequence[Measurement]:
         """Return the subject's observations, earliest ``measured_at`` first."""
+
+
+class ProgressSnapshotRepository(ABC):
+    """Persistence port for :class:`~backcasting.domain.progress.ProgressSnapshot`.
+
+    Snapshots are the plan-level progress history ("Planned ≠ Actual ≠
+    Progress", docs/07-PROGRESS-FEEDBACK.md): an append-only series,
+    one reading per taken moment.
+    """
+
+    @abstractmethod
+    def save(self, snapshot: ProgressSnapshot) -> None:
+        """Insert or replace the snapshot keyed by ``snapshot_id``."""
+
+    @abstractmethod
+    def get(self, snapshot_id: uuid.UUID) -> ProgressSnapshot | None:
+        """Return the snapshot with ``snapshot_id``, or ``None``."""
+
+    @abstractmethod
+    def list_for_plan(self, plan_id: uuid.UUID) -> Sequence[ProgressSnapshot]:
+        """Return the plan's snapshots, earliest ``taken_at`` first."""
