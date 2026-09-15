@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-064 (Schedule persistence)
+- Current Task: TASK-065 (Conflict resolution)
 - Current Epic: EPIC-007 Scheduling
 
 ## Completed
@@ -684,6 +684,23 @@
   should surface, not be silently re-rounded. Insufficient total
   capacity returns empty — the `NO_AVAILABLE_SLOT` fact (docs/06),
   surfaced upstream, never routed around. 16 tests.
+- TASK-064 — Schedule persistence (2026-09-16): the placement record —
+  `domain/schedule.py` with the frozen `Schedule` (schedule_id,
+  task_id, half-open [start, end), created_at), `create_schedule`,
+  and `place_task`, plus the `ScheduleRepository` port in
+  `domain/repositories.py` (save / get / list_for_task, earliest
+  start first). "Schedule: placement of task in time" (docs/02);
+  "Task 1:N Schedules" (docs/03) — a split task occupies several
+  intervals, so `place_task` turns the TASK-063 slot allocations into
+  one Schedule per part. `create_schedule` enforces the task's
+  deadline on the persisted placement (finishing exactly at it is on
+  time — the same half-open semantics the deadline layer filters by),
+  so a stored Schedule can never encode a deadline violation; one
+  task's placements must not overlap each other (back-to-back is
+  fine). Schedule is distinct from both the Calendar Event it may be
+  materialized as and from Execution, and replacing placements never
+  rewrites the Plan ("Schedule and Replanning are distinct",
+  docs/03). 19 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

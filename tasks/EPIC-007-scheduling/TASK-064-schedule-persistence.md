@@ -1,7 +1,7 @@
 # TASK-064 — Schedule persistence
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-007-scheduling — Scheduling
