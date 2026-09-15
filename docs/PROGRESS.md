@@ -2,8 +2,8 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-056 (Plan validation)
-- Current Epic: EPIC-006 Planning
+- Current Task: TASK-057 (Candidate slot generation)
+- Current Epic: EPIC-007 Scheduling
 
 ## Completed
 - Product/domain design baseline completed before implementation pack generation.
@@ -570,6 +570,22 @@
   tasks remain outcome-level state (docs/03). `generate_plan`
   composes accept-proposals + publish over a begun draft; per
   ADR-002 nothing here generates content. 16 tests.
+- TASK-056 — Plan validation (2026-09-15): pipeline step 14,
+  "Validate" (docs/04) — `domain/plan_validation.py`, in the
+  return-all-issues style of `domain/validation.py`.
+  `validate_plan` checks the plan as a whole: task ownership
+  (`task_owner_mismatch`), non-emptiness (`empty_plan`), full
+  estimation (`unestimated_task`), workload drift
+  (`workload_mismatch` — the recorded workload must equal the sum of
+  the tasks' estimates), dependency health
+  (`dependency_reference_outside`/`dependency_cycle` via
+  `topological_order`), and the spec feasibility rule `infeasible`
+  (workload + buffer ≤ usable capacity, docs/04).
+  `activate_plan` applies the promotion gate: only a CANDIDATE may
+  activate, and "Goal max 1 Active Plan" (docs/03) holds — a
+  competing active plan must be superseded or archived first. A
+  failed validation leaves the candidate a candidate: the domain
+  reports, it does not destroy. 23 tests. EPIC-006 complete.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
