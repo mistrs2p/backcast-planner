@@ -33,6 +33,7 @@ from datetime import date, datetime, time, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 from backcasting.domain.calendar import Calendar
+from backcasting.domain.timezone import require_utc
 
 MAX_TITLE_LENGTH = 200
 VALID_WEEKDAYS = frozenset(range(7))
@@ -40,13 +41,6 @@ VALID_WEEKDAYS = frozenset(range(7))
 
 class AvailabilityError(ValueError):
     """Raised when an availability invariant is violated."""
-
-
-def _require_utc(name: str, value: datetime) -> None:
-    if not isinstance(value, datetime) or value.tzinfo is None:
-        raise AvailabilityError(f"{name} must be timezone-aware")
-    if value.utcoffset() != timezone.utc.utcoffset(value):
-        raise AvailabilityError(f"{name} must be in UTC")
 
 
 @dataclass(frozen=True)
@@ -161,8 +155,8 @@ def available_intervals(
     """
     if not isinstance(window, AvailabilityWindow):
         raise TypeError("window must be an AvailabilityWindow")
-    _require_utc("range_start", range_start)
-    _require_utc("range_end", range_end)
+    require_utc("range_start", range_start, error=AvailabilityError)
+    require_utc("range_end", range_end, error=AvailabilityError)
     if range_end <= range_start:
         raise AvailabilityError("range_end must be after range_start")
 

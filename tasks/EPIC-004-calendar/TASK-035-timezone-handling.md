@@ -1,7 +1,7 @@
 # TASK-035 — Timezone handling
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-004-calendar — Calendar
