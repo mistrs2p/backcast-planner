@@ -1,7 +1,7 @@
 # TASK-008 — Environment configuration
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-001-foundation — Foundation

@@ -17,5 +17,7 @@ Rules:
   (`AGENTS.md` §5).
 - Database changes require Alembic migrations.
 
-Application code, dependency manifests, and Docker wiring are introduced by
-subsequent EPIC-001 tasks (technology verification, Docker baseline).
+Current contents: `src/backcasting/config.py` — the validated environment
+configuration layer (TASK-008). Dependency manifests and Docker wiring are
+introduced by subsequent EPIC-001 tasks (technology verification, Docker
+services).

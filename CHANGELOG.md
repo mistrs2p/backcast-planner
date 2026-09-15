@@ -20,4 +20,6 @@
   validators on pushes/PRs to main; `requirements-dev.txt` added (TASK-006).
 - Docker baseline: `infra/docker-compose.yml` provides PostgreSQL 18 + Redis with
   health checks and persistent storage for local development (TASK-007).
+- Environment configuration: validated stdlib-only `Settings` layer for the backend
+  (`apps/api/src/backcasting/config.py`) with optional `.env` seeding (TASK-008).
 - Initial execution pack created.
