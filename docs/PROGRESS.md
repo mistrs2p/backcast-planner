@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-008 (Environment configuration)
+- Current Task: TASK-009 (Technology verification)
 - Current Epic: EPIC-001 Foundation
 
 ## Completed
@@ -42,6 +42,12 @@
   via env vars). Live smoke test passed (both services healthy). Bug found and fixed:
   PostgreSQL 18 rejects a volume mounted directly at the data directory; the mount
   must be at `/var/lib/postgresql` (regression test added). 7 tests.
+- TASK-008 — Environment configuration (2026-09-15): first backend code —
+  `apps/api/src/backcasting/config.py`, a stdlib-only validated `Settings` layer
+  (APP_ENV/LOG_LEVEL enums, PostgreSQL DATABASE_URL and redis:// REDIS_URL schemes,
+  JWT_SECRET required and placeholder-rejected with a 32-char minimum in production,
+  LLM provider allowlist with model-requires-provider). Optional `.env` seeding with
+  real-environment precedence. 22 tests via a root `tests/conftest.py` path shim.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
