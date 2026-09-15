@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-044 (Buffer)
+- Current Task: TASK-045 (Capacity analysis)
 - Current Epic: EPIC-005 Capacity
 
 ## Completed
@@ -393,6 +393,19 @@
   chronological) and `applies_to` (half-open touch check returning a
   bool — a preference never rejects a slot, it only reports
   applicability). 32 tests.
+- TASK-044 — Buffer (2026-09-15): the conservatism layer of the
+  feasibility rule "Required Workload + Buffer ≤ usable Capacity"
+  (docs/04) — `domain/buffer.py` with the frozen `Buffer`: a
+  per-period policy reserving a `ratio` fraction of usable capacity
+  (0 ≤ ratio < 1 — a full reserve is abstention, not a buffer;
+  finite, non-bool), plus `create_buffer`, `reserved_amount` /
+  `usable_amount` (ratio application, rounding clamped at zero) and
+  `apply_buffer`, which pairs a buffer with the `EffectiveCapacity`
+  record of the same calendar and period and yields the
+  `BufferedCapacity` (reserved + usable, never negative) the
+  feasibility rule consumes. Completes the split of labor fixed in
+  TASK-040: effective capacity may exceed the plan when history
+  over-delivers; conservatism lives here. 32 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

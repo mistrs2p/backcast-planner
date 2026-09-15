@@ -1,7 +1,7 @@
 # TASK-044 — Buffer
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-005-capacity — Capacity
