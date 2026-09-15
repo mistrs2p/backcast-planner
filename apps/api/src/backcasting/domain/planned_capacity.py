@@ -19,7 +19,9 @@ Rules:
 - ``created_at``/``updated_at`` are timezone-aware UTC;
   ``updated_at ≥ created_at``.
 
-:func:`derive_planned_capacity` computes the amount deterministically:
+:func:`derive_planned_capacity` computes the amount deterministically
+(via :func:`workable_time`, the shared capacity semantics that
+Observed Capacity measures backward over a period that has happened):
 
 - every availability window contributes its UTC intervals over the
   period (TASK-034 semantics: local wall-clock times preserved across
@@ -124,6 +126,60 @@ def _subtract(base: list[Interval], cuts: list[Interval]) -> list[Interval]:
     return remaining
 
 
+def workable_time(
+    windows: tuple[AvailabilityWindow, ...],
+    events: tuple[CalendarEvent, ...] = (),
+    *,
+    range_start: datetime,
+    range_end: datetime,
+) -> timedelta:
+    """The workable time over a range: merged availability minus the
+    commitments occupying it.
+
+    This is the shared capacity semantics — Planned Capacity runs it
+    forward (an estimate), Observed Capacity runs it backward over a
+    period that has happened (a measurement). Overlapping and touching
+    intervals — across windows *and* across events — are merged first,
+    so no time is ever counted twice; commitments outside the windows
+    consume none of the workable time.
+    """
+    if not isinstance(windows, tuple):
+        raise PlannedCapacityError("windows must be a tuple of AvailabilityWindow")
+    for window in windows:
+        if not isinstance(window, AvailabilityWindow):
+            raise PlannedCapacityError("windows must be AvailabilityWindow instances")
+    if not isinstance(events, tuple):
+        raise PlannedCapacityError("events must be a tuple of CalendarEvent")
+    for event in events:
+        if not isinstance(event, CalendarEvent):
+            raise PlannedCapacityError("events must be CalendarEvent instances")
+    require_utc("range_start", range_start, error=PlannedCapacityError)
+    require_utc("range_end", range_end, error=PlannedCapacityError)
+    if range_end <= range_start:
+        raise PlannedCapacityError("range_end must be after range_start")
+
+    available: list[Interval] = []
+    for window in windows:
+        available.extend(
+            available_intervals(
+                window, range_start=range_start, range_end=range_end
+            )
+        )
+    merged_availability = _merge(available)
+
+    committed: list[Interval] = []
+    for event in events:
+        clipped = _clip(event.start, event.end, range_start, range_end)
+        if clipped is not None:
+            committed.append(clipped)
+    merged_commitments = _merge(committed)
+
+    amount = timedelta(0)
+    for start, end in _subtract(merged_availability, merged_commitments):
+        amount += end - start
+    return amount
+
+
 def derive_planned_capacity(
     calendar: Calendar,
     windows: tuple[AvailabilityWindow, ...],
@@ -158,30 +214,10 @@ def derive_planned_capacity(
             raise PlannedCapacityError("events must be CalendarEvent instances")
         if event.calendar_id != calendar.calendar_id:
             raise PlannedCapacityError("event does not belong to this calendar")
-    require_utc("range_start", range_start, error=PlannedCapacityError)
-    require_utc("range_end", range_end, error=PlannedCapacityError)
-    if range_end <= range_start:
-        raise PlannedCapacityError("range_end must be after range_start")
 
-    available: list[Interval] = []
-    for window in windows:
-        available.extend(
-            available_intervals(
-                window, range_start=range_start, range_end=range_end
-            )
-        )
-    merged_availability = _merge(available)
-
-    committed: list[Interval] = []
-    for event in events:
-        clipped = _clip(event.start, event.end, range_start, range_end)
-        if clipped is not None:
-            committed.append(clipped)
-    merged_commitments = _merge(committed)
-
-    amount = timedelta(0)
-    for start, end in _subtract(merged_availability, merged_commitments):
-        amount += end - start
+    amount = workable_time(
+        windows, events, range_start=range_start, range_end=range_end
+    )
 
     now = created_at if created_at is not None else datetime.now(UTC)
     return PlannedCapacity(

@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-039 (Observed capacity)
+- Current Task: TASK-040 (Effective capacity)
 - Current Epic: EPIC-005 Capacity
 
 ## Completed
@@ -333,6 +333,18 @@
   overlap availability (a meeting at 22:00 doesn't eat an 18–21
   window); what actually happened is Observed Capacity (next task).
   33 tests.
+- TASK-039 — Observed capacity (2026-09-15): the backward-looking
+  measurement ("Measurement: observed data", docs/02) —
+  `domain/observed_capacity.py` with the frozen `ObservedCapacity`
+  record and `measure_observed_capacity`, running the *same* semantics
+  as planned capacity (extracted into the shared `workable_time`
+  helper in `domain/planned_capacity.py`) over a period that has
+  happened. Two invariants distinguish a measurement from an estimate:
+  a period can only be measured after it ends
+  (`measured_at ≥ period_end`), and a measurement is an immutable
+  historical fact — no `updated_at`, no revision path; a corrected
+  measurement is a new record. This planned/observed contrast is what
+  makes capacity variance (docs/07) meaningful. 24 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
