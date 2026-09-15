@@ -1,7 +1,7 @@
 # TASK-029 — Calendar model
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-004-calendar — Calendar

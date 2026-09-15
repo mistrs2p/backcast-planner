@@ -85,4 +85,7 @@
   deterministic pipeline (gap → feasibility → strategies → selection →
   milestones) with one-shot run semantics; failures carry the FAILED run
   and the failing step (TASK-028). EPIC-003 complete.
+- Calendar model: user-owned calendar root with a ZoneInfo home timezone
+  and the 15-minute MVP planning granularity pinned as a constant
+  (TASK-029).
 - Initial execution pack created.
