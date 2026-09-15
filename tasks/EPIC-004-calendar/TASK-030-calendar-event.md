@@ -1,7 +1,7 @@
 # TASK-030 — Calendar event
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-004-calendar — Calendar

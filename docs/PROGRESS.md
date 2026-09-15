@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-030 (Calendar event)
+- Current Task: TASK-031 (Recurrence rules)
 - Current Epic: EPIC-004 Calendar
 
 ## Completed
@@ -227,6 +227,14 @@
   constant rather than per-calendar state. Events, recurrence,
   exceptions, availability, and floating rest follow in their tasks.
   15 tests. EPIC-004 started.
+- TASK-030 — Calendar event (2026-09-15): `domain/calendar_event.py` with
+  the frozen `CalendarEvent` (UUID identity, calendar reference, bounded
+  title/description, UTC `start`/`end` with end > start) and
+  `create_event` bound to a calendar. Design decisions within spec
+  latitude: events are *not* forced onto the 15-minute planning
+  granularity (that governs task placement; existing commitments arrive
+  at reality's times) and an event carries no task link — "Calendar
+  Event is not necessarily a Task" (docs/03). 29 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
