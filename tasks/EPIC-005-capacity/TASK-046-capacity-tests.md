@@ -1,7 +1,7 @@
 # TASK-046 — Capacity tests
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-005-capacity — Capacity

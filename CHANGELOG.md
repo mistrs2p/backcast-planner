@@ -151,4 +151,8 @@
   composes availability, constraints, commitments, history, and buffer
   into the `CapacityAnalysis` record whose `usable_amount` feeds the
   feasibility rule (TASK-045).
+- Capacity integration tests: the epic-closing suite wiring recurrence
+  and exceptions into the capacity chain and on into
+  `execute_backcasting` — feasible and infeasible end-to-end paths,
+  DST capacity loss, and pool splitting (TASK-046).
 - Initial execution pack created.

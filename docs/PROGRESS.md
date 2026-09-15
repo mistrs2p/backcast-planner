@@ -2,8 +2,8 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-046 (Capacity integration tests)
-- Current Epic: EPIC-005 Capacity
+- Current Task: TASK-047 (Plan model)
+- Current Epic: EPIC-006 Planning
 
 ## Completed
 - Product/domain design baseline completed before implementation pack generation.
@@ -424,6 +424,23 @@
   capacity); constraint-blocked availability is subtracted at this
   analysis level while `derive_planned_capacity` keeps its TASK-038
   record semantics (availability − occupying commitments). 27 tests.
+- TASK-046 — Capacity integration tests (2026-09-15): the epic-closing
+  integration suite `tests/test_capacity_integration.py` wiring
+  EPIC-004's calendar machinery (weekly recurrence with cancelled and
+  rescheduled occurrences) into EPIC-005's capacity chain and on into
+  the EPIC-003 pipeline: a realistic week analyzed end to end
+  (40h availability, hard-blocked hours, standup commitments, a
+  history sample measured with `measure_observed_capacity`, a 10%
+  buffer) whose `usable_amount`/`reserved_amount` feed
+  `execute_backcasting` to a COMPLETED run — and, overcommitted, to
+  `InfeasibleBackcasting` carrying the FAILED run; exceptions proven
+  to change capacity (a cancelled occurrence frees 30 minutes, a
+  rescheduled one moves its bite out of the windows); the capacity
+  pool splitting the analysis's effective amount across goals; the
+  2026-03-29 London spring-forward proven to cost a real capacity
+  hour through the whole chain; and the analysis's planned amount
+  cross-checked against `workable_time`/`derive_planned_capacity`.
+  8 tests. EPIC-005 complete.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
