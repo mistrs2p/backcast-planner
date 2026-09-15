@@ -29,7 +29,11 @@ import uuid
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
+from backcasting.domain.current_state import CurrentState
+from backcasting.domain.future_state import FutureState
+from backcasting.domain.goal import Goal
 from backcasting.domain.metric import Metric, MetricError
+from backcasting.domain.validation import require_valid, validate_goal_context
 
 MAX_NARRATIVE_LENGTH = 5000
 
@@ -129,11 +133,58 @@ def record_gap(
         goal_id=goal_id,
         current_state_id=current_state_id,
         future_state_id=future_state_id,
-        dimensions=dimensions,
-        narrative=narrative,
         calculated_at=(
             calculated_at
             if calculated_at is not None
             else datetime.now(timezone.utc)
         ),
+        dimensions=dimensions,
+        narrative=narrative,
+    )
+
+
+def calculate_gap(
+    goal: Goal,
+    current_state: CurrentState,
+    future_state: FutureState,
+    measurements: tuple[tuple[Metric, object, object], ...] = (),
+    *,
+    narrative: str = "",
+    gap_id: uuid.UUID | None = None,
+    calculated_at: datetime | None = None,
+) -> Gap:
+    """Calculate the gap for a goal's assembled context.
+
+    The deterministic backcasting step 4 ("Calculate Gap",
+    ``docs/04-BACKCASTING-MODEL.md``). The context is validated first
+    (ownership matching, target after snapshot — see
+    :func:`backcasting.domain.validation.validate_goal_context`); a gap is
+    only ever recorded for a context that hangs together. Each measurement
+    is a ``(metric, current_value, target_value)`` triple, validated
+    against its metric; metrics may appear at most once.
+
+    ``goal``/``current_state``/``future_state`` must belong to the same
+    planning context.
+    """
+    if not isinstance(goal, Goal):
+        raise TypeError("goal must be a Goal")
+    if not isinstance(current_state, CurrentState):
+        raise TypeError("current_state must be a CurrentState")
+    if not isinstance(future_state, FutureState):
+        raise TypeError("future_state must be a FutureState")
+
+    require_valid(validate_goal_context(goal, future_state, current_state))
+
+    dimensions = tuple(
+        GapDimension(metric, current_value, target_value)
+        for metric, current_value, target_value in measurements
+    )
+    return record_gap(
+        goal.goal_id,
+        current_state.state_id,
+        future_state.state_id,
+        dimensions=dimensions,
+        narrative=narrative,
+        gap_id=gap_id,
+        calculated_at=calculated_at,
     )
