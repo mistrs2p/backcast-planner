@@ -158,6 +158,9 @@
 - Plan versioning: traceable replan history — per-plan strictly
   increasing versions with reason, source-run provenance, and a
   content change set; no-op replans rejected (TASK-048).
+- Outcome model: the "achieved state/result" — plan-owned, optionally
+  milestone-bound, taskless by design, with descriptive-only revision
+  (TASK-049).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
