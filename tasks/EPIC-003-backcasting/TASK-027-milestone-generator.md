@@ -1,7 +1,7 @@
 # TASK-027 — Milestone generator
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-003-backcasting — Backcasting

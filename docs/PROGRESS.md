@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-027 (Milestone generator)
+- Current Task: TASK-028 (Backcasting integration)
 - Current Epic: EPIC-003 Backcasting
 
 ## Completed
@@ -196,6 +196,15 @@
   its own — as a *measurable* checkpoint its achievement is expressed
   through its Outcomes (Milestone 1:N Outcomes, docs/03) rather than a
   status flag. 28 tests.
+- TASK-027 — Milestone generator (2026-09-15): the deterministic side of
+  pipeline step 10 per docs/09 / ADR-002 — `MilestoneProposal` (validated
+  raw proposal as an AI adapter emits it) and `accept_proposed_milestones`,
+  which turns a proposal batch into run milestones only when the run is
+  RUNNING against exactly that destination (state-id provenance), the
+  batch is non-empty, titles are unique, target dates are strictly
+  increasing, and every checkpoint lies strictly between acceptance and
+  the destination's target date (intermediate — never the destination
+  itself). 24 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

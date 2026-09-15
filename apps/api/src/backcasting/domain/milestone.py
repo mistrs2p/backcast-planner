@@ -33,6 +33,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
 from backcasting.domain.backcasting_run import BackcastingRun, BackcastingRunStatus
+from backcasting.domain.future_state import FutureState
 
 MAX_TITLE_LENGTH = 200
 MAX_DESCRIPTION_LENGTH = 5000
@@ -121,4 +122,118 @@ def define_milestone(
         description=description,
         created_at=now,
         updated_at=now,
+    )
+
+
+@dataclass(frozen=True)
+class MilestoneProposal:
+    """A raw milestone proposal as an AI adapter emits it.
+
+    The domain does not generate milestones (``docs/09-AI-ARCHITECTURE.md``:
+    "The LLM proposes and reasons; the Domain validates and enforces");
+    it accepts proposals through :func:`accept_proposed_milestones`,
+    which applies the deterministic rules.
+    """
+
+    title: str
+    target_date: datetime
+    description: str = ""
+
+    def __post_init__(self) -> None:
+        title = self.title
+        if not isinstance(title, str) or not title.strip():
+            raise MilestoneError("proposal title must be a non-empty string")
+        if len(title.strip()) > MAX_TITLE_LENGTH:
+            raise MilestoneError(
+                f"proposal title must be at most {MAX_TITLE_LENGTH} characters"
+            )
+        object.__setattr__(self, "title", title.strip())
+        target_date = self.target_date
+        if not isinstance(target_date, datetime) or target_date.tzinfo is None:
+            raise MilestoneError("proposal target_date must be timezone-aware")
+        if target_date.utcoffset() != timezone.utc.utcoffset(target_date):
+            raise MilestoneError("proposal target_date must be in UTC")
+        object.__setattr__(self, "target_date", target_date)
+        description = self.description
+        if description is None:
+            description = ""
+        if not isinstance(description, str):
+            raise MilestoneError("proposal description must be a string")
+        if len(description) > MAX_DESCRIPTION_LENGTH:
+            raise MilestoneError(
+                f"proposal description must be at most {MAX_DESCRIPTION_LENGTH} characters"
+            )
+        object.__setattr__(self, "description", description)
+
+
+def accept_proposed_milestones(
+    run: BackcastingRun,
+    future_state: FutureState,
+    proposals: tuple[MilestoneProposal, ...],
+    *,
+    at: datetime | None = None,
+) -> tuple[Milestone, ...]:
+    """Accept AI-proposed milestones for a run (pipeline step 10).
+
+    Deterministic rules enforced here:
+
+    - The run must be RUNNING (milestones are generated during the run).
+    - ``future_state`` must be exactly the destination the run is
+      backcasting from (same state id and goal) — a milestone path
+      belongs to one destination.
+    - At least one proposal must be supplied — an empty generation is a
+      failed step, not a valid outcome.
+    - Titles must be unique within the batch.
+    - Target dates must be strictly increasing: milestones are ordered
+      checkpoints along the path.
+    - Every target date must lie strictly between the acceptance
+      instant and the destination's target date — intermediate
+      checkpoints, never the destination itself.
+
+    Returns the recorded milestones in proposal order, sharing ``at`` as
+    their creation time.
+    """
+    if not isinstance(run, BackcastingRun):
+        raise TypeError("run must be a BackcastingRun")
+    if not isinstance(future_state, FutureState):
+        raise TypeError("future_state must be a FutureState")
+    if not isinstance(proposals, tuple):
+        raise MilestoneError("proposals must be a tuple of MilestoneProposal")
+    if run.status is not BackcastingRunStatus.RUNNING:
+        raise MilestoneError(
+            f"cannot accept milestones for a run with status {run.status.value}"
+        )
+    if future_state.state_id != run.future_state_id:
+        raise MilestoneError(
+            "future_state must be the destination this run is backcasting from"
+        )
+    if future_state.goal_id != run.goal_id:
+        raise MilestoneError("future_state must belong to the run's goal")
+    if not proposals:
+        raise MilestoneError("at least one milestone proposal is required")
+    now = at if at is not None else datetime.now(timezone.utc)
+    titles: set[str] = set()
+    previous_target: datetime | None = None
+    for proposal in proposals:
+        if not isinstance(proposal, MilestoneProposal):
+            raise MilestoneError("proposals must be MilestoneProposal instances")
+        if proposal.title in titles:
+            raise MilestoneError(f"duplicate milestone title: {proposal.title}")
+        titles.add(proposal.title)
+        if previous_target is not None and proposal.target_date <= previous_target:
+            raise MilestoneError("milestone target dates must be strictly increasing")
+        previous_target = proposal.target_date
+        if proposal.target_date >= future_state.target_date:
+            raise MilestoneError(
+                "milestone target dates must precede the destination's target date"
+            )
+    return tuple(
+        define_milestone(
+            run,
+            proposal.title,
+            proposal.target_date,
+            description=proposal.description,
+            created_at=now,
+        )
+        for proposal in proposals
     )

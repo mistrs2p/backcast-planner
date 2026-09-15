@@ -77,4 +77,8 @@
 - Milestone model: intermediate measurable checkpoint bound to a running
   backcasting run, with a target date strictly after creation and no
   lifecycle of its own — achievement flows through outcomes (TASK-026).
+- Milestone generation: deterministic acceptance of AI-proposed milestone
+  batches — unique titles, strictly increasing target dates strictly
+  inside the acceptance-to-destination window, exact destination
+  provenance (TASK-027).
 - Initial execution pack created.
