@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-069 (Execution model)
+- Current Task: TASK-070 (Measurement model)
 - Current Epic: EPIC-008 Progress
 
 ## Completed
@@ -773,6 +773,21 @@
   plan validation) and propagate down the dependency chain as
   DEPENDENCY_BLOCKED without retry loops. EPIC-007 complete;
   EPIC-008 started. 21 tests.
+- TASK-069 — Execution model (2026-09-16): the Actual of docs/07's
+  "Planned ≠ Actual ≠ Progress" triad — `domain/execution.py` with
+  the frozen `Execution` (execution_id, task_id, half-open
+  [start, end), created_at, `.duration`), `create_execution`,
+  `executions_for_task`, and `actual_duration` (the Actual
+  counterpart of `estimate_workload`; empty sum zero). "Execution:
+  what actually happened" (docs/02); "Task 1:N Executions"
+  (docs/03) — one record per sitting. The mirror image of Schedule
+  with the opposite epistemology: no deadline enforcement (a missed
+  deadline is exactly the variance signal, refusing to record it
+  would erase the deviation), no granularity rounding (work took
+  what it took; the 15-minute quantum is a planning concern), no
+  consistency demand against placements (executing outside the
+  placed time is a schedule variance, recorded by both records
+  simply existing). 15 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
