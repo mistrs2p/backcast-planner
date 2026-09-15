@@ -45,4 +45,4 @@ tasks/               Executable backlog (epics → tasks)
 - Docker-first local development
 - Redis + worker for asynchronous work when justified
 
-Exact dependency versions must be verified by `TASK-003` against official release documentation before lockfiles are finalized.
+Exact dependency versions must be verified by `TASK-009` against official release documentation before lockfiles are finalized.

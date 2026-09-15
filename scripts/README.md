@@ -7,5 +7,10 @@ Development, validation, and automation scripts for the repository.
   `.env.example`, and enforces domain-layer import purity under `apps/api`.
   Run with `python scripts/check_rules.py`; exit code 1 reports violations.
 
-Scripts for PROJECT_STATE validation (TASK-003), progress system maintenance
-(TASK-004), and CI support (TASK-006) will be added by their respective tasks.
+- `project_state.py` — PROJECT_STATE foundation (TASK-003): validates the
+  PROJECT_STATE.json schema (required keys, lifecycle enums, validation results,
+  ISO dates) and its consistency with `tasks/TASK-MANIFEST.json` and task-file
+  statuses. Run with `python scripts/project_state.py validate`.
+
+Scripts for progress system maintenance (TASK-004) and CI support (TASK-006)
+will be added by their respective tasks.

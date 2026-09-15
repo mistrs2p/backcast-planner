@@ -8,4 +8,7 @@
 - AGENTS.md enforcement: `scripts/check_rules.py` validates AGENTS.md structure,
   rejects tracked secrets and non-placeholder credentials, and enforces domain-layer
   import purity; covered by enforcement tests (TASK-002).
+- PROJECT_STATE foundation: `scripts/project_state.py` validates the state schema and
+  cross-checks it against the task manifest and task statuses; stale TASK-003/TASK-009
+  version-verification references corrected (TASK-003).
 - Initial execution pack created.
