@@ -1,7 +1,7 @@
 # TASK-058 — Hard constraint filtering
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-007-scheduling — Scheduling
