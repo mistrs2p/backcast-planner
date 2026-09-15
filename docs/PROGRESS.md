@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-063 (Task splitting)
+- Current Task: TASK-064 (Schedule persistence)
 - Current Epic: EPIC-007 Scheduling
 
 ## Completed
@@ -669,6 +669,21 @@
   equal scores keep input order, so chronological generation order
   remains the tie-breaker, and with no preferences every slot scores
   0 — the layer abstains, it never reorders by default. 19 tests.
+- TASK-063 — Task splitting (2026-09-16): the placement fallback —
+  `domain/task_splitting.py` with `split_task_across_slots` and the
+  frozen `SlotAllocation` (slot, start, end). When no single
+  surviving slot holds the task's full estimated duration, the work
+  flows greedily through the slots in the order given (the
+  preference layer ranks them best-first, TASK-062): the best slot
+  hosts as much as it can at the planning granularity, the remainder
+  flows onward — each slot at most one part, packed from its start,
+  parts summing exactly to the duration. The planning granularity is
+  the quantum (docs/05: 15 minutes for the MVP): every part is a
+  whole multiple of it, and a duration that is not itself a multiple
+  is an error — the estimate was made off-granularity and that fact
+  should surface, not be silently re-rounded. Insufficient total
+  capacity returns empty — the `NO_AVAILABLE_SLOT` fact (docs/06),
+  surfaced upstream, never routed around. 16 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

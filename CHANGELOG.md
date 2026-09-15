@@ -203,6 +203,10 @@
 - Preference scoring: the soft layer — each preference contributes
   ±weight × overlap fraction and slots rank best-first without ever
   being rejected; ties keep chronological order (TASK-062).
+- Task splitting: the placement fallback — a duration no single slot
+  holds flows greedily through the ranked slots in 15-minute
+  granularity multiples; parts sum exactly, insufficient capacity
+  returns empty (NO_AVAILABLE_SLOT) (TASK-063).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
