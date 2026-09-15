@@ -1,7 +1,7 @@
 # TASK-006 — CI baseline
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-001-foundation — Foundation

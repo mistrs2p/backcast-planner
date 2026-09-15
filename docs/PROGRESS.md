@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-006 (CI baseline)
+- Current Task: TASK-007 (Docker baseline)
 - Current Epic: EPIC-001 Foundation
 
 ## Completed
@@ -32,6 +32,11 @@
   malformed task-branch names (feature|fix|chore|docs/TASK-###-short-name);
   `check-commits` requires Conventional Commit style for non-merge commits on a
   branch. 33 tests against temporary git repositories.
+- TASK-006 — CI baseline (2026-09-15): added `.github/workflows/ci.yml` running
+  pytest plus all repository validators (check_rules, project_state, progress,
+  conventional commits on PRs) on pushes and PRs to main, with
+  `requirements-dev.txt` for dev dependencies (unpinned until TASK-009).
+  6 workflow-structure tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
