@@ -1,7 +1,7 @@
 # TASK-052 — Resources
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-006-planning — Planning

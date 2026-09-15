@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-052 (Resources)
+- Current Task: TASK-053 (Task estimation)
 - Current Epic: EPIC-006 Planning
 
 ## Completed
@@ -514,6 +514,17 @@
   input order) the scheduler's deterministic processing order.
   Collections are plan-scoped by construction — persistence scoping is
   the repository's concern (EPIC-008). 25 tests.
+- TASK-052 — Resources (2026-09-15): the "Task N:M Resources" link
+  (docs/03) — `domain/resource.py` with the frozen `Resource`: a
+  standalone catalog entity (name, description, stamps) with no plan
+  or calendar scope, because docs/03 states only the N:M link and
+  imposes no ownership rule; a resource is shared context, an input
+  to backcasting (docs/04). `use_resources` writes the requirement
+  into the Task's new `resource_ids` (a frozenset union, idempotent,
+  mirroring `serve_outcomes`); tasks from any plan may require the
+  same resource. `RESOURCE_UNAVAILABLE` (docs/06) stays with the
+  scheduling epic — this module only records the requirement.
+  25 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
