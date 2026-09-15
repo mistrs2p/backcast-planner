@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-054 (Task decomposition contract)
+- Current Task: TASK-055 (Plan generation)
 - Current Epic: EPIC-006 Planning
 
 ## Completed
@@ -540,6 +540,21 @@
   estimate is surfaced, never hidden as a zero. The estimate
   records themselves are pure history; persistence is EPIC-008.
   29 tests.
+- TASK-054 — Task decomposition contract (2026-09-15): pipeline
+  step 12, "Generate tasks" (docs/04), behind ADR-002's split —
+  `TaskProposal` (in `domain/task.py`) is the raw shape an AI
+  adapter emits: title, description, optional duration/deadline,
+  and outcome bindings referenced by title (ids are the domain's
+  to assign). `accept_proposed_tasks` enforces the deterministic
+  rules: the plan must not be terminal (SUPERSEDED/ARCHIVED/INVALID
+  plans cannot gain tasks), supplied outcomes must belong to the
+  plan and carry unique titles (a title reference must resolve to
+  exactly one outcome), at least one proposal is required (empty
+  generation is a failed step, mirroring milestones), task titles
+  are unique within the batch, and every outcome reference must
+  resolve — an unresolved reference is a contract violation, never
+  a silently dropped link. Mirrors the MilestoneProposal/
+  accept_proposed_milestones precedent. 21 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

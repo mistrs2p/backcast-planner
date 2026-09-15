@@ -45,7 +45,7 @@ from dataclasses import dataclass, field, replace
 from datetime import datetime, timedelta, timezone
 
 from backcasting.domain.outcome import Outcome
-from backcasting.domain.plan import Plan
+from backcasting.domain.plan import Plan, PlanStatus, is_terminal
 from backcasting.domain.timezone import UTC, require_utc
 
 MAX_TITLE_LENGTH = 200
@@ -210,3 +210,140 @@ def is_schedulable(task: Task) -> bool:
     if not isinstance(task, Task):
         raise TypeError("task must be a Task")
     return task.duration is not None
+
+
+@dataclass(frozen=True)
+class TaskProposal:
+    """A raw task proposal as an AI adapter emits it.
+
+    The decomposition contract for pipeline step 12, "Generate tasks"
+    (docs/04): the LLM decomposes outcomes into proposed tasks
+    ("outcome decomposition, task generation", docs/09) and the domain
+    validates (:func:`accept_proposed_tasks`). Outcome bindings are
+    referenced by the outcome's title — the proposal carries no ids,
+    because ids are the domain's to assign.
+    """
+
+    title: str
+    description: str = ""
+    duration: timedelta | None = None
+    deadline: datetime | None = None
+    outcome_titles: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        title = self.title
+        if not isinstance(title, str) or not title.strip():
+            raise TaskError("proposal title must be a non-empty string")
+        if len(title.strip()) > MAX_TITLE_LENGTH:
+            raise TaskError(
+                f"proposal title must be at most {MAX_TITLE_LENGTH} characters"
+            )
+        object.__setattr__(self, "title", title.strip())
+        description = self.description
+        if description is None:
+            description = ""
+        if not isinstance(description, str):
+            raise TaskError("proposal description must be a string")
+        if len(description) > MAX_DESCRIPTION_LENGTH:
+            raise TaskError(
+                f"proposal description must be at most {MAX_DESCRIPTION_LENGTH} characters"
+            )
+        object.__setattr__(self, "description", description)
+        if self.duration is not None:
+            if (
+                not isinstance(self.duration, timedelta)
+                or self.duration <= timedelta(0)
+            ):
+                raise TaskError("proposal duration must be a strictly positive timedelta")
+        if self.deadline is not None:
+            require_utc("proposal deadline", self.deadline, error=TaskError)
+        outcome_titles = self.outcome_titles
+        if not isinstance(outcome_titles, tuple):
+            raise TaskError("proposal outcome_titles must be a tuple of str")
+        cleaned: list[str] = []
+        for outcome_title in outcome_titles:
+            if not isinstance(outcome_title, str) or not outcome_title.strip():
+                raise TaskError("proposal outcome_titles must be non-empty strings")
+            cleaned.append(outcome_title.strip())
+        object.__setattr__(self, "outcome_titles", tuple(cleaned))
+
+
+def accept_proposed_tasks(
+    plan: Plan,
+    outcomes: tuple[Outcome, ...],
+    proposals: tuple[TaskProposal, ...],
+    *,
+    at: datetime | None = None,
+) -> tuple[Task, ...]:
+    """Accept AI-proposed tasks for a plan (pipeline step 12).
+
+    Deterministic rules enforced here (ADR-002: "The LLM proposes and
+    reasons; the Domain validates and enforces"):
+
+    - The plan must not be terminal — a SUPERSEDED, ARCHIVED, or
+      INVALID plan cannot gain tasks; generation targets a plan that
+      is still being shaped.
+    - Every supplied outcome must belong to the plan, and outcome
+      titles must be unique among them — a proposal's title reference
+      must resolve to exactly one outcome.
+    - At least one proposal must be supplied — an empty generation is
+      a failed step, not a valid outcome (mirroring milestones).
+    - Task titles must be unique within the batch.
+    - Every referenced outcome title must resolve; an unresolved
+      reference is a contract violation, not a silently dropped link.
+
+    Returns the created tasks in proposal order, sharing ``at`` as
+    their creation time, each serving its resolved outcomes.
+    """
+    if not isinstance(plan, Plan):
+        raise TypeError("plan must be a Plan")
+    if not isinstance(outcomes, tuple):
+        raise TaskError("outcomes must be a tuple of Outcome")
+    for outcome in outcomes:
+        if not isinstance(outcome, Outcome):
+            raise TaskError("outcomes must be Outcome instances")
+        if outcome.plan_id != plan.plan_id:
+            raise TaskError("outcome does not belong to this plan")
+    if not isinstance(proposals, tuple):
+        raise TaskError("proposals must be a tuple of TaskProposal")
+    if is_terminal(plan.status):
+        raise TaskError(
+            f"cannot accept tasks for a plan with status {plan.status.value}"
+        )
+    by_title: dict[str, Outcome] = {}
+    for outcome in outcomes:
+        if outcome.title in by_title:
+            raise TaskError(f"duplicate outcome title: {outcome.title}")
+        by_title[outcome.title] = outcome
+    if not proposals:
+        raise TaskError("at least one task proposal is required")
+    now = at if at is not None else datetime.now(UTC)
+    titles: set[str] = set()
+    for proposal in proposals:
+        if not isinstance(proposal, TaskProposal):
+            raise TaskError("proposals must be TaskProposal instances")
+        if proposal.title in titles:
+            raise TaskError(f"duplicate task title: {proposal.title}")
+        titles.add(proposal.title)
+        for outcome_title in proposal.outcome_titles:
+            if outcome_title not in by_title:
+                raise TaskError(
+                    f"proposal references unknown outcome: {outcome_title}"
+                )
+    tasks: list[Task] = []
+    for proposal in proposals:
+        task = create_task(
+            plan,
+            proposal.title,
+            description=proposal.description,
+            duration=proposal.duration,
+            deadline=proposal.deadline,
+            created_at=now,
+        )
+        resolved = tuple(
+            by_title[outcome_title] for outcome_title in proposal.outcome_titles
+        )
+        if resolved:
+            task = serve_outcomes(task, resolved, updated_at=now)
+        tasks.append(task)
+    return tuple(tasks)

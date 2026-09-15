@@ -1,7 +1,7 @@
 # TASK-054 — Task decomposition contract
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-006-planning — Planning
