@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-018 (Domain events)
+- Current Task: TASK-019 (Repository interfaces)
 - Current Epic: EPIC-002 Core Domain
 
 ## Completed
@@ -122,6 +122,14 @@
   the current-state snapshot), and `require_valid` aggregating all issues
   into a `DomainValidationError`. Entity-local invariants remain in their
   constructors; this layer sees what they cannot. 14 tests.
+- TASK-018 — Domain events (2026-09-15): `domain/events.py` with the
+  frozen `DomainEvent` envelope (typed via `DomainEventType`, UTC
+  `occurred_at`, UUID identity, payload wrapped in a read-only
+  `MappingProxyType` copy), the in-memory `EventCollector`, and
+  constructors for the operations the core domain supports (goal
+  created/revised/status-changed, current state captured, future state
+  defined/revised). Persistence/publication deferred to infrastructure
+  tasks, keeping the domain free of delivery mechanisms. 22 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

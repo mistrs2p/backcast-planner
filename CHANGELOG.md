@@ -51,4 +51,7 @@
   (ownership matching, target-after-snapshot) with aggregated issue
   reporting — the deterministic validation seam required by the AI
   architecture (TASK-017).
+- Domain events: immutable typed event envelope with read-only payloads,
+  an in-memory collector, and constructors for current domain operations;
+  publication deferred to infrastructure (TASK-018).
 - Initial execution pack created.
