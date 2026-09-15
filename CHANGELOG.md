@@ -72,4 +72,6 @@
 - Strategy generation: deterministic acceptance of AI-proposed strategy
   batches as run candidates — non-empty, unique names, running run only
   (TASK-024).
+- Feasibility engine: required workload + buffer ≤ usable capacity over
+  non-negative timedeltas, with signed slack exposed (TASK-025).
 - Initial execution pack created.
