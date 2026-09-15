@@ -18,4 +18,6 @@
   messages (TASK-005).
 - CI baseline: GitHub Actions workflow runs the test suite and all repository
   validators on pushes/PRs to main; `requirements-dev.txt` added (TASK-006).
+- Docker baseline: `infra/docker-compose.yml` provides PostgreSQL 18 + Redis with
+  health checks and persistent storage for local development (TASK-007).
 - Initial execution pack created.

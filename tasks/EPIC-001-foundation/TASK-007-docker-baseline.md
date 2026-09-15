@@ -1,7 +1,7 @@
 # TASK-007 — Docker baseline
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-001-foundation — Foundation

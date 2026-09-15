@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-007 (Docker baseline)
+- Current Task: TASK-008 (Environment configuration)
 - Current Epic: EPIC-001 Foundation
 
 ## Completed
@@ -37,6 +37,11 @@
   conventional commits on PRs) on pushes and PRs to main, with
   `requirements-dev.txt` for dev dependencies (unpinned until TASK-009).
   6 workflow-structure tests.
+- TASK-007 — Docker baseline (2026-09-15): added `infra/docker-compose.yml` with
+  PostgreSQL 18 and Redis (health checks, persistent volume, credential placeholders
+  via env vars). Live smoke test passed (both services healthy). Bug found and fixed:
+  PostgreSQL 18 rejects a volume mounted directly at the data directory; the mount
+  must be at `/var/lib/postgresql` (regression test added). 7 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
