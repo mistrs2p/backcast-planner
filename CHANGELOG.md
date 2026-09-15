@@ -25,4 +25,7 @@
 - Technology verification: exact versions verified against official sources and
   recorded in ADR-007; backend dependencies, dev dependencies, and Docker images
   exactly pinned with traceability tests (TASK-009).
+- Shared contracts foundation: FastAPI application factory with /health,
+  OpenAPI contract generated and committed to packages/contracts with CI drift
+  checking (ADR-008); test client moved to httpx2 (TASK-010).
 - Initial execution pack created.

@@ -77,6 +77,7 @@ REQUIRED_ADRS = [
     "docs/adr/ADR-005-tailwind.md",
     "docs/adr/ADR-006-llm-provider-abstraction.md",
     "docs/adr/ADR-007-technology-versions.md",
+    "docs/adr/ADR-008-openapi-contracts.md",
 ]
 
 

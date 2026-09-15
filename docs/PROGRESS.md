@@ -2,8 +2,8 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-010 (Shared contracts foundation)
-- Current Epic: EPIC-001 Foundation
+- Current Task: TASK-011 (User model)
+- Current Epic: EPIC-002 Core Domain
 
 ## Completed
 - Product/domain design baseline completed before implementation pack generation.
@@ -56,6 +56,13 @@
   redis 8.1.0); compose images pinned (postgres:18.4, redis:7.4.11-alpine, live smoke
   test passed); requirements-dev pinned. TypeScript deliberately 5.9.3 (not 7.0.2);
   worker framework deliberately deferred. 11 traceability tests enforce pin/ADR sync.
+- TASK-010 — Shared contracts foundation (2026-09-15): ADR-008 — the FastAPI app is
+  the single source of truth for the API contract. Added `backcasting.app.create_app()`
+  (application factory with `GET /health`) and `scripts/generate_contracts.py`, which
+  exports the OpenAPI schema to `packages/contracts/openapi.json` (committed) with a
+  `--check` drift mode wired into CI. Discovered starlette 1.6 deprecates httpx for
+  TestClient — switched the test client dependency to httpx2 2.13.0 (ADR-007 updated).
+  6 tests (app metadata, health, contract validity/identity/drift). EPIC-001 complete.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

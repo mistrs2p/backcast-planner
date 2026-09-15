@@ -22,12 +22,17 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install test dependencies
-        # Versions stay unpinned until TASK-009 (technology verification).
-        run: python -m pip install -r requirements-dev.txt
+      - name: Install dependencies
+        # Repo toolchain + the backend package (runtime deps, test deps).
+        run: |
+          python -m pip install -r requirements-dev.txt
+          python -m pip install -e "apps/api[dev]"
 
       - name: Run tests
         run: python -m pytest
+
+      - name: API contract drift check
+        run: python scripts/generate_contracts.py --check
 
       - name: AGENTS.md rule enforcement
         run: python scripts/check_rules.py
