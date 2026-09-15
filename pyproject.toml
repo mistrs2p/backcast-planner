@@ -1,0 +1,8 @@
+# Root tooling configuration for the backcasting-planner monorepo.
+# Application packages declare their own metadata and dependencies in
+# their respective directories (apps/api, apps/web, packages/contracts).
+# Exact tool and dependency versions are verified and pinned by TASK-009.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

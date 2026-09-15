@@ -1,0 +1,1206 @@
+[
+  {
+    "id": 1,
+    "title": "Repository bootstrap",
+    "epic": "EPIC-001-foundation",
+    "dependencies": [],
+    "path": "EPIC-001-foundation/TASK-001-repository-bootstrap.md"
+  },
+  {
+    "id": 2,
+    "title": "AGENTS.md enforcement",
+    "epic": "EPIC-001-foundation",
+    "dependencies": [
+      1
+    ],
+    "path": "EPIC-001-foundation/TASK-002-agents-md-enforcement.md"
+  },
+  {
+    "id": 3,
+    "title": "PROJECT_STATE foundation",
+    "epic": "EPIC-001-foundation",
+    "dependencies": [
+      2
+    ],
+    "path": "EPIC-001-foundation/TASK-003-project-state-foundation.md"
+  },
+  {
+    "id": 4,
+    "title": "Progress system foundation",
+    "epic": "EPIC-001-foundation",
+    "dependencies": [
+      3
+    ],
+    "path": "EPIC-001-foundation/TASK-004-progress-system-foundation.md"
+  },
+  {
+    "id": 5,
+    "title": "Git workflow foundation",
+    "epic": "EPIC-001-foundation",
+    "dependencies": [
+      4
+    ],
+    "path": "EPIC-001-foundation/TASK-005-git-workflow-foundation.md"
+  },
+  {
+    "id": 6,
+    "title": "CI baseline",
+    "epic": "EPIC-001-foundation",
+    "dependencies": [
+      5
+    ],
+    "path": "EPIC-001-foundation/TASK-006-ci-baseline.md"
+  },
+  {
+    "id": 7,
+    "title": "Docker baseline",
+    "epic": "EPIC-001-foundation",
+    "dependencies": [
+      6
+    ],
+    "path": "EPIC-001-foundation/TASK-007-docker-baseline.md"
+  },
+  {
+    "id": 8,
+    "title": "Environment configuration",
+    "epic": "EPIC-001-foundation",
+    "dependencies": [
+      7
+    ],
+    "path": "EPIC-001-foundation/TASK-008-environment-configuration.md"
+  },
+  {
+    "id": 9,
+    "title": "Technology verification",
+    "epic": "EPIC-001-foundation",
+    "dependencies": [
+      8
+    ],
+    "path": "EPIC-001-foundation/TASK-009-technology-verification.md"
+  },
+  {
+    "id": 10,
+    "title": "Shared contracts foundation",
+    "epic": "EPIC-001-foundation",
+    "dependencies": [
+      9
+    ],
+    "path": "EPIC-001-foundation/TASK-010-shared-contracts-foundation.md"
+  },
+  {
+    "id": 11,
+    "title": "User model",
+    "epic": "EPIC-002-core-domain",
+    "dependencies": [
+      10
+    ],
+    "path": "EPIC-002-core-domain/TASK-011-user-model.md"
+  },
+  {
+    "id": 12,
+    "title": "Goal model",
+    "epic": "EPIC-002-core-domain",
+    "dependencies": [
+      11
+    ],
+    "path": "EPIC-002-core-domain/TASK-012-goal-model.md"
+  },
+  {
+    "id": 13,
+    "title": "Current State",
+    "epic": "EPIC-002-core-domain",
+    "dependencies": [
+      12
+    ],
+    "path": "EPIC-002-core-domain/TASK-013-current-state.md"
+  },
+  {
+    "id": 14,
+    "title": "Future State",
+    "epic": "EPIC-002-core-domain",
+    "dependencies": [
+      13
+    ],
+    "path": "EPIC-002-core-domain/TASK-014-future-state.md"
+  },
+  {
+    "id": 15,
+    "title": "Metric abstraction",
+    "epic": "EPIC-002-core-domain",
+    "dependencies": [
+      14
+    ],
+    "path": "EPIC-002-core-domain/TASK-015-metric-abstraction.md"
+  },
+  {
+    "id": 16,
+    "title": "Goal lifecycle",
+    "epic": "EPIC-002-core-domain",
+    "dependencies": [
+      15
+    ],
+    "path": "EPIC-002-core-domain/TASK-016-goal-lifecycle.md"
+  },
+  {
+    "id": 17,
+    "title": "Domain validation",
+    "epic": "EPIC-002-core-domain",
+    "dependencies": [
+      16
+    ],
+    "path": "EPIC-002-core-domain/TASK-017-domain-validation.md"
+  },
+  {
+    "id": 18,
+    "title": "Domain events",
+    "epic": "EPIC-002-core-domain",
+    "dependencies": [
+      17
+    ],
+    "path": "EPIC-002-core-domain/TASK-018-domain-events.md"
+  },
+  {
+    "id": 19,
+    "title": "Repository interfaces",
+    "epic": "EPIC-002-core-domain",
+    "dependencies": [
+      18
+    ],
+    "path": "EPIC-002-core-domain/TASK-019-repository-interfaces.md"
+  },
+  {
+    "id": 20,
+    "title": "Gap model",
+    "epic": "EPIC-003-backcasting",
+    "dependencies": [
+      19
+    ],
+    "path": "EPIC-003-backcasting/TASK-020-gap-model.md"
+  },
+  {
+    "id": 21,
+    "title": "Gap calculation",
+    "epic": "EPIC-003-backcasting",
+    "dependencies": [
+      20
+    ],
+    "path": "EPIC-003-backcasting/TASK-021-gap-calculation.md"
+  },
+  {
+    "id": 22,
+    "title": "Backcasting run",
+    "epic": "EPIC-003-backcasting",
+    "dependencies": [
+      21
+    ],
+    "path": "EPIC-003-backcasting/TASK-022-backcasting-run.md"
+  },
+  {
+    "id": 23,
+    "title": "Strategy model",
+    "epic": "EPIC-003-backcasting",
+    "dependencies": [
+      22
+    ],
+    "path": "EPIC-003-backcasting/TASK-023-strategy-model.md"
+  },
+  {
+    "id": 24,
+    "title": "Strategy generation",
+    "epic": "EPIC-003-backcasting",
+    "dependencies": [
+      23
+    ],
+    "path": "EPIC-003-backcasting/TASK-024-strategy-generation.md"
+  },
+  {
+    "id": 25,
+    "title": "Feasibility engine",
+    "epic": "EPIC-003-backcasting",
+    "dependencies": [
+      24
+    ],
+    "path": "EPIC-003-backcasting/TASK-025-feasibility-engine.md"
+  },
+  {
+    "id": 26,
+    "title": "Milestone model",
+    "epic": "EPIC-003-backcasting",
+    "dependencies": [
+      25
+    ],
+    "path": "EPIC-003-backcasting/TASK-026-milestone-model.md"
+  },
+  {
+    "id": 27,
+    "title": "Milestone generator",
+    "epic": "EPIC-003-backcasting",
+    "dependencies": [
+      26
+    ],
+    "path": "EPIC-003-backcasting/TASK-027-milestone-generator.md"
+  },
+  {
+    "id": 28,
+    "title": "Backcasting integration",
+    "epic": "EPIC-003-backcasting",
+    "dependencies": [
+      27
+    ],
+    "path": "EPIC-003-backcasting/TASK-028-backcasting-integration.md"
+  },
+  {
+    "id": 29,
+    "title": "Calendar model",
+    "epic": "EPIC-004-calendar",
+    "dependencies": [
+      28
+    ],
+    "path": "EPIC-004-calendar/TASK-029-calendar-model.md"
+  },
+  {
+    "id": 30,
+    "title": "Calendar event",
+    "epic": "EPIC-004-calendar",
+    "dependencies": [
+      29
+    ],
+    "path": "EPIC-004-calendar/TASK-030-calendar-event.md"
+  },
+  {
+    "id": 31,
+    "title": "Recurrence rules",
+    "epic": "EPIC-004-calendar",
+    "dependencies": [
+      30
+    ],
+    "path": "EPIC-004-calendar/TASK-031-recurrence-rules.md"
+  },
+  {
+    "id": 32,
+    "title": "Exceptions",
+    "epic": "EPIC-004-calendar",
+    "dependencies": [
+      31
+    ],
+    "path": "EPIC-004-calendar/TASK-032-exceptions.md"
+  },
+  {
+    "id": 33,
+    "title": "Floating rest",
+    "epic": "EPIC-004-calendar",
+    "dependencies": [
+      32
+    ],
+    "path": "EPIC-004-calendar/TASK-033-floating-rest.md"
+  },
+  {
+    "id": 34,
+    "title": "Availability",
+    "epic": "EPIC-004-calendar",
+    "dependencies": [
+      33
+    ],
+    "path": "EPIC-004-calendar/TASK-034-availability.md"
+  },
+  {
+    "id": 35,
+    "title": "Timezone handling",
+    "epic": "EPIC-004-calendar",
+    "dependencies": [
+      34
+    ],
+    "path": "EPIC-004-calendar/TASK-035-timezone-handling.md"
+  },
+  {
+    "id": 36,
+    "title": "Calendar conflict detection",
+    "epic": "EPIC-004-calendar",
+    "dependencies": [
+      35
+    ],
+    "path": "EPIC-004-calendar/TASK-036-calendar-conflict-detection.md"
+  },
+  {
+    "id": 37,
+    "title": "Calendar API",
+    "epic": "EPIC-004-calendar",
+    "dependencies": [
+      36
+    ],
+    "path": "EPIC-004-calendar/TASK-037-calendar-api.md"
+  },
+  {
+    "id": 38,
+    "title": "Planned capacity",
+    "epic": "EPIC-005-capacity",
+    "dependencies": [
+      37
+    ],
+    "path": "EPIC-005-capacity/TASK-038-planned-capacity.md"
+  },
+  {
+    "id": 39,
+    "title": "Observed capacity",
+    "epic": "EPIC-005-capacity",
+    "dependencies": [
+      38
+    ],
+    "path": "EPIC-005-capacity/TASK-039-observed-capacity.md"
+  },
+  {
+    "id": 40,
+    "title": "Effective capacity",
+    "epic": "EPIC-005-capacity",
+    "dependencies": [
+      39
+    ],
+    "path": "EPIC-005-capacity/TASK-040-effective-capacity.md"
+  },
+  {
+    "id": 41,
+    "title": "Capacity pool",
+    "epic": "EPIC-005-capacity",
+    "dependencies": [
+      40
+    ],
+    "path": "EPIC-005-capacity/TASK-041-capacity-pool.md"
+  },
+  {
+    "id": 42,
+    "title": "Constraints",
+    "epic": "EPIC-005-capacity",
+    "dependencies": [
+      41
+    ],
+    "path": "EPIC-005-capacity/TASK-042-constraints.md"
+  },
+  {
+    "id": 43,
+    "title": "Preferences",
+    "epic": "EPIC-005-capacity",
+    "dependencies": [
+      42
+    ],
+    "path": "EPIC-005-capacity/TASK-043-preferences.md"
+  },
+  {
+    "id": 44,
+    "title": "Buffer",
+    "epic": "EPIC-005-capacity",
+    "dependencies": [
+      43
+    ],
+    "path": "EPIC-005-capacity/TASK-044-buffer.md"
+  },
+  {
+    "id": 45,
+    "title": "Capacity analysis",
+    "epic": "EPIC-005-capacity",
+    "dependencies": [
+      44
+    ],
+    "path": "EPIC-005-capacity/TASK-045-capacity-analysis.md"
+  },
+  {
+    "id": 46,
+    "title": "Capacity tests",
+    "epic": "EPIC-005-capacity",
+    "dependencies": [
+      45
+    ],
+    "path": "EPIC-005-capacity/TASK-046-capacity-tests.md"
+  },
+  {
+    "id": 47,
+    "title": "Plan model",
+    "epic": "EPIC-006-planning",
+    "dependencies": [
+      46
+    ],
+    "path": "EPIC-006-planning/TASK-047-plan-model.md"
+  },
+  {
+    "id": 48,
+    "title": "Plan versioning",
+    "epic": "EPIC-006-planning",
+    "dependencies": [
+      47
+    ],
+    "path": "EPIC-006-planning/TASK-048-plan-versioning.md"
+  },
+  {
+    "id": 49,
+    "title": "Outcome model",
+    "epic": "EPIC-006-planning",
+    "dependencies": [
+      48
+    ],
+    "path": "EPIC-006-planning/TASK-049-outcome-model.md"
+  },
+  {
+    "id": 50,
+    "title": "Task model",
+    "epic": "EPIC-006-planning",
+    "dependencies": [
+      49
+    ],
+    "path": "EPIC-006-planning/TASK-050-task-model.md"
+  },
+  {
+    "id": 51,
+    "title": "Task dependencies",
+    "epic": "EPIC-006-planning",
+    "dependencies": [
+      50
+    ],
+    "path": "EPIC-006-planning/TASK-051-task-dependencies.md"
+  },
+  {
+    "id": 52,
+    "title": "Resources",
+    "epic": "EPIC-006-planning",
+    "dependencies": [
+      51
+    ],
+    "path": "EPIC-006-planning/TASK-052-resources.md"
+  },
+  {
+    "id": 53,
+    "title": "Task estimation",
+    "epic": "EPIC-006-planning",
+    "dependencies": [
+      52
+    ],
+    "path": "EPIC-006-planning/TASK-053-task-estimation.md"
+  },
+  {
+    "id": 54,
+    "title": "Task decomposition contract",
+    "epic": "EPIC-006-planning",
+    "dependencies": [
+      53
+    ],
+    "path": "EPIC-006-planning/TASK-054-task-decomposition-contract.md"
+  },
+  {
+    "id": 55,
+    "title": "Plan generation",
+    "epic": "EPIC-006-planning",
+    "dependencies": [
+      54
+    ],
+    "path": "EPIC-006-planning/TASK-055-plan-generation.md"
+  },
+  {
+    "id": 56,
+    "title": "Plan validation",
+    "epic": "EPIC-006-planning",
+    "dependencies": [
+      55
+    ],
+    "path": "EPIC-006-planning/TASK-056-plan-validation.md"
+  },
+  {
+    "id": 57,
+    "title": "Candidate slot generation",
+    "epic": "EPIC-007-scheduling",
+    "dependencies": [
+      56
+    ],
+    "path": "EPIC-007-scheduling/TASK-057-candidate-slot-generation.md"
+  },
+  {
+    "id": 58,
+    "title": "Hard constraint filtering",
+    "epic": "EPIC-007-scheduling",
+    "dependencies": [
+      57
+    ],
+    "path": "EPIC-007-scheduling/TASK-058-hard-constraint-filtering.md"
+  },
+  {
+    "id": 59,
+    "title": "Capacity filtering",
+    "epic": "EPIC-007-scheduling",
+    "dependencies": [
+      58
+    ],
+    "path": "EPIC-007-scheduling/TASK-059-capacity-filtering.md"
+  },
+  {
+    "id": 60,
+    "title": "Dependency filtering",
+    "epic": "EPIC-007-scheduling",
+    "dependencies": [
+      59
+    ],
+    "path": "EPIC-007-scheduling/TASK-060-dependency-filtering.md"
+  },
+  {
+    "id": 61,
+    "title": "Deadline handling",
+    "epic": "EPIC-007-scheduling",
+    "dependencies": [
+      60
+    ],
+    "path": "EPIC-007-scheduling/TASK-061-deadline-handling.md"
+  },
+  {
+    "id": 62,
+    "title": "Preference scoring",
+    "epic": "EPIC-007-scheduling",
+    "dependencies": [
+      61
+    ],
+    "path": "EPIC-007-scheduling/TASK-062-preference-scoring.md"
+  },
+  {
+    "id": 63,
+    "title": "Task splitting",
+    "epic": "EPIC-007-scheduling",
+    "dependencies": [
+      62
+    ],
+    "path": "EPIC-007-scheduling/TASK-063-task-splitting.md"
+  },
+  {
+    "id": 64,
+    "title": "Schedule persistence",
+    "epic": "EPIC-007-scheduling",
+    "dependencies": [
+      63
+    ],
+    "path": "EPIC-007-scheduling/TASK-064-schedule-persistence.md"
+  },
+  {
+    "id": 65,
+    "title": "Conflict resolution",
+    "epic": "EPIC-007-scheduling",
+    "dependencies": [
+      64
+    ],
+    "path": "EPIC-007-scheduling/TASK-065-conflict-resolution.md"
+  },
+  {
+    "id": 66,
+    "title": "Rescheduling",
+    "epic": "EPIC-007-scheduling",
+    "dependencies": [
+      65
+    ],
+    "path": "EPIC-007-scheduling/TASK-066-rescheduling.md"
+  },
+  {
+    "id": 67,
+    "title": "Rolling horizon",
+    "epic": "EPIC-007-scheduling",
+    "dependencies": [
+      66
+    ],
+    "path": "EPIC-007-scheduling/TASK-067-rolling-horizon.md"
+  },
+  {
+    "id": 68,
+    "title": "Scheduler integration",
+    "epic": "EPIC-007-scheduling",
+    "dependencies": [
+      67
+    ],
+    "path": "EPIC-007-scheduling/TASK-068-scheduler-integration.md"
+  },
+  {
+    "id": 69,
+    "title": "Execution model",
+    "epic": "EPIC-008-progress",
+    "dependencies": [
+      68
+    ],
+    "path": "EPIC-008-progress/TASK-069-execution-model.md"
+  },
+  {
+    "id": 70,
+    "title": "Measurement model",
+    "epic": "EPIC-008-progress",
+    "dependencies": [
+      69
+    ],
+    "path": "EPIC-008-progress/TASK-070-measurement-model.md"
+  },
+  {
+    "id": 71,
+    "title": "Progress snapshots",
+    "epic": "EPIC-008-progress",
+    "dependencies": [
+      70
+    ],
+    "path": "EPIC-008-progress/TASK-071-progress-snapshots.md"
+  },
+  {
+    "id": 72,
+    "title": "Velocity",
+    "epic": "EPIC-008-progress",
+    "dependencies": [
+      71
+    ],
+    "path": "EPIC-008-progress/TASK-072-velocity.md"
+  },
+  {
+    "id": 73,
+    "title": "Variance",
+    "epic": "EPIC-008-progress",
+    "dependencies": [
+      72
+    ],
+    "path": "EPIC-008-progress/TASK-073-variance.md"
+  },
+  {
+    "id": 74,
+    "title": "Trend analysis",
+    "epic": "EPIC-008-progress",
+    "dependencies": [
+      73
+    ],
+    "path": "EPIC-008-progress/TASK-074-trend-analysis.md"
+  },
+  {
+    "id": 75,
+    "title": "Goal health",
+    "epic": "EPIC-008-progress",
+    "dependencies": [
+      74
+    ],
+    "path": "EPIC-008-progress/TASK-075-goal-health.md"
+  },
+  {
+    "id": 76,
+    "title": "Sustainability",
+    "epic": "EPIC-008-progress",
+    "dependencies": [
+      75
+    ],
+    "path": "EPIC-008-progress/TASK-076-sustainability.md"
+  },
+  {
+    "id": 77,
+    "title": "Explicit feedback",
+    "epic": "EPIC-008-progress",
+    "dependencies": [
+      76
+    ],
+    "path": "EPIC-008-progress/TASK-077-explicit-feedback.md"
+  },
+  {
+    "id": 78,
+    "title": "Implicit feedback",
+    "epic": "EPIC-008-progress",
+    "dependencies": [
+      77
+    ],
+    "path": "EPIC-008-progress/TASK-078-implicit-feedback.md"
+  },
+  {
+    "id": 79,
+    "title": "Trigger model",
+    "epic": "EPIC-009-replanning",
+    "dependencies": [
+      78
+    ],
+    "path": "EPIC-009-replanning/TASK-079-trigger-model.md"
+  },
+  {
+    "id": 80,
+    "title": "Thresholds",
+    "epic": "EPIC-009-replanning",
+    "dependencies": [
+      79
+    ],
+    "path": "EPIC-009-replanning/TASK-080-thresholds.md"
+  },
+  {
+    "id": 81,
+    "title": "Persistence detection",
+    "epic": "EPIC-009-replanning",
+    "dependencies": [
+      80
+    ],
+    "path": "EPIC-009-replanning/TASK-081-persistence-detection.md"
+  },
+  {
+    "id": 82,
+    "title": "Cooldown",
+    "epic": "EPIC-009-replanning",
+    "dependencies": [
+      81
+    ],
+    "path": "EPIC-009-replanning/TASK-082-cooldown.md"
+  },
+  {
+    "id": 83,
+    "title": "Replanning policy",
+    "epic": "EPIC-009-replanning",
+    "dependencies": [
+      82
+    ],
+    "path": "EPIC-009-replanning/TASK-083-replanning-policy.md"
+  },
+  {
+    "id": 84,
+    "title": "Replanning decision engine",
+    "epic": "EPIC-009-replanning",
+    "dependencies": [
+      83
+    ],
+    "path": "EPIC-009-replanning/TASK-084-replanning-decision-engine.md"
+  },
+  {
+    "id": 85,
+    "title": "Local replan",
+    "epic": "EPIC-009-replanning",
+    "dependencies": [
+      84
+    ],
+    "path": "EPIC-009-replanning/TASK-085-local-replan.md"
+  },
+  {
+    "id": 86,
+    "title": "Regional replan",
+    "epic": "EPIC-009-replanning",
+    "dependencies": [
+      85
+    ],
+    "path": "EPIC-009-replanning/TASK-086-regional-replan.md"
+  },
+  {
+    "id": 87,
+    "title": "Global replan",
+    "epic": "EPIC-009-replanning",
+    "dependencies": [
+      86
+    ],
+    "path": "EPIC-009-replanning/TASK-087-global-replan.md"
+  },
+  {
+    "id": 88,
+    "title": "Plan comparison",
+    "epic": "EPIC-009-replanning",
+    "dependencies": [
+      87
+    ],
+    "path": "EPIC-009-replanning/TASK-088-plan-comparison.md"
+  },
+  {
+    "id": 89,
+    "title": "Replanning integration",
+    "epic": "EPIC-009-replanning",
+    "dependencies": [
+      88
+    ],
+    "path": "EPIC-009-replanning/TASK-089-replanning-integration.md"
+  },
+  {
+    "id": 90,
+    "title": "LLM provider interface",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      89
+    ],
+    "path": "EPIC-010-ai/TASK-090-llm-provider-interface.md"
+  },
+  {
+    "id": 91,
+    "title": "OpenAI adapter",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      90
+    ],
+    "path": "EPIC-010-ai/TASK-091-openai-adapter.md"
+  },
+  {
+    "id": 92,
+    "title": "Anthropic adapter",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      91
+    ],
+    "path": "EPIC-010-ai/TASK-092-anthropic-adapter.md"
+  },
+  {
+    "id": 93,
+    "title": "Google adapter",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      92
+    ],
+    "path": "EPIC-010-ai/TASK-093-google-adapter.md"
+  },
+  {
+    "id": 94,
+    "title": "Context builder",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      93
+    ],
+    "path": "EPIC-010-ai/TASK-094-context-builder.md"
+  },
+  {
+    "id": 95,
+    "title": "Goal interpretation",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      94
+    ],
+    "path": "EPIC-010-ai/TASK-095-goal-interpretation.md"
+  },
+  {
+    "id": 96,
+    "title": "Strategy generation",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      95
+    ],
+    "path": "EPIC-010-ai/TASK-096-strategy-generation.md"
+  },
+  {
+    "id": 97,
+    "title": "Outcome decomposition",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      96
+    ],
+    "path": "EPIC-010-ai/TASK-097-outcome-decomposition.md"
+  },
+  {
+    "id": 98,
+    "title": "Task generation",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      97
+    ],
+    "path": "EPIC-010-ai/TASK-098-task-generation.md"
+  },
+  {
+    "id": 99,
+    "title": "Plan explanation",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      98
+    ],
+    "path": "EPIC-010-ai/TASK-099-plan-explanation.md"
+  },
+  {
+    "id": 100,
+    "title": "AI validation",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      99
+    ],
+    "path": "EPIC-010-ai/TASK-100-ai-validation.md"
+  },
+  {
+    "id": 101,
+    "title": "Tool permissions",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      100
+    ],
+    "path": "EPIC-010-ai/TASK-101-tool-permissions.md"
+  },
+  {
+    "id": 102,
+    "title": "AI evaluation dataset",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      101
+    ],
+    "path": "EPIC-010-ai/TASK-102-ai-evaluation-dataset.md"
+  },
+  {
+    "id": 103,
+    "title": "AI fallback",
+    "epic": "EPIC-010-ai",
+    "dependencies": [
+      102
+    ],
+    "path": "EPIC-010-ai/TASK-103-ai-fallback.md"
+  },
+  {
+    "id": 104,
+    "title": "App shell",
+    "epic": "EPIC-011-product-ux",
+    "dependencies": [
+      103
+    ],
+    "path": "EPIC-011-product-ux/TASK-104-app-shell.md"
+  },
+  {
+    "id": 105,
+    "title": "Design system",
+    "epic": "EPIC-011-product-ux",
+    "dependencies": [
+      104
+    ],
+    "path": "EPIC-011-product-ux/TASK-105-design-system.md"
+  },
+  {
+    "id": 106,
+    "title": "Tailwind setup",
+    "epic": "EPIC-011-product-ux",
+    "dependencies": [
+      105
+    ],
+    "path": "EPIC-011-product-ux/TASK-106-tailwind-setup.md"
+  },
+  {
+    "id": 107,
+    "title": "Goal creation",
+    "epic": "EPIC-011-product-ux",
+    "dependencies": [
+      106
+    ],
+    "path": "EPIC-011-product-ux/TASK-107-goal-creation.md"
+  },
+  {
+    "id": 108,
+    "title": "Goal detail",
+    "epic": "EPIC-011-product-ux",
+    "dependencies": [
+      107
+    ],
+    "path": "EPIC-011-product-ux/TASK-108-goal-detail.md"
+  },
+  {
+    "id": 109,
+    "title": "Backcasting visualization",
+    "epic": "EPIC-011-product-ux",
+    "dependencies": [
+      108
+    ],
+    "path": "EPIC-011-product-ux/TASK-109-backcasting-visualization.md"
+  },
+  {
+    "id": 110,
+    "title": "Milestone UI",
+    "epic": "EPIC-011-product-ux",
+    "dependencies": [
+      109
+    ],
+    "path": "EPIC-011-product-ux/TASK-110-milestone-ui.md"
+  },
+  {
+    "id": 111,
+    "title": "Plan UI",
+    "epic": "EPIC-011-product-ux",
+    "dependencies": [
+      110
+    ],
+    "path": "EPIC-011-product-ux/TASK-111-plan-ui.md"
+  },
+  {
+    "id": 112,
+    "title": "Task UI",
+    "epic": "EPIC-011-product-ux",
+    "dependencies": [
+      111
+    ],
+    "path": "EPIC-011-product-ux/TASK-112-task-ui.md"
+  },
+  {
+    "id": 113,
+    "title": "Calendar UI",
+    "epic": "EPIC-011-product-ux",
+    "dependencies": [
+      112
+    ],
+    "path": "EPIC-011-product-ux/TASK-113-calendar-ui.md"
+  },
+  {
+    "id": 114,
+    "title": "Progress UI",
+    "epic": "EPIC-011-product-ux",
+    "dependencies": [
+      113
+    ],
+    "path": "EPIC-011-product-ux/TASK-114-progress-ui.md"
+  },
+  {
+    "id": 115,
+    "title": "Replanning UI",
+    "epic": "EPIC-011-product-ux",
+    "dependencies": [
+      114
+    ],
+    "path": "EPIC-011-product-ux/TASK-115-replanning-ui.md"
+  },
+  {
+    "id": 116,
+    "title": "AI assistant",
+    "epic": "EPIC-011-product-ux",
+    "dependencies": [
+      115
+    ],
+    "path": "EPIC-011-product-ux/TASK-116-ai-assistant.md"
+  },
+  {
+    "id": 117,
+    "title": "Production Docker",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      116
+    ],
+    "path": "EPIC-012-production/TASK-117-production-docker.md"
+  },
+  {
+    "id": 118,
+    "title": "CI/CD",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      117
+    ],
+    "path": "EPIC-012-production/TASK-118-ci-cd.md"
+  },
+  {
+    "id": 119,
+    "title": "Database migration pipeline",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      118
+    ],
+    "path": "EPIC-012-production/TASK-119-database-migration-pipeline.md"
+  },
+  {
+    "id": 120,
+    "title": "Secrets management",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      119
+    ],
+    "path": "EPIC-012-production/TASK-120-secrets-management.md"
+  },
+  {
+    "id": 121,
+    "title": "Logging",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      120
+    ],
+    "path": "EPIC-012-production/TASK-121-logging.md"
+  },
+  {
+    "id": 122,
+    "title": "Metrics",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      121
+    ],
+    "path": "EPIC-012-production/TASK-122-metrics.md"
+  },
+  {
+    "id": 123,
+    "title": "Tracing",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      122
+    ],
+    "path": "EPIC-012-production/TASK-123-tracing.md"
+  },
+  {
+    "id": 124,
+    "title": "Health/readiness",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      123
+    ],
+    "path": "EPIC-012-production/TASK-124-health-readiness.md"
+  },
+  {
+    "id": 125,
+    "title": "Backup",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      124
+    ],
+    "path": "EPIC-012-production/TASK-125-backup.md"
+  },
+  {
+    "id": 126,
+    "title": "Restore test",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      125
+    ],
+    "path": "EPIC-012-production/TASK-126-restore-test.md"
+  },
+  {
+    "id": 127,
+    "title": "Rollback",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      126
+    ],
+    "path": "EPIC-012-production/TASK-127-rollback.md"
+  },
+  {
+    "id": 128,
+    "title": "Production deployment",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      127
+    ],
+    "path": "EPIC-012-production/TASK-128-production-deployment.md"
+  },
+  {
+    "id": 129,
+    "title": "Smoke tests",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      128
+    ],
+    "path": "EPIC-012-production/TASK-129-smoke-tests.md"
+  },
+  {
+    "id": 130,
+    "title": "Security hardening",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      129
+    ],
+    "path": "EPIC-012-production/TASK-130-security-hardening.md"
+  },
+  {
+    "id": 131,
+    "title": "Incident workflow",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      130
+    ],
+    "path": "EPIC-012-production/TASK-131-incident-workflow.md"
+  },
+  {
+    "id": 132,
+    "title": "Release tagging",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      131
+    ],
+    "path": "EPIC-012-production/TASK-132-release-tagging.md"
+  },
+  {
+    "id": 133,
+    "title": "Post-deploy verification",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      132
+    ],
+    "path": "EPIC-012-production/TASK-133-post-deploy-verification.md"
+  },
+  {
+    "id": 134,
+    "title": "Production acceptance sign-off",
+    "epic": "EPIC-012-production",
+    "dependencies": [
+      133
+    ],
+    "path": "EPIC-012-production/TASK-134-production-acceptance-sign-off.md"
+  }
+]
