@@ -1,7 +1,7 @@
 # TASK-068 — Scheduler integration
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-007-scheduling — Scheduling

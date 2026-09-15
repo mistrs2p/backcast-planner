@@ -221,6 +221,11 @@
 - Rolling horizon: the two-week operational window (docs/06) and the
   exact/approximate split — due tasks, near-milestone outcome tasks,
   and their prerequisite chains go to exact scheduling (TASK-067).
+- Scheduler integration: the full chain composed per task in
+  dependency order — candidates, constraints, capacity, dependencies,
+  deadline, preferences, splitting, placement — with docs/06 failure
+  reasons surfacing at the layer that caused them and the budget
+  consumed in order; EPIC-007 complete (TASK-068).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
