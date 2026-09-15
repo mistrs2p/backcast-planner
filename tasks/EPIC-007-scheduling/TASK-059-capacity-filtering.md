@@ -1,7 +1,7 @@
 # TASK-059 — Capacity filtering
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-007-scheduling — Scheduling

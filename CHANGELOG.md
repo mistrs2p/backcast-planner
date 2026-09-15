@@ -191,6 +191,9 @@
 - Hard constraint filtering: constraints subtract their blocked
   intervals from candidate slots, keeping only pieces that still fit
   the task's duration (TASK-058).
+- Capacity filtering: the goal's remaining budget gates the task
+  (NO_CAPACITY when it cannot hold the duration) and slots are
+  clipped to the analyzed-capacity period (TASK-059).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
