@@ -88,4 +88,7 @@
 - Calendar model: user-owned calendar root with a ZoneInfo home timezone
   and the 15-minute MVP planning granularity pinned as a constant
   (TASK-029).
+- Calendar event: time-blocked entry with UTC start/end (end > start),
+  deliberately unaligned to planning granularity and task-free — an
+  event is not necessarily a task (TASK-030).
 - Initial execution pack created.
