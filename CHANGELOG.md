@@ -168,6 +168,8 @@
   duplicate, self, and cross-plan rejection; direct/transitive
   prerequisite queries and a deterministic topological order
   (TASK-051).
+- Resources: standalone catalog entities linked to tasks through an
+  idempotent N:M requirement (`resource_ids` on Task) (TASK-052).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

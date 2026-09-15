@@ -14,7 +14,10 @@ Relationships (docs/03):
   cannot serve another plan's outcome);
 - Task 1:N Schedules and Task 1:N Executions — placements in time and
   records of doing, both later epics' concerns, never embedded here;
-- Task N:M Resources — the resources task (TASK-052);
+- Task N:M Resources — a task may require any number of shared
+  resources, linked through ``resource_ids`` (TASK-052); resources
+  are user-level context, not plan-scoped, so any task may link any
+  resource;
 - "Calendar Event is not necessarily a Task" (docs/03) — the two
   concepts stay separate: a schedule *places* a task into calendar
   time; it does not turn it into an event.
@@ -29,7 +32,8 @@ Rules:
 - ``deadline`` is an optional timezone-aware UTC instant strictly
   after ``created_at`` — the deadline layer of the scheduling
   hierarchy (docs/05).
-- ``outcome_ids`` are unique UUIDs of the outcomes the task serves.
+- ``outcome_ids`` are unique UUIDs of the outcomes the task serves;
+  ``resource_ids`` are unique UUIDs of the resources it requires.
 - ``created_at``/``updated_at`` are timezone-aware UTC;
   ``updated_at ≥ created_at``.
 """
@@ -63,6 +67,7 @@ class Task:
     duration: timedelta | None = None
     deadline: datetime | None = None
     outcome_ids: frozenset[uuid.UUID] = frozenset()
+    resource_ids: frozenset[uuid.UUID] = frozenset()
     created_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     updated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
@@ -99,6 +104,11 @@ class Task:
             if not isinstance(outcome_id, uuid.UUID):
                 raise TaskError("outcome_ids must contain UUIDs")
         object.__setattr__(self, "outcome_ids", outcome_ids)
+        resource_ids = frozenset(self.resource_ids)
+        for resource_id in resource_ids:
+            if not isinstance(resource_id, uuid.UUID):
+                raise TaskError("resource_ids must contain UUIDs")
+        object.__setattr__(self, "resource_ids", resource_ids)
         for stamp_name in ("created_at", "updated_at"):
             stamp = getattr(self, stamp_name)
             if not isinstance(stamp, datetime) or stamp.tzinfo is None:
@@ -150,10 +160,11 @@ def revise_task(
 ) -> Task:
     """Return a revised copy of ``task`` with ``updated_at`` advanced.
 
-    The Task's identity, plan, outcome links, and ``created_at`` are
-    carried over unchanged; only the editable fields move. Passing
-    ``None`` for a field keeps it — clearing a duration or deadline
-    belongs to explicit resets, not accidental omissions.
+    The Task's identity, plan, outcome and resource links, and
+    ``created_at`` are carried over unchanged; only the editable
+    fields move. Passing ``None`` for a field keeps it — clearing a
+    duration or deadline belongs to explicit resets, not accidental
+    omissions.
     """
     if not isinstance(task, Task):
         raise TypeError("task must be a Task")
