@@ -1,7 +1,7 @@
 # TASK-065 — Conflict resolution
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-007-scheduling — Scheduling

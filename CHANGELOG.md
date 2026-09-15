@@ -210,6 +210,10 @@
 - Schedule persistence: the placement record — `Schedule` +
   `place_task` (deadline-respecting, non-overlapping per task) and
   the `ScheduleRepository` port (TASK-064).
+- Conflict resolution: commitments displace placements, the
+  later-starting placement yields between placements, and a displaced
+  task with no surviving candidates escalates to replanning
+  (docs/06 principle) (TASK-065).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
