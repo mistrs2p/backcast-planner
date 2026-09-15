@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-042 (Constraints)
+- Current Task: TASK-043 (Preferences)
 - Current Epic: EPIC-005 Capacity
 
 ## Completed
@@ -367,6 +367,18 @@
   `unallocated_amount` is the non-negative remainder the scheduler may
   still commit), plus `allocate_capacity` and the `allocation_for`
   lookup. 23 tests.
+- TASK-042 — Constraints (2026-09-15): the hard restrictions the
+  scheduler must never violate (docs/05 hierarchy, docs/13 "Hard
+  constraints are never violated", the `HARD_CONSTRAINT` failure
+  reason in docs/06) — `domain/constraint.py` with the frozen
+  `Constraint` in two MVP kinds: `BLOCKED_RANGE` (a fixed UTC interval
+  nothing may be scheduled in) and `BLOCKED_WEEKLY` (a weekly
+  wall-clock exclusion anchored to a timezone — the mirror image of an
+  Availability Window, DST-aware, no cross-midnight blocks), plus the
+  factories, `blocked_intervals` (expansion into UTC intervals over a
+  range, clipped, chronological) and `is_blocked` (half-open overlap
+  check: scheduling to end exactly as a block begins is allowed).
+  33 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
