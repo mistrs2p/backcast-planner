@@ -1,7 +1,7 @@
 # TASK-022 — Backcasting run
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-003-backcasting — Backcasting
