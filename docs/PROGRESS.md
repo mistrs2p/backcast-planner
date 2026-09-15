@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-029 (Calendar model)
+- Current Task: TASK-030 (Calendar event)
 - Current Epic: EPIC-004 Calendar
 
 ## Completed
@@ -218,6 +218,15 @@
   feasibility numbers) and any step failure raises `BackcastingStepError`
   (carrying the FAILED run and the step name). 18 tests. EPIC-003
   complete.
+- TASK-029 — Calendar model (2026-09-15): first piece of EPIC-004 —
+  `domain/calendar.py` with the frozen `Calendar` root (UUID identity,
+  owning `user_id` per "Calendar belongs to User", a valid ZoneInfo home
+  timezone anchoring all timezone-aware operations, UTC stamps) and
+  `create_calendar`. The MVP planning granularity (15 minutes, docs/05)
+  is pinned as the module constant `PLANNING_GRANULARITY` — an MVP-wide
+  constant rather than per-calendar state. Events, recurrence,
+  exceptions, availability, and floating rest follow in their tasks.
+  15 tests. EPIC-004 started.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
