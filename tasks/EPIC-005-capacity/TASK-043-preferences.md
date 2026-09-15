@@ -1,7 +1,7 @@
 # TASK-043 — Preferences
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-005-capacity — Capacity

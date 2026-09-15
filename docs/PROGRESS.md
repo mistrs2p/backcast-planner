@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-043 (Preferences)
+- Current Task: TASK-044 (Buffer)
 - Current Epic: EPIC-005 Capacity
 
 ## Completed
@@ -379,6 +379,20 @@
   range, clipped, chronological) and `is_blocked` (half-open overlap
   check: scheduling to end exactly as a block begins is allowed).
   33 tests.
+- TASK-043 — Preferences (2026-09-15): the soft layer of the
+  scheduling hierarchy ("… → capacity → soft preferences →
+  optimization", docs/05) — advisory guidance the optimizer ranks
+  candidates by but may violate, in explicit contrast with hard
+  constraints (docs/13) — `domain/preference.py` with the frozen
+  `Preference`: a weekly wall-clock window (the same shape as an
+  Availability Window: naive local times, no cross-midnight,
+  ZoneInfo-anchored, defaulting to the calendar's zone) with a
+  direction (`PREFER` — slots inside are better; `AVOID` — worse) and
+  an integer `weight` 1–5, plus `create_preference`,
+  `preference_windows` (DST-aware UTC expansion, clipped,
+  chronological) and `applies_to` (half-open touch check returning a
+  bool — a preference never rejects a slot, it only reports
+  applicability). 32 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
