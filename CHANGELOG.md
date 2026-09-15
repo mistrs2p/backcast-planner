@@ -103,4 +103,9 @@
 - Availability windows: weekly wall-clock patterns on a calendar
   expanding into UTC intervals over a range — DST-aware local times,
   clipped to the range (TASK-034).
+- Timezone handling: shared `domain/timezone.py` for the mandatory
+  semantics — UTC-instant validation, wall-clock conversion across DST
+  (fold-aware), local-time classification (unambiguous/ambiguous/
+  nonexistent), and Monday-anchored week bounds; duplicated per-module
+  UTC checks consolidated onto it (TASK-035).
 - Initial execution pack created.

@@ -44,6 +44,7 @@ from backcasting.domain.calendar_event import (
     CalendarEvent,
     create_event,
 )
+from backcasting.domain.timezone import require_utc
 
 VALID_WEEKDAYS = frozenset(range(7))
 
@@ -57,13 +58,6 @@ class Frequency(str, Enum):
 
     DAILY = "daily"
     WEEKLY = "weekly"
-
-
-def _require_utc(name: str, value: datetime) -> None:
-    if not isinstance(value, datetime) or value.tzinfo is None:
-        raise RecurrenceError(f"{name} must be timezone-aware")
-    if value.utcoffset() != timezone.utc.utcoffset(value):
-        raise RecurrenceError(f"{name} must be in UTC")
 
 
 @dataclass(frozen=True)
@@ -99,7 +93,7 @@ class RecurrenceRule:
         object.__setattr__(self, "title", title.strip())
         if not isinstance(self.frequency, Frequency):
             raise RecurrenceError("frequency must be a Frequency")
-        _require_utc("starts_on", self.starts_on)
+        require_utc("starts_on", self.starts_on, error=RecurrenceError)
         if not isinstance(self.duration, timedelta) or self.duration <= timedelta(0):
             raise RecurrenceError("duration must be a positive timedelta")
         if isinstance(self.interval, bool) or not isinstance(self.interval, int):
@@ -118,7 +112,7 @@ class RecurrenceRule:
         if self.frequency is Frequency.DAILY and by_weekday:
             raise RecurrenceError("by_weekday is only valid for WEEKLY rules")
         if self.until is not None:
-            _require_utc("until", self.until)
+            require_utc("until", self.until, error=RecurrenceError)
             if self.until <= self.starts_on:
                 raise RecurrenceError("until must be after starts_on")
         description = self.description
@@ -198,8 +192,8 @@ def occurrences(
     """
     if not isinstance(rule, RecurrenceRule):
         raise TypeError("rule must be a RecurrenceRule")
-    _require_utc("window_start", window_start)
-    _require_utc("window_end", window_end)
+    require_utc("window_start", window_start, error=RecurrenceError)
+    require_utc("window_end", window_end, error=RecurrenceError)
     if window_end <= window_start:
         raise RecurrenceError("window_end must be after window_start")
     effective_start = max(window_start, rule.starts_on)

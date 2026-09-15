@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-035 (Timezone handling)
+- Current Task: TASK-036 (Calendar conflict detection)
 - Current Epic: EPIC-004 Calendar
 
 ## Completed
@@ -273,6 +273,20 @@
   clipping to the range bounds. Availability ≠ capacity (docs/00):
   capacity is computed from these windows in the capacity epic.
   35 tests.
+- TASK-035 — Timezone handling (2026-09-15): the single home for the
+  mandatory timezone semantics (docs/05 "Timezone-aware operations are
+  mandatory"; docs/10 "Persisted instants use UTC; user timezone is used
+  for interpretation/display") — `domain/timezone.py` with
+  `require_utc` (the shared UTC-instant check, error class injected so
+  each module keeps its typed errors), `to_utc` (naive rejected, never
+  guessed), `local_time`/`instant_from_wall_clock` (wall-clock
+  semantics across DST, ambiguous times resolve to fold), and
+  `local_time_kind` (UNAMBIGUOUS/AMBIGUOUS/NONEXISTENT via round-trip
+  classification) plus `week_bounds` (Monday-anchored local week as UTC
+  instants; DST weeks are correctly 167/169 hours). The four private
+  `_require_utc` copies in recurrence, recurrence exception, floating
+  rest, and availability were consolidated onto the shared helper.
+  24 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

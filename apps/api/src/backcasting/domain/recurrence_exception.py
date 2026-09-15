@@ -39,17 +39,11 @@ from enum import Enum
 from backcasting.domain.calendar import Calendar
 from backcasting.domain.calendar_event import CalendarEvent, create_event
 from backcasting.domain.recurrence import RecurrenceRule, occurrences
+from backcasting.domain.timezone import require_utc
 
 
 class RecurrenceExceptionError(ValueError):
     """Raised when a recurrence exception invariant is violated."""
-
-
-def _require_utc(name: str, value: datetime) -> None:
-    if not isinstance(value, datetime) or value.tzinfo is None:
-        raise RecurrenceExceptionError(f"{name} must be timezone-aware")
-    if value.utcoffset() != timezone.utc.utcoffset(value):
-        raise RecurrenceExceptionError(f"{name} must be in UTC")
 
 
 class ExceptionKind(str, Enum):
@@ -79,7 +73,9 @@ class RecurrenceException:
             raise RecurrenceExceptionError("rule_id must be a UUID")
         if not isinstance(self.kind, ExceptionKind):
             raise RecurrenceExceptionError("kind must be an ExceptionKind")
-        _require_utc("original_start", self.original_start)
+        require_utc(
+            "original_start", self.original_start, error=RecurrenceExceptionError
+        )
         if self.kind is ExceptionKind.CANCELLED:
             if self.new_start is not None:
                 raise RecurrenceExceptionError(
@@ -90,7 +86,7 @@ class RecurrenceException:
                 raise RecurrenceExceptionError(
                     "a rescheduled occurrence requires new_start"
                 )
-            _require_utc("new_start", self.new_start)
+            require_utc("new_start", self.new_start, error=RecurrenceExceptionError)
             if self.new_start == self.original_start:
                 raise RecurrenceExceptionError(
                     "new_start must differ from original_start"

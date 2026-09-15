@@ -33,19 +33,13 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 
 from backcasting.domain.calendar import Calendar
+from backcasting.domain.timezone import require_utc
 
 MAX_TITLE_LENGTH = 200
 
 
 class FloatingRestError(ValueError):
     """Raised when a floating-rest invariant is violated."""
-
-
-def _require_utc(name: str, value: datetime) -> None:
-    if not isinstance(value, datetime) or value.tzinfo is None:
-        raise FloatingRestError(f"{name} must be timezone-aware")
-    if value.utcoffset() != timezone.utc.utcoffset(value):
-        raise FloatingRestError(f"{name} must be in UTC")
 
 
 @dataclass(frozen=True)
@@ -139,8 +133,8 @@ def evaluate_rest(
         if not isinstance(interval, tuple) or len(interval) != 2:
             raise FloatingRestError("intervals must be (start, end) pairs")
         start, end = interval
-        _require_utc("interval start", start)
-        _require_utc("interval end", end)
+        require_utc("interval start", start, error=FloatingRestError)
+        require_utc("interval end", end, error=FloatingRestError)
         if end <= start:
             raise FloatingRestError("interval end must be after start")
         spans.append((start, end))
