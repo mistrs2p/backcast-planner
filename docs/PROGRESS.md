@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-055 (Plan generation)
+- Current Task: TASK-056 (Plan validation)
 - Current Epic: EPIC-006 Planning
 
 ## Completed
@@ -555,6 +555,21 @@
   resolve — an unresolved reference is a contract violation, never
   a silently dropped link. Mirrors the MilestoneProposal/
   accept_proposed_milestones precedent. 21 tests.
+- TASK-055 — Plan generation (2026-09-15): the assembly half of the
+  pipeline tail (docs/04) — `domain/plan_generation.py`.
+  `begin_plan` opens a DRAFT plan from a COMPLETED run (a running or
+  failed run cannot birth a plan) with `run_id` provenance that
+  docs/08 plan versioning reads back as `source_run_id`.
+  `publish_plan` closes the draft into a CANDIDATE — the lifecycle's
+  staging state before validation (TASK-056) can promote it to
+  ACTIVE — stamping the workload as the computed sum of the tasks'
+  estimates (`estimate_workload`; a `TaskEstimationError` propagates
+  rather than being masked). Publishing requires the plan still be a
+  DRAFT, every task belong to it, and at least one task exist: a
+  plan with nothing to execute is not a plan, while outcomes without
+  tasks remain outcome-level state (docs/03). `generate_plan`
+  composes accept-proposals + publish over a begun draft; per
+  ADR-002 nothing here generates content. 16 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

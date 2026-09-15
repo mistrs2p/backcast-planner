@@ -177,6 +177,9 @@
   `accept_proposed_tasks` — the AI-proposes/domain-validates boundary
   for pipeline step 12, with plan-liveness, outcome-resolution, and
   batch-uniqueness rules (TASK-054).
+- Plan generation: `begin_plan` opens a run-provenanced DRAFT from a
+  COMPLETED run; `publish_plan` closes it into a CANDIDATE with the
+  workload computed from task estimates (TASK-055).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
