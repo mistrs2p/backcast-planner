@@ -200,6 +200,9 @@
 - Deadline handling: slots clip their ends to the task's deadline —
   finishing exactly at it is on time, shorter remainders drop, and an
   emptied list is the DEADLINE_CONFLICT fact (TASK-061).
+- Preference scoring: the soft layer — each preference contributes
+  ±weight × overlap fraction and slots rank best-first without ever
+  being rejected; ties keep chronological order (TASK-062).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

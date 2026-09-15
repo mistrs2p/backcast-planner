@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-062 (Preference scoring)
+- Current Task: TASK-063 (Task splitting)
 - Current Epic: EPIC-007 Scheduling
 
 ## Completed
@@ -655,6 +655,20 @@
   final subtractive layer before preference ranking: the hierarchy is
   hard constraints → commitments → dependencies → deadline, and what
   survives is what preferences get to rank. 11 tests.
+- TASK-062 — Preference scoring (2026-09-16): the soft layer of the
+  hierarchy (docs/05) — `domain/preference_scoring.py` with
+  `score_slot` and `rank_slots_by_preferences`. Everything before
+  this point was subtractive; preferences never remove anything — a
+  slot with a terrible score is still schedulable, merely ranked
+  last. Scoring is deterministic and combines the three things a
+  Preference carries (TASK-043): each preference contributes its
+  weight scaled by the fraction of the slot inside its window
+  (positive for PREFER, negative for AVOID), and the slot's score is
+  the sum — an AVOID at weight 5 exactly cancels a PREFER at weight 5
+  over the same time. Ranking is a stable sort by descending score:
+  equal scores keep input order, so chronological generation order
+  remains the tie-breaker, and with no preferences every slot scores
+  0 — the layer abstains, it never reorders by default. 19 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
