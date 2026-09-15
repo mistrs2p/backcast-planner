@@ -1,7 +1,7 @@
 # TASK-039 — Observed capacity
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-005-capacity — Capacity

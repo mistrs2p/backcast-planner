@@ -125,4 +125,8 @@
   windows merged (DST-aware, clipped to the period) minus the existing
   commitments occupying them, recorded per calendar as an immutable
   `PlannedCapacity` (TASK-038).
+- Observed capacity: the backward-looking measurement of the same
+  semantics over a period that has ended (`measured_at ≥ period_end`),
+  an immutable historical fact with no revision path; the computation
+  is shared via `workable_time` (TASK-039).
 - Initial execution pack created.
