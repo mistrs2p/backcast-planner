@@ -229,6 +229,10 @@
 - Execution model: the Actual of "Planned ≠ Actual ≠ Progress" —
   one record per sitting, facts recorded without deadline judgment
   or rounding, summed by actual_duration (TASK-069).
+- Measurement model: observed data for a metric — one validated,
+  immutable value per observation, attached to an optional milestone
+  or outcome subject, queryable per subject and by latest reading;
+  MeasurementRepository port added (TASK-070).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

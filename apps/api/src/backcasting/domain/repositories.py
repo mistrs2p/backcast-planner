@@ -32,6 +32,7 @@ from backcasting.domain.calendar_event import CalendarEvent
 from backcasting.domain.current_state import CurrentState
 from backcasting.domain.future_state import FutureState
 from backcasting.domain.goal import Goal
+from backcasting.domain.measurement import Measurement
 from backcasting.domain.schedule import Schedule
 from backcasting.domain.user import Email, User
 
@@ -160,3 +161,25 @@ class ScheduleRepository(ABC):
     @abstractmethod
     def list_for_task(self, task_id: uuid.UUID) -> Sequence[Schedule]:
         """Return the task's placements, earliest start first."""
+
+
+class MeasurementRepository(ABC):
+    """Persistence port for :class:`~backcasting.domain.measurement.Measurement`.
+
+    "Measurement: observed data" (docs/02-CONCEPTUAL-MODEL.md): the
+    immutable observations that make milestones and outcomes
+    measurable. Corrections are new records (new ``measurement_id``),
+    never in-place edits.
+    """
+
+    @abstractmethod
+    def save(self, measurement: Measurement) -> None:
+        """Insert or replace the measurement keyed by ``measurement_id``."""
+
+    @abstractmethod
+    def get(self, measurement_id: uuid.UUID) -> Measurement | None:
+        """Return the measurement with ``measurement_id``, or ``None``."""
+
+    @abstractmethod
+    def list_for_subject(self, subject_id: uuid.UUID) -> Sequence[Measurement]:
+        """Return the subject's observations, earliest ``measured_at`` first."""

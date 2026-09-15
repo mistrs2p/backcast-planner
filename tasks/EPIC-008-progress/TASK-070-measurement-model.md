@@ -1,7 +1,7 @@
 # TASK-070 — Measurement model
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-008-progress — Progress
