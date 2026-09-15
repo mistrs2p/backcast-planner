@@ -136,4 +136,7 @@
 - Capacity pool: the split of a period's effective capacity across
   goals — unique-goal allocations that never exceed the pool, with the
   remainder left unallocated for the scheduler (TASK-041).
+- Constraints: hard scheduling restrictions — fixed blocked UTC ranges
+  and weekly wall-clock exclusions (DST-aware), with blocked-interval
+  expansion and half-open overlap checking (TASK-042).
 - Initial execution pack created.

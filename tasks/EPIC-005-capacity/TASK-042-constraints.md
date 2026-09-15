@@ -1,7 +1,7 @@
 # TASK-042 — Constraints
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-005-capacity — Capacity
