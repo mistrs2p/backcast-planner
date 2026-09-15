@@ -1,7 +1,7 @@
 # TASK-002 — AGENTS.md enforcement
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-001-foundation — Foundation
