@@ -173,6 +173,10 @@
 - Task estimation: append-only estimate records with provenance and
   rationale, validated application onto the owning task, and a
   workload sum that refuses unestimated tasks (TASK-053).
+- Task decomposition contract: `TaskProposal` and
+  `accept_proposed_tasks` — the AI-proposes/domain-validates boundary
+  for pipeline step 12, with plan-liveness, outcome-resolution, and
+  batch-uniqueness rules (TASK-054).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
