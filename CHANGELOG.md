@@ -31,4 +31,8 @@
 - User domain model: `Email` value object and immutable `User` entity with
   validated IANA timezone and UTC timestamps; `tzdata` added as a runtime
   dependency for `zoneinfo` portability (TASK-011).
+- Goal domain model: immutable `Goal` entity with user ownership, the six
+  spec lifecycle states (DRAFT → ACTIVE → PAUSED → COMPLETED/CANCELLED/
+  ARCHIVED), and create/revise factories; lifecycle transition rules
+  deferred to the goal-lifecycle task (TASK-012).
 - Initial execution pack created.

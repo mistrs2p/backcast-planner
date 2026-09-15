@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-012 (Goal model)
+- Current Task: TASK-013 (Current State)
 - Current Epic: EPIC-002 Core Domain
 
 ## Completed
@@ -71,6 +71,15 @@
   id/timestamp for deterministic tests. Added `tzdata==2026.4` as a runtime
   dependency (zoneinfo has no system tz database on Windows; ADR-007 updated).
   35 tests. EPIC-002 started.
+- TASK-012 — Goal model (2026-09-15): `apps/api/src/backcasting/domain/goal.py`
+  with the frozen `Goal` entity (UUID identity + owning `user_id` per
+  "User 1:N Goals", stripped non-empty title ≤200, optional description
+  ≤2000, timezone-aware UTC created/updated with updated ≥ created) and
+  `GoalStatus` covering exactly the spec's six lifecycle states
+  (DRAFT → ACTIVE → PAUSED → COMPLETED/CANCELLED/ARCHIVED). New goals start
+  in DRAFT; `create_goal`/`revise_goal` factories with injectable id/clock.
+  Transition rules deliberately deferred to the goal-lifecycle task.
+  22 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
