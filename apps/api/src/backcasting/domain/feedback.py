@@ -22,15 +22,18 @@ fact of history: no ``updated_at``, no revision path.
 The ``subject_id`` (a goal, plan, task, milestone, or outcome id)
 scopes the statement to what it is about; a subjectless statement
 speaks to the whole situation. Implicit behavioral signals
-(TASK-078) join this record's kind as the other half of docs/02's
-split.
+(:func:`detect_work_outside_availability`,
+:func:`detect_work_outside_placements`) are the other half of
+docs/02's split: mechanically derived from the behavior records,
+each stated as a factual sentence and returned only when the
+behavior is present — absence of a behavior is not a signal.
 """
 
 from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum
 
 from backcasting.domain.timezone import UTC, require_utc
@@ -117,4 +120,116 @@ def feedback_for_subject(
             raise FeedbackError("feedbacks must be Feedback instances")
     return tuple(
         feedback for feedback in feedbacks if feedback.subject_id == subject_id
+    )
+
+
+def _overlap(start_a, end_a, start_b, end_b) -> timedelta:
+    """The intersection of two intervals, zero when disjoint."""
+    start = max(start_a, start_b)
+    end = min(end_a, end_b)
+    return end - start if end > start else timedelta(0)
+
+
+def detect_work_outside_availability(
+    executions: tuple,
+    windows: tuple,
+    events: tuple = (),
+    *,
+    at: datetime,
+) -> Feedback | None:
+    """Derive the implicit signal: work outside declared availability.
+
+    For each sitting, the workable time over the sitting's own
+    interval (availability minus commitments, the shared capacity
+    semantics) is what could legitimately be worked; the rest of the
+    sitting is behavior that contradicts the declaration. Returns
+    ``None`` when every recorded hour sat inside the workable time —
+    absence of a behavior is not a signal.
+    """
+    from backcasting.domain.execution import Execution
+    from backcasting.domain.planned_capacity import workable_time
+
+    if not isinstance(executions, tuple):
+        raise FeedbackError("executions must be a tuple of Execution")
+    for execution in executions:
+        if not isinstance(execution, Execution):
+            raise FeedbackError("executions must be Execution instances")
+    if not isinstance(windows, tuple):
+        raise FeedbackError("windows must be a tuple of AvailabilityWindow")
+    if not isinstance(events, tuple):
+        raise FeedbackError("events must be a tuple of CalendarEvent")
+    require_utc("at", at, error=FeedbackError)
+
+    outside = timedelta(0)
+    for execution in executions:
+        workable = workable_time(
+            windows,
+            events,
+            range_start=execution.start,
+            range_end=execution.end,
+        )
+        outside += execution.duration - workable
+    if outside <= timedelta(0):
+        return None
+    return record_feedback(
+        f"{outside} of recorded work happened outside the declared availability",
+        kind=FeedbackKind.IMPLICIT,
+        created_at=at,
+    )
+
+
+def detect_work_outside_placements(
+    executions: tuple,
+    schedules: tuple,
+    *,
+    at: datetime,
+) -> Feedback | None:
+    """Derive the implicit signal: work outside the placed times.
+
+    Only sittings of tasks that carry at least one placement count:
+    a task with no placement has no placed time to be outside of
+    (that absence is a planning concern, not a behavioral one).
+    Returns ``None`` when every such sitting sat inside its task's
+    placements.
+    """
+    from backcasting.domain.execution import Execution
+    from backcasting.domain.schedule import Schedule
+
+    if not isinstance(executions, tuple):
+        raise FeedbackError("executions must be a tuple of Execution")
+    for execution in executions:
+        if not isinstance(execution, Execution):
+            raise FeedbackError("executions must be Execution instances")
+    if not isinstance(schedules, tuple):
+        raise FeedbackError("schedules must be a tuple of Schedule")
+    for schedule in schedules:
+        if not isinstance(schedule, Schedule):
+            raise FeedbackError("schedules must be Schedule instances")
+    require_utc("at", at, error=FeedbackError)
+
+    placements_by_task: dict[uuid.UUID, list] = {}
+    for schedule in schedules:
+        placements_by_task.setdefault(schedule.task_id, []).append(schedule)
+
+    outside = timedelta(0)
+    for execution in executions:
+        placements = placements_by_task.get(execution.task_id)
+        if not placements:
+            continue
+        inside = sum(
+            (
+                _overlap(
+                    execution.start, execution.end, placement.start, placement.end
+                )
+                for placement in placements
+            ),
+            timedelta(0),
+        )
+        outside += execution.duration - inside
+    if outside <= timedelta(0):
+        return None
+    return record_feedback(
+        f"{outside} of recorded work happened outside the placed times",
+        kind=FeedbackKind.IMPLICIT,
+        created_at=at,
     )

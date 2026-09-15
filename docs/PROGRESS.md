@@ -2,8 +2,8 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-078 (Implicit feedback)
-- Current Epic: EPIC-008 Progress
+- Current Task: TASK-079 (Trigger model)
+- Current Epic: EPIC-009 Replanning
 
 ## Completed
 - Product/domain design baseline completed before implementation pack generation.

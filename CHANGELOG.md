@@ -259,6 +259,10 @@
   unclassified — validation and storage only, interpretation left
   to the reasoning layer per ADR-002; FeedbackRepository port added
   (TASK-077).
+- Implicit feedback: behavioral signals derived mechanically from
+  the records — work outside declared availability, work outside
+  the placed times — stated as factual Feedback records, present
+  only when the behavior is; EPIC-008 complete (TASK-078).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

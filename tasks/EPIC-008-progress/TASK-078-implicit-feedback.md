@@ -1,7 +1,7 @@
 # TASK-078 — Implicit feedback
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-008-progress — Progress
