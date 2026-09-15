@@ -1,7 +1,7 @@
 # TASK-012 — Goal model
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-002-core-domain — Core Domain
