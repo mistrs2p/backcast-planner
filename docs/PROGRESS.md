@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-051 (Task dependencies)
+- Current Task: TASK-052 (Resources)
 - Current Epic: EPIC-006 Planning
 
 ## Completed
@@ -499,6 +499,21 @@
   Task" is honored by separation — a schedule places a task, it does
   not turn it into an event. `revise_task` moves editable fields;
   passing None keeps them. 29 tests.
+- TASK-051 — Task dependencies (2026-09-15): the ordering layer of
+  the docs/05 scheduling hierarchy ("… existing commitments →
+  dependencies → …"; an unmet dependency is `DEPENDENCY_BLOCKED`,
+  docs/06) — `domain/task_dependency.py` with the frozen
+  `TaskDependency` finish-to-start link (the MVP relation: a task
+  cannot start until the tasks it depends on have finished).
+  Collections grow only through `add_dependency`, which rejects
+  self-links, duplicates, cross-plan links, and the edge that closes
+  a cycle (checked at write time, so valid collections are acyclic by
+  construction; `topological_order` still checks defensively).
+  `depends_on`/`blocks` give direct neighbors, `all_prerequisites`
+  the transitive closure, and `topological_order` (Kahn's, stable on
+  input order) the scheduler's deterministic processing order.
+  Collections are plan-scoped by construction — persistence scoping is
+  the repository's concern (EPIC-008). 25 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
