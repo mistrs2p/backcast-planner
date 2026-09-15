@@ -1,7 +1,7 @@
 # TASK-076 — Sustainability
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-008-progress — Progress

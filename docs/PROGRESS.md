@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-076 (Sustainability)
+- Current Task: TASK-077 (Explicit feedback)
 - Current Epic: EPIC-008 Progress
 
 ## Completed
@@ -905,6 +905,26 @@
   with no reasons. Ordering off-track > at-risk > on-track is
   fixed; what to do about a poor reading is docs/08's ladder,
   upstream. 27 tests.
+- TASK-076 — Sustainability (2026-09-16): the judgment velocity
+  declined to make — `domain/sustainability.py` with
+  `SustainabilityStatus` (SUSTAINABLE/UNSUSTAINABLE), the frozen
+  `Sustainability` (status, worked, workable, utilization,
+  max_utilization; post-init enforces utilization = worked/workable
+  and status consistency), and `assess_sustainability(velocity,
+  windows, events, *, max_utilization=1.0)` — the workable side
+  recomputed with workable_time over the velocity's own window
+  (same-period guarantee as capacity variance). Rules: working
+  beyond the workable time is unsustainable whatever the ceiling —
+  those hours come from time the user did not declare workable
+  (evenings, weekends, protected time), the burnout signal; the
+  default ceiling 1.0 is the availability declaration's own
+  semantics (docs/05 — the user said this time is workable); a
+  lower ceiling (e.g. 0.8) encodes leave-headroom policy without
+  touching the declaration; no workable time → utilization None,
+  and any work over zero workable time is still beyond capacity.
+  13 tests, including the wiring where a plan completes on time
+  via an evening sprint: progress ON_TRACK and pace UNSUSTAINABLE —
+  both readings stand.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
