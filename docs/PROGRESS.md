@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-011 (User model)
+- Current Task: TASK-012 (Goal model)
 - Current Epic: EPIC-002 Core Domain
 
 ## Completed
@@ -63,6 +63,14 @@
   `--check` drift mode wired into CI. Discovered starlette 1.6 deprecates httpx for
   TestClient — switched the test client dependency to httpx2 2.13.0 (ADR-007 updated).
   6 tests (app metadata, health, contract validity/identity/drift). EPIC-001 complete.
+- TASK-011 — User model (2026-09-15): first domain entity —
+  `apps/api/src/backcasting/domain/user.py` with the `Email` value object
+  (validated, domain-lowercased) and the frozen `User` entity (UUID identity,
+  IANA timezone via ZoneInfo, non-empty ≤100-char display name, timezone-aware
+  UTC `created_at`), plus a `create_user` factory with injectable
+  id/timestamp for deterministic tests. Added `tzdata==2026.4` as a runtime
+  dependency (zoneinfo has no system tz database on Windows; ADR-007 updated).
+  35 tests. EPIC-002 started.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

@@ -28,4 +28,7 @@
 - Shared contracts foundation: FastAPI application factory with /health,
   OpenAPI contract generated and committed to packages/contracts with CI drift
   checking (ADR-008); test client moved to httpx2 (TASK-010).
+- User domain model: `Email` value object and immutable `User` entity with
+  validated IANA timezone and UTC timestamps; `tzdata` added as a runtime
+  dependency for `zoneinfo` portability (TASK-011).
 - Initial execution pack created.

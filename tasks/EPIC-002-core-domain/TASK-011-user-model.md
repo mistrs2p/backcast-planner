@@ -1,7 +1,7 @@
 # TASK-011 — User model
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-002-core-domain — Core Domain

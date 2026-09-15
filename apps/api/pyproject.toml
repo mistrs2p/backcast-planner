@@ -16,6 +16,9 @@ dependencies = [
     "alembic==1.20.0",
     "psycopg[binary]==3.3.5",
     "redis==8.1.0",
+    # IANA timezone database for zoneinfo (required on Windows; fallback on
+    # systems without a system tz database).
+    "tzdata==2026.4",
 ]
 
 [project.optional-dependencies]
