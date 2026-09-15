@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-009 (Technology verification)
+- Current Task: TASK-010 (Shared contracts foundation)
 - Current Epic: EPIC-001 Foundation
 
 ## Completed
@@ -48,6 +48,14 @@
   JWT_SECRET required and placeholder-rejected with a 32-char minimum in production,
   LLM provider allowlist with model-requires-provider). Optional `.env` seeding with
   real-environment precedence. 22 tests via a root `tests/conftest.py` path shim.
+- TASK-009 — Technology verification (2026-09-15): verified exact versions against
+  official sources (PyPI, npm registry, nodejs.org, Docker Hub) and recorded them in
+  `docs/adr/ADR-007-technology-versions.md` with rationale, security notes, and
+  breaking-change posture. Backend deps exactly pinned in `apps/api/pyproject.toml`
+  (fastapi 0.141.1, uvicorn 0.53.0, sqlalchemy 2.0.53, alembic 1.20.0, psycopg 3.3.5,
+  redis 8.1.0); compose images pinned (postgres:18.4, redis:7.4.11-alpine, live smoke
+  test passed); requirements-dev pinned. TypeScript deliberately 5.9.3 (not 7.0.2);
+  worker framework deliberately deferred. 11 traceability tests enforce pin/ADR sync.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

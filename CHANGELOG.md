@@ -22,4 +22,7 @@
   health checks and persistent storage for local development (TASK-007).
 - Environment configuration: validated stdlib-only `Settings` layer for the backend
   (`apps/api/src/backcasting/config.py`) with optional `.env` seeding (TASK-008).
+- Technology verification: exact versions verified against official sources and
+  recorded in ADR-007; backend dependencies, dev dependencies, and Docker images
+  exactly pinned with traceability tests (TASK-009).
 - Initial execution pack created.
