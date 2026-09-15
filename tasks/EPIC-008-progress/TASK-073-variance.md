@@ -1,7 +1,7 @@
 # TASK-073 — Variance
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-008-progress — Progress
