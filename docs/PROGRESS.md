@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-071 (Progress snapshots)
+- Current Task: TASK-072 (Velocity)
 - Current Epic: EPIC-008 Progress
 
 ## Completed
@@ -808,6 +808,25 @@
   observation of the metric itself. `MeasurementRepository` port
   added (save / get / list_for_subject, earliest measured_at first).
   24 tests.
+- TASK-071 — Progress snapshots (2026-09-16): the third term of
+  docs/07's triad — `domain/progress.py` with the frozen
+  `ProgressSnapshot` (snapshot_id, plan_id, taken_at, task_count,
+  completed_task_count, planned, actual, remaining, progress,
+  completion_rate) and `take_progress_snapshot(plan, tasks,
+  executions, *, at)`. Derivation, all mechanical: planned =
+  `estimate_workload` (unestimated tasks propagate the estimation
+  error — unknown workload, no derivable progress); actual sums only
+  the sittings for these tasks that ended at or before the snapshot
+  moment (a sitting in progress has not actually happened yet);
+  progress and completion_rate are capped at 1.0 — a plan cannot be
+  more than done, overruns are the variance layer's material
+  (docs/07), the same separation that keeps Execution free of
+  judgment; remaining floors at zero; completion is per task (own
+  actual ≥ own duration), so overwork on one task does not complete
+  its sibling; an empty task list reports zero everywhere.
+  `ProgressSnapshotRepository` port added (save / get /
+  list_for_plan, earliest taken_at first) — an append-only history,
+  the progress counterpart of CurrentState snapshots. 18 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

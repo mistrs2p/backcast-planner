@@ -233,6 +233,11 @@
   immutable value per observation, attached to an optional milestone
   or outcome subject, queryable per subject and by latest reading;
   MeasurementRepository port added (TASK-070).
+- Progress snapshots: the derived third term of "Planned ≠ Actual ≠
+  Progress" — one immutable point-in-time reading per plan with
+  planned/actual/remaining workload, progress and completion rate
+  capped at done (overruns belong to variance); per-task completion;
+  ProgressSnapshotRepository port added (TASK-071).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

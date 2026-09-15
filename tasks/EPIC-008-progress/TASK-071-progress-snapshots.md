@@ -1,7 +1,7 @@
 # TASK-071 — Progress snapshots
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-008-progress — Progress
