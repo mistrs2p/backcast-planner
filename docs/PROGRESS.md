@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-093 (Google adapter)
+- Current Task: TASK-094 (Context builder)
 - Current Epic: EPIC-010 AI
 
 ## Completed
@@ -1134,6 +1134,25 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-093 — Google adapter (2026-09-16): the third vendor behind
+  the LLM port, completing the adapter set. `infrastructure/
+  google_provider.py` with `GoogleProvider(LLMProvider)` — name
+  "google", the same lazy-import/injected-client construction as its
+  siblings. Vendor-shape translation: neutral ASSISTANT turns are
+  renamed to the vendor's "model" role; SYSTEM turns are hoisted
+  into the config object's `system_instruction` (joined when
+  multiple); a request of only system turns fails the call up front
+  (no conversation to send); sampling knobs ride in the config, each
+  only when the request set it — Gemini imposes no required output
+  bound, so an unset one is simply absent. Response translation
+  catches the vendor `text` property's own raise (safety refusal,
+  empty candidates) and states it as provider trouble; usage crosses
+  from usage_metadata (prompt/candidates token counts). Every vendor
+  fault is ProviderCallError with the original exception chained.
+  21 tests against a recording fake, closing with the three-vendor
+  wiring: three API shapes, one port, callers that cannot tell the
+  vendors apart except by name.
 
 - TASK-092 — Anthropic adapter (2026-09-16): the second vendor
   behind the LLM port, over an API that differs in kind.
