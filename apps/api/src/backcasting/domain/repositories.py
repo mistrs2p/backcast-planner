@@ -32,6 +32,7 @@ from backcasting.domain.calendar_event import CalendarEvent
 from backcasting.domain.feedback import Feedback
 from backcasting.domain.current_state import CurrentState
 from backcasting.domain.future_state import FutureState
+from backcasting.domain.gap import Gap
 from backcasting.domain.goal import Goal
 from backcasting.domain.goal_interpretation import GoalInterpretation
 from backcasting.domain.outcome_decomposition import OutcomeDecomposition
@@ -115,6 +116,28 @@ class FutureStateRepository(ABC):
     @abstractmethod
     def get_for_goal(self, goal_id: uuid.UUID) -> FutureState | None:
         """Return the goal's destination (1:1 in the MVP), or ``None``."""
+
+
+class GapRepository(ABC):
+    """Persistence port for :class:`~backcasting.domain.gap.Gap`.
+
+    A gap is a recorded calculation (backcasting step 4,
+    ``docs/04-BACKCASTING-MODEL.md``), not just a derived value: it
+    pins the narrative and dimensions as calculated for one context.
+    One per goal in the MVP — redefinition arrives with replanning.
+    """
+
+    @abstractmethod
+    def save(self, gap: Gap) -> None:
+        """Insert or replace the gap keyed by ``gap_id``."""
+
+    @abstractmethod
+    def get(self, gap_id: uuid.UUID) -> Gap | None:
+        """Return the gap with ``gap_id``, or ``None``."""
+
+    @abstractmethod
+    def get_for_goal(self, goal_id: uuid.UUID) -> Gap | None:
+        """Return the goal's gap, or ``None``."""
 
 
 class CalendarRepository(ABC):
