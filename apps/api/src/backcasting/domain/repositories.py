@@ -34,6 +34,7 @@ from backcasting.domain.current_state import CurrentState
 from backcasting.domain.future_state import FutureState
 from backcasting.domain.goal import Goal
 from backcasting.domain.goal_interpretation import GoalInterpretation
+from backcasting.domain.strategy_generation import StrategyGeneration
 from backcasting.domain.measurement import Measurement
 from backcasting.domain.progress import ProgressSnapshot
 from backcasting.domain.schedule import Schedule
@@ -278,3 +279,24 @@ class GoalInterpretationRepository(ABC):
     @abstractmethod
     def list_for_goal(self, goal_id: uuid.UUID) -> Sequence[GoalInterpretation]:
         """Return the goal's interpretations, earliest first."""
+
+class StrategyGenerationRepository(ABC):
+    """Persistence port for
+    :class:`~backcasting.domain.strategy_generation.StrategyGeneration`.
+
+    The AI layer's strategy generations, recorded verbatim with
+    provenance and never revised — regeneration is a new record.
+    """
+
+    @abstractmethod
+    def save(self, generation: StrategyGeneration) -> None:
+        """Insert or replace the generation keyed by
+        ``generation_id``."""
+
+    @abstractmethod
+    def get(self, generation_id: uuid.UUID) -> StrategyGeneration | None:
+        """Return the generation with ``generation_id``, or ``None``."""
+
+    @abstractmethod
+    def list_for_goal(self, goal_id: uuid.UUID) -> Sequence[StrategyGeneration]:
+        """Return the goal's generations, earliest first."""

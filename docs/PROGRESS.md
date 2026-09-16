@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-096 (Strategy generation)
+- Current Task: TASK-097 (Outcome decomposition)
 - Current Epic: EPIC-010 AI
 
 ## Completed
@@ -1134,6 +1134,28 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-096 — Strategy generation (2026-09-16): the AI half of
+  pipeline step 8 (docs/04). The deterministic half has existed
+  since EPIC-003 — `accept_proposed_strategies` binding proposals
+  to a RUNNING run with unique names, `decide_strategy` selecting
+  (step 9) — so this task adds the LLM side:
+  `domain/strategy_generation.py` with the frozen
+  `StrategyGeneration(generation_id, goal_id, proposal, provider,
+  model, created_at)` — the proposal verbatim (bounded at 20k),
+  tied to the goal, with full provenance; parsing into
+  StrategyProposal tuples is TASK-100's validation, not the
+  record's. `StrategyGenerationRepository` port (insert-or-replace,
+  get, list_for_goal earliest first). The use case,
+  `application/strategy_generation.py`: `generate_strategies(goal,
+  state, future, provider)` wires the strategy context (the three
+  anchors of every backcast), the provider port, and the record;
+  vendor faults propagate as ProviderCallError untouched. 13 tests
+  (in `tests/test_ai_strategy_generation.py`, alongside TASK-024's
+  deterministic suite), including the seam test: a generation,
+  read as name/rationale candidates, entering the existing
+  acceptance through a real `calculate_gap`/`start_run` context —
+  the two halves of step 8 provably meet.
 
 - TASK-095 — Goal interpretation (2026-09-16): the first AI
   operation, wired end to end. `domain/goal_interpretation.py`
