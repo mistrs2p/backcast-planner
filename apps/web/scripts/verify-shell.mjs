@@ -65,6 +65,51 @@ check(
   "the goals home route exists",
 );
 
+// TASK-107 — goal creation: the home page composes the interactive
+// board, which talks to the API through the /api proxy.
+const page = await read("src/app/page.tsx");
+check(
+  page.includes("<GoalBoard />"),
+  "the goals home renders the goal board",
+);
+check(
+  await exists("src/components/goal-board.tsx"),
+  "the goal board component exists",
+);
+const board = await read("src/components/goal-board.tsx");
+check(
+  board.startsWith('"use client"'),
+  "the goal board is a client component",
+);
+check(
+  board.includes("TextField") &&
+    board.includes("Button") &&
+    board.includes("Card"),
+  "the goal board composes the design-system primitives",
+);
+check(
+  board.includes("role=\"alert\""),
+  "goal board errors are announced as alerts",
+);
+check(
+  await exists("src/lib/goals.ts") && await exists("src/lib/user.ts"),
+  "the goals API client and user-id convention exist",
+);
+const goalsClient = await read("src/lib/goals.ts");
+check(
+  goalsClient.includes("/api/goals"),
+  "the goals client targets the proxied API path",
+);
+const nextConfig = await read("next.config.ts");
+check(
+  nextConfig.includes('"/api/:path*"'),
+  "next.config rewrites /api/* to the backend",
+);
+check(
+  nextConfig.includes("API_ORIGIN"),
+  "the API origin is configurable via API_ORIGIN",
+);
+
 const pkg = JSON.parse(await read("package.json"));
 check(
   pkg.dependencies.next === "16.3.5",

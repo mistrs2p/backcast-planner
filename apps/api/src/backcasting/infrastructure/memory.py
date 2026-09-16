@@ -14,11 +14,34 @@ import uuid
 
 from backcasting.domain.calendar import Calendar
 from backcasting.domain.calendar_event import CalendarEvent
+from backcasting.domain.goal import Goal
 from backcasting.domain.repositories import (
     CalendarEventRepository,
     CalendarRepository,
+    GoalRepository,
     RepositoryError,
 )
+
+
+class InMemoryGoalRepository(GoalRepository):
+    """Goal port backed by a dict, safe for concurrent requests."""
+
+    def __init__(self) -> None:
+        self._by_id: dict[uuid.UUID, Goal] = {}
+        self._lock = threading.Lock()
+
+    def save(self, goal: Goal) -> None:
+        with self._lock:
+            self._by_id[goal.goal_id] = goal
+
+    def get(self, goal_id: uuid.UUID) -> Goal | None:
+        with self._lock:
+            return self._by_id.get(goal_id)
+
+    def list_for_user(self, user_id: uuid.UUID):
+        with self._lock:
+            goals = [g for g in self._by_id.values() if g.user_id == user_id]
+        return tuple(sorted(goals, key=lambda g: (g.created_at, g.goal_id)))
 
 
 class InMemoryCalendarRepository(CalendarRepository):
