@@ -51,7 +51,7 @@ class TestLocalReplanRecord:
             plan_id=plan.plan_id,
             version=1,
             reason="Re-estimate after persistent slippage",
-            change_set=PlanChangeSet(revised_task_id=uuid.uuid4()),
+            change_set=PlanChangeSet(revised_task_ids=(uuid.uuid4(),)),
             created_at=REVISED,
         )
 
@@ -110,7 +110,7 @@ class TestReplanTaskLocally:
         assert replan.plan.workload == 22 * HOUR  # 20h + the 2h delta
         assert replan.version.version == 1
         assert replan.version.change_set.workload == 22 * HOUR
-        assert replan.version.change_set.revised_task_id == task.task_id
+        assert replan.version.change_set.revised_task_ids == (task.task_id,)
 
     def test_goal_and_future_stay_untouched(self, plan, task) -> None:
         """Level 2's defining constraint: the plan's identity and
@@ -158,7 +158,7 @@ class TestReplanTaskLocally:
         assert replan.plan.workload == 20 * HOUR  # unchanged
         assert replan.task.deadline == new_deadline
         assert replan.version.change_set.workload is None
-        assert replan.version.change_set.revised_task_id == task.task_id
+        assert replan.version.change_set.revised_task_ids == (task.task_id,)
 
     def test_title_and_description_move_too(self, plan, task) -> None:
         replan = replan_task_locally(

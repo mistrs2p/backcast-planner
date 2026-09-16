@@ -55,7 +55,7 @@ class PlanChangeSet:
 
     title: str | None = None
     workload: timedelta | None = None
-    revised_task_id: uuid.UUID | None = None
+    revised_task_ids: tuple[uuid.UUID, ...] = ()
 
     def __post_init__(self) -> None:
         if self.title is not None:
@@ -71,10 +71,11 @@ class PlanChangeSet:
                 raise PlanVersionError(
                     "workload must be a non-negative timedelta or None"
                 )
-        if self.revised_task_id is not None and not isinstance(
-            self.revised_task_id, uuid.UUID
-        ):
-            raise PlanVersionError("revised_task_id must be a UUID or None")
+        if not isinstance(self.revised_task_ids, tuple):
+            raise PlanVersionError("revised_task_ids must be a tuple of UUIDs")
+        for task_id in self.revised_task_ids:
+            if not isinstance(task_id, uuid.UUID):
+                raise PlanVersionError("revised_task_ids must be UUID instances")
 
 
 @dataclass(frozen=True)
@@ -162,7 +163,7 @@ def apply_plan_version(
     if (
         title == plan.title
         and workload == plan.workload
-        and change_set.revised_task_id is None
+        and not change_set.revised_task_ids
     ):
         raise PlanVersionError(
             "change set changes nothing; a plan version must be a meaningful replan"

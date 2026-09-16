@@ -1,7 +1,7 @@
 # TASK-086 — Regional replan
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-009-replanning — Replanning

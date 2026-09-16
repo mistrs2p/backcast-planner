@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-086 (Regional replan)
+- Current Task: TASK-087 (Global replan)
 - Current Epic: EPIC-009 Replanning
 
 ## Completed
@@ -1091,6 +1091,30 @@
   replanning_policy as the shared scope ladder for TASK-086/087.
   17 tests, including the arc from trigger to decision to the
   re-estimate.
+
+- TASK-086 — Regional replan (2026-09-16): level 2 at middle
+  scope — a dependency-connected group of tasks revised as one
+  decision, one reason, one plan version (revising the region
+  task-by-task would tell one decision in several versions).
+  `domain/regional_replan.py` with `TaskRevision(before, after)`
+  (identity kept; a revision that changes nothing is rejected),
+  `dependency_region(seed, tasks, dependencies)` — the seed plus
+  every task connected through the dependency graph, both
+  directions (a re-estimate moves work for prerequisites and
+  dependents alike), topologically ordered; unlinked tasks stay
+  out — the region is the ripple, not the plan. The boundary is
+  mechanical; whether the proposed revisions cover it is the
+  reasoning layer's judgement (ADR-002).
+  `replan_tasks_regionally(plan, history, revisions, *, reason)` —
+  distinct tasks of the plan only, workload moves by the summed
+  estimate deltas (shift-not-recompute, same rule as TASK-085;
+  opposite-direction deltas net out; an estimate landing counts in
+  full), one version naming every revised task. To carry several
+  tasks, `PlanChangeSet.revised_task_id` generalized to
+  `revised_task_ids: tuple` (local replan updated mechanically;
+  its 17 tests and plan_version's 25 still green). 23 tests,
+  including the region moving as one decision while an unlinked
+  task stays untouched.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

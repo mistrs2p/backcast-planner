@@ -127,7 +127,7 @@ def replan_task_locally(
         history,
         reason=reason,
         change_set=PlanChangeSet(
-            workload=workload, revised_task_id=task.task_id
+            workload=workload, revised_task_ids=(task.task_id,)
         ),
         source_run_id=source_run_id,
         at=at,
