@@ -425,6 +425,13 @@
   both FeasibilityResults and the workload delta exposed
   (TASK-088).
 
+- Progress: `ExecutionRepository` port with an in-memory
+  implementation, `InMemoryProgressSnapshotRepository`,
+  `ProgressService`, and `POST /goals/{goal_id}/executions` plus
+  `POST|GET /goals/{goal_id}/progress`; the goal detail's progress
+  section records work, takes snapshots, and shows actual vs
+  planned (TASK-114).
+
 - Calendar UI: `GET /users/{user_id}/calendar` read path plus the
   `/calendar` page — create the one-per-user calendar, list and
   place events, and see conflicts surfaced (TASK-113).

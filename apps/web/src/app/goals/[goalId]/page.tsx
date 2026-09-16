@@ -12,6 +12,11 @@ import {
   PublishPlanButton,
 } from "@/components/plan-forms";
 import { PlanView } from "@/components/plan-view";
+import {
+  RecordWorkForm,
+  TakeSnapshotButton,
+} from "@/components/progress-forms";
+import { ProgressView } from "@/components/progress-view";
 import { TaskEditForm } from "@/components/task-forms";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -19,6 +24,7 @@ import type { BackcastView } from "@/lib/backcast";
 import type { Goal } from "@/lib/goals";
 import type { MilestoneView } from "@/lib/milestones";
 import type { PlanBundleView } from "@/lib/plans";
+import type { ProgressView as ProgressSnapshotView } from "@/lib/progress";
 import { serverGet } from "@/lib/server-api";
 
 export const dynamic = "force-dynamic";
@@ -33,12 +39,13 @@ function formatDate(moment: string): string {
 
 /**
  * One goal (TASK-108) with its backcast (TASK-109), the milestones
- * pinned on its run (TASK-110), and the plan executing it
- * (TASK-111) — whose tasks stay revisable while the plan is a
- * DRAFT (TASK-112). Rendered on the server from the backend's GET
- * endpoints; an unknown goal renders Next's not-found boundary.
- * Before a backcast is defined, the definition form stands in for
- * the visualization; milestones and the plan follow from the run.
+ * pinned on its run (TASK-110), the plan executing it (TASK-111)
+ * — whose tasks stay revisable while the plan is a DRAFT
+ * (TASK-112) — and the progress of actually doing it (TASK-114).
+ * Rendered on the server from the backend's GET endpoints; an
+ * unknown goal renders Next's not-found boundary. Before a
+ * backcast is defined, the definition form stands in for the
+ * visualization; milestones and the plan follow from the run.
  */
 export default async function GoalDetailPage({
   params,
@@ -144,6 +151,37 @@ async function Plan({ goalId }: { goalId: string }) {
           />
         </>
       ) : null}
+      <Progress goalId={goalId} tasks={bundle.tasks} />
+    </>
+  );
+}
+
+async function Progress({
+  goalId,
+  tasks,
+}: {
+  goalId: string;
+  tasks: PlanBundleView["tasks"];
+}) {
+  const progress = await serverGet<ProgressSnapshotView>(
+    `/goals/${goalId}/progress`,
+  );
+  return (
+    <>
+      {progress !== null ? (
+        <ProgressView progress={progress} />
+      ) : (
+        <Card title="Progress">
+          <p className="text-text-muted">
+            No progress snapshot yet — record work as it happens, then
+            take one.
+          </p>
+        </Card>
+      )}
+      {tasks.length > 0 ? (
+        <RecordWorkForm goalId={goalId} tasks={tasks} />
+      ) : null}
+      <TakeSnapshotButton goalId={goalId} />
     </>
   );
 }

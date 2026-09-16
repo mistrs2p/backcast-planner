@@ -383,6 +383,60 @@ check(
   "navigation marks the current entry from the pathname",
 );
 
+// TASK-114 — progress UI: the Actual side of docs/07's triad. The
+// goal detail gains a progress section once a plan exists — record
+// sittings of work, take snapshots, read the latest.
+check(
+  await exists("src/components/progress-view.tsx") &&
+    await exists("src/components/progress-forms.tsx"),
+  "the progress view and forms components exist",
+);
+check(
+  await exists("src/lib/progress.ts"),
+  "the progress API client exists",
+);
+const progressClient = await read("src/lib/progress.ts");
+check(
+  progressClient.includes("`/api/goals/${goalId}/executions`") &&
+    progressClient.includes("`/api/goals/${goalId}/progress`"),
+  "the progress client targets the proxied API paths",
+);
+const progressDetail = await read("src/app/goals/[goalId]/page.tsx");
+check(
+  progressDetail.includes("ProgressView") &&
+    progressDetail.includes("RecordWorkForm") &&
+    progressDetail.includes("TakeSnapshotButton"),
+  "the goal detail composes the progress view and forms",
+);
+const progressView = await read("src/components/progress-view.tsx");
+check(
+  !progressView.startsWith('"use client"'),
+  "the progress view renders on the server",
+);
+check(
+  progressView.includes("actual_hours") &&
+    progressView.includes("planned_hours") &&
+    progressView.includes("completed_task_count"),
+  "the progress view shows actual vs planned and completion",
+);
+const progressForms = await read("src/components/progress-forms.tsx");
+check(
+  progressForms.startsWith('"use client"'),
+  "the progress forms are client components",
+);
+check(
+  progressForms.includes("router.refresh()"),
+  "the progress forms refresh the server-rendered page after submit",
+);
+check(
+  progressForms.includes('type="datetime-local"'),
+  "recording work uses datetime inputs",
+);
+check(
+  progressForms.includes("role=\"alert\""),
+  "progress form errors are announced as alerts",
+);
+
 const pkg = JSON.parse(await read("package.json"));
 check(
   pkg.dependencies.next === "16.3.5",

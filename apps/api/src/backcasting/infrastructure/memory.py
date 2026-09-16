@@ -16,23 +16,27 @@ from backcasting.domain.backcasting_run import BackcastingRun
 from backcasting.domain.calendar import Calendar
 from backcasting.domain.calendar_event import CalendarEvent
 from backcasting.domain.current_state import CurrentState
+from backcasting.domain.execution import Execution
 from backcasting.domain.future_state import FutureState
 from backcasting.domain.gap import Gap
 from backcasting.domain.goal import Goal
 from backcasting.domain.milestone import Milestone
 from backcasting.domain.outcome import Outcome
 from backcasting.domain.plan import Plan
+from backcasting.domain.progress import ProgressSnapshot
 from backcasting.domain.repositories import (
     BackcastingRunRepository,
     CalendarEventRepository,
     CalendarRepository,
     CurrentStateRepository,
+    ExecutionRepository,
     FutureStateRepository,
     GapRepository,
     GoalRepository,
     MilestoneRepository,
     OutcomeRepository,
     PlanRepository,
+    ProgressSnapshotRepository,
     RepositoryError,
     TaskRepository,
 )
@@ -257,6 +261,54 @@ class InMemoryTaskRepository(TaskRepository):
         with self._lock:
             tasks = [t for t in self._by_id.values() if t.plan_id == plan_id]
         return tuple(sorted(tasks, key=lambda t: (t.created_at, t.task_id)))
+
+
+class InMemoryExecutionRepository(ExecutionRepository):
+    """Execution port backed by a dict, safe for concurrent requests.
+
+    Append-only history: ``save`` only inserts (a revision of a
+    sitting is another sitting, docs/07)."""
+
+    def __init__(self) -> None:
+        self._by_id: dict[uuid.UUID, Execution] = {}
+        self._lock = threading.Lock()
+
+    def save(self, execution: Execution) -> None:
+        with self._lock:
+            self._by_id[execution.execution_id] = execution
+
+    def get(self, execution_id: uuid.UUID) -> Execution | None:
+        with self._lock:
+            return self._by_id.get(execution_id)
+
+    def list_for_task(self, task_id: uuid.UUID):
+        with self._lock:
+            sittings = [e for e in self._by_id.values() if e.task_id == task_id]
+        return tuple(sorted(sittings, key=lambda e: (e.start, e.execution_id)))
+
+
+class InMemoryProgressSnapshotRepository(ProgressSnapshotRepository):
+    """Progress-snapshot port backed by a dict, safe for concurrent
+    requests. Append-only history, earliest ``taken_at`` first."""
+
+    def __init__(self) -> None:
+        self._by_id: dict[uuid.UUID, ProgressSnapshot] = {}
+        self._lock = threading.Lock()
+
+    def save(self, snapshot: ProgressSnapshot) -> None:
+        with self._lock:
+            self._by_id[snapshot.snapshot_id] = snapshot
+
+    def get(self, snapshot_id: uuid.UUID) -> ProgressSnapshot | None:
+        with self._lock:
+            return self._by_id.get(snapshot_id)
+
+    def list_for_plan(self, plan_id: uuid.UUID):
+        with self._lock:
+            snapshots = [
+                s for s in self._by_id.values() if s.plan_id == plan_id
+            ]
+        return tuple(sorted(snapshots, key=lambda s: (s.taken_at, s.snapshot_id)))
 
 
 class InMemoryCalendarRepository(CalendarRepository):

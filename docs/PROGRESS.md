@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-114 (Progress UI)
+- Current Task: TASK-115 (Replanning UI)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,27 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-114 — Progress UI (2026-09-16): the Actual side of
+  docs/07's triad, end to end. New backend surface:
+  `ExecutionRepository` port (append-only sittings, earliest start
+  first) with an in-memory implementation, the missing
+  `InMemoryProgressSnapshotRepository`, `ProgressService` (record a
+  sitting on one of the goal's plan's tasks — facts record on any
+  plan status, deviation is the variance layer's material; take a
+  snapshot, which propagates the domain's refusal over unestimated
+  tasks; read the latest), and three endpoints: `POST
+  /goals/{goal_id}/executions`, `POST|GET
+  /goals/{goal_id}/progress` (contract regenerated). On the web,
+  the goal detail gains a progress section once a plan exists:
+  the latest snapshot rendered server-side (actual of planned,
+  remaining, tasks complete, progress and completion rate), a
+  record-work form (task select + aware datetime inputs — only
+  ended work counts), and a take-snapshot control; empty state
+  before the first snapshot. 21 new backend tests (suite: 2363);
+  smoke-tested live through the Next proxy (record → snapshot →
+  2.5h of 3h, 1 of 2 tasks, 83%; backwards sitting 422; unknown
+  task 404).
 
 - TASK-113 — Calendar UI (2026-09-16): the user-scoped calendar
   joins the top level. New read path `GET /users/{user_id}/calendar`
