@@ -1,7 +1,7 @@
 # TASK-093 — Google adapter
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-010-ai — AI

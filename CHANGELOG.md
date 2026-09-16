@@ -344,6 +344,12 @@
   from an adapter default, text blocks joined back into one
   proposal, no silent clamping of sampling knobs (TASK-092).
 
+- Google adapter: `GoogleProvider` implements the neutral LLM port
+  over the Google GenAI SDK — assistant turns renamed to the
+  vendor's "model" role, system instruction and sampling knobs
+  riding in the config object, the raising `text` property caught
+  into `ProviderCallError` (TASK-093).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with
