@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-098 (Task generation)
+- Current Task: TASK-099 (Plan explanation)
 - Current Epic: EPIC-010 AI
 
 ## Completed
@@ -1134,6 +1134,24 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-098 — Task generation (2026-09-16): the AI half of
+  pipeline step 12 (docs/04). The deterministic half is
+  `accept_proposed_tasks`, which binds TaskProposal batches to a
+  living plan with resolved outcome-title references; this task adds
+  the LLM side: `domain/task_generation.py` with the frozen
+  `TaskGeneration(generation_id, plan_id, proposal, provider, model,
+  created_at)` — the proposal verbatim (bounded at 20k), tied to the
+  plan whose outcomes were decomposed (a generation is anchored to a
+  single plan's shape), with full provenance; parsing into
+  TaskProposal tuples is TASK-100's validation. `TaskGenerationRepository`
+  port (insert-or-replace, get, list_for_plan earliest first). The
+  use case, `application/task_generation.py`: `generate_tasks(outcomes,
+  provider)` requires a non-empty outcome tuple sharing one plan,
+  wires the outcomes-only context, the provider port, and the record;
+  vendor faults propagate as ProviderCallError untouched. 17 tests
+  (`tests/test_ai_task_generation.py`), including the seam to
+  `accept_proposed_tasks`.
 
 - TASK-097 — Outcome decomposition (2026-09-16): the AI half of
   pipeline step 11 (docs/04). The deterministic half is

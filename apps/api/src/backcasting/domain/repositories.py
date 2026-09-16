@@ -36,6 +36,7 @@ from backcasting.domain.goal import Goal
 from backcasting.domain.goal_interpretation import GoalInterpretation
 from backcasting.domain.outcome_decomposition import OutcomeDecomposition
 from backcasting.domain.strategy_generation import StrategyGeneration
+from backcasting.domain.task_generation import TaskGeneration
 from backcasting.domain.measurement import Measurement
 from backcasting.domain.progress import ProgressSnapshot
 from backcasting.domain.schedule import Schedule
@@ -326,3 +327,25 @@ class OutcomeDecompositionRepository(ABC):
         self, future_state_id: uuid.UUID
     ) -> Sequence[OutcomeDecomposition]:
         """Return the future state's decompositions, earliest first."""
+
+
+class TaskGenerationRepository(ABC):
+    """Persistence port for
+    :class:`~backcasting.domain.task_generation.TaskGeneration`.
+
+    The AI layer's task generations, recorded verbatim with
+    provenance and never revised — a regeneration is a new record.
+    """
+
+    @abstractmethod
+    def save(self, generation: TaskGeneration) -> None:
+        """Insert or replace the generation keyed by
+        ``generation_id``."""
+
+    @abstractmethod
+    def get(self, generation_id: uuid.UUID) -> TaskGeneration | None:
+        """Return the generation with ``generation_id``, or ``None``."""
+
+    @abstractmethod
+    def list_for_plan(self, plan_id: uuid.UUID) -> Sequence[TaskGeneration]:
+        """Return the plan's task generations, earliest first."""

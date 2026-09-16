@@ -1,7 +1,7 @@
 # TASK-098 — Task generation
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-010-ai — AI
