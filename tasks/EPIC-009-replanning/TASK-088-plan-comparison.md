@@ -1,7 +1,7 @@
 # TASK-088 — Plan comparison
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-009-replanning — Replanning

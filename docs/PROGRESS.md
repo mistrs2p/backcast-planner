@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-088 (Plan comparison)
+- Current Task: TASK-089 (Replanning integration)
 - Current Epic: EPIC-009 Replanning
 
 ## Completed
@@ -1134,6 +1134,27 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-088 — Plan comparison (2026-09-16): current vs candidate,
+  mechanically. `domain/plan_comparison.py` with `PreferredPlan`
+  (CURRENT/CANDIDATE), the frozen `PlanComparison(current,
+  candidate, both FeasibilityResults, workload_delta, preferred,
+  reason)` — candidate must be another version of the same plan —
+  and `compare_plans(current, candidate, *, buffer,
+  usable_capacity)`: both sides judged under the same buffer and
+  capacity so the comparison is honest. The rules, all from the
+  spec's own: feasibility first (docs/04's rule is authoritative —
+  a feasible plan beats an infeasible one, whichever side); with
+  verdicts equal, the candidate wins only on strictly more slack
+  (same destination, cheaper path — level 2 fixes the
+  Goal/Future); a tie keeps the current plan (minimum-change:
+  adopting a no-gain candidate is change for its own sake). The
+  arithmetic is stated alongside the verdict so the reasoning
+  layer can disagree with grounds; what the domain deliberately
+  does not weigh — strategic fit, preference, risk — stays with
+  the LLM and the user (ADR-002). 12 tests, including the global
+  replan candidate (20h declared, 9h re-derived) adopted under
+  12h capacity.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
