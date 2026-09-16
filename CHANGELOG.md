@@ -338,6 +338,12 @@
   default-model resolution, and every vendor fault chained into
   `ProviderCallError` (TASK-091).
 
+- Anthropic adapter: `AnthropicProvider` implements the neutral
+  LLM port over the Anthropic SDK — system turns hoisted to the
+  vendor's top-level parameter, the required output bound resolved
+  from an adapter default, text blocks joined back into one
+  proposal, no silent clamping of sampling knobs (TASK-092).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with

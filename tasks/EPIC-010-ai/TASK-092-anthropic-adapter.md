@@ -1,7 +1,7 @@
 # TASK-092 — Anthropic adapter
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-010-ai — AI
