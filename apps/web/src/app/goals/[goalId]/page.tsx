@@ -12,6 +12,7 @@ import {
   PublishPlanButton,
 } from "@/components/plan-forms";
 import { PlanView } from "@/components/plan-view";
+import { TaskEditForm } from "@/components/task-forms";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { BackcastView } from "@/lib/backcast";
@@ -33,7 +34,8 @@ function formatDate(moment: string): string {
 /**
  * One goal (TASK-108) with its backcast (TASK-109), the milestones
  * pinned on its run (TASK-110), and the plan executing it
- * (TASK-111). Rendered on the server from the backend's GET
+ * (TASK-111) — whose tasks stay revisable while the plan is a
+ * DRAFT (TASK-112). Rendered on the server from the backend's GET
  * endpoints; an unknown goal renders Next's not-found boundary.
  * Before a backcast is defined, the definition form stands in for
  * the visualization; milestones and the plan follow from the run.
@@ -124,7 +126,14 @@ async function Plan({ goalId }: { goalId: string }) {
   );
   return (
     <>
-      <PlanView bundle={bundle} />
+      <PlanView
+        bundle={bundle}
+        taskEdit={
+          isDraft
+            ? (task) => <TaskEditForm goalId={goalId} task={task} />
+            : undefined
+        }
+      />
       {isDraft ? (
         <>
           <AddOutcomeForm goalId={goalId} />

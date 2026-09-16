@@ -96,12 +96,31 @@ export function addTask(
     title: string;
     description?: string;
     duration_hours?: number;
+    deadline?: string;
     outcome_ids?: string[];
   },
 ): Promise<TaskView> {
   return request<TaskView>(`/api/goals/${goalId}/plan/tasks`, {
     method: "POST",
     body: JSON.stringify(draft),
+  });
+}
+
+/** Revise a task on the goal's DRAFT plan (TASK-112) — omitted
+ * fields keep their current value. */
+export function reviseTask(
+  goalId: string,
+  taskId: string,
+  changes: {
+    title?: string;
+    description?: string;
+    duration_hours?: number;
+    deadline?: string;
+  },
+): Promise<TaskView> {
+  return request<TaskView>(`/api/goals/${goalId}/plan/tasks/${taskId}`, {
+    method: "PATCH",
+    body: JSON.stringify(changes),
   });
 }
 
