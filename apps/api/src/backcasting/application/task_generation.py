@@ -24,7 +24,7 @@ from backcasting.domain.llm_provider import LLMProvider
 from backcasting.domain.outcome import Outcome
 from backcasting.domain.task_generation import (
     TaskGeneration,
-    TaskGenerationError,
+    plan_anchor,
     record_task_generation,
 )
 
@@ -42,22 +42,7 @@ def generate_tasks(
     model that actually answered, and is returned unsaved —
     persistence is the caller's wiring.
     """
-    if not isinstance(outcomes, tuple):
-        raise TaskGenerationError("outcomes must be a tuple of Outcome")
-    for outcome in outcomes:
-        if not isinstance(outcome, Outcome):
-            raise TaskGenerationError("outcomes must be Outcome instances")
-    if not outcomes:
-        raise TaskGenerationError(
-            "at least one outcome is required — no anchor to generate from"
-        )
-    plan_id = outcomes[0].plan_id
-    for outcome in outcomes[1:]:
-        if outcome.plan_id != plan_id:
-            raise TaskGenerationError(
-                "outcomes must share one plan — a generation is anchored "
-                "to a single plan"
-            )
+    plan_id = plan_anchor(outcomes)
     request = build_task_generation_context(outcomes)
     response = provider.complete(request)
     return record_task_generation(

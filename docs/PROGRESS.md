@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-100 (AI validation)
+- Current Task: TASK-101 (Tool permissions)
 - Current Epic: EPIC-010 AI
 
 ## Completed
@@ -1134,6 +1134,31 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-100 — AI validation (2026-09-16): docs/09's
+  schema-validation guardrail — the layer every AI-operation record
+  deferred to. `domain/proposal_parsing.py`: the wire contract is
+  JSON, extracted tolerantly (whole text, fenced block, or first
+  balanced span — an unbalanced opening is malformed, not missing)
+  and then enforced strictly: `parse_strategy_proposals` →
+  StrategyProposal tuples, `parse_outcome_titles` → titles,
+  `parse_task_proposals` → TaskProposal tuples (duration_hours,
+  UTC-offset deadlines, outcome-title references). Unknown keys,
+  wrong types, missing required fields, and empty batches are
+  contract violations — the guardrail never repairs. Acceptance
+  stays with the deterministic acceptors, where the run/plan
+  context lives. The companion guardrail, retry limits:
+  `application/validated_generation.py` with
+  `generate_validated_strategies/outcomes/tasks` — ask, parse,
+  re-ask up to max_attempts (default 3), then propagate the last
+  parse error chained; only the attempt that parses is recorded
+  verbatim; ProviderCallError is not retried (that is TASK-103's
+  fallback policy) and propagates untouched from the first attempt.
+  The outcomes anchor rule moved to
+  `domain/task_generation.plan_anchor`, shared by both task
+  generation use cases. 30 tests (`tests/test_ai_validation.py`),
+  including the full arc: provider → verbatim record → parsed
+  proposals → `accept_proposed_tasks`.
 
 - TASK-099 — Plan explanation (2026-09-16): docs/09's sixth AI
   operation — and the one where the record is the whole capability:
