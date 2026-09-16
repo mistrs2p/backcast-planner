@@ -1,7 +1,7 @@
 # TASK-105 — Design system
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-011-product-ux — Product UX

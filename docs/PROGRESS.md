@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-105 (Design system)
+- Current Task: TASK-106 (Tailwind setup)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,31 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-105 — Design system (2026-09-16): the token vocabulary
+  and the reusable primitives the feature UIs (TASK-107+) compose
+  — AGENTS.md §6's "build reusable primitives before
+  feature-specific UI duplication" made concrete.
+  `src/styles/tokens.css`: the design tokens as CSS custom
+  properties — semantic colors (surface/text/border, primary with
+  a hover state, danger, focus), a 4px spacing scale, a type
+  scale, radii, and one card shadow — with the palette swapped for
+  dark mode via prefers-color-scheme so only values move, never
+  names. TASK-106 maps these into Tailwind's @theme (ADR-005's
+  "token-driven component system"). Primitives in
+  `src/components/ui/`: `Button`/`ButtonLink` (primary/secondary/
+  danger variants; defaults to type=button so a stray primitive
+  never submits a form), `TextField` (label required by type,
+  htmlFor/id wiring, aria-describedby for hint and error,
+  aria-invalid, the error a role=alert live region, useId
+  fallback), and `Card` (titled surface with an actions slot).
+  The shell styles now consume the tokens. `src/app/design/page.tsx`
+  is the living style guide rendering every primitive against the
+  tokens. Automated checks: `scripts/verify-design.mjs` (chained
+  into `npm run verify` — asserts the token vocabulary, the
+  accessible wiring of each primitive, and showcase coverage)
+  plus `tsc --noEmit` and `next build` (4/4 static routes). No new
+  dependencies.
 
 - TASK-104 — App shell (2026-09-16): the EPIC-011 opener — the
   Next.js skeleton the feature UIs land in. `apps/web` scaffolded

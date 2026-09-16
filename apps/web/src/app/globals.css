@@ -1,8 +1,10 @@
 /*
- * Minimal shell styles only. The design tokens arrive with
- * TASK-105 and the Tailwind pipeline with TASK-106; until then the
- * shell is structure: landmarks, a skip link, and plain semantics.
+ * Shell and primitive styles, driven entirely by the tokens
+ * (src/styles/tokens.css). TASK-106 folds these into the Tailwind
+ * pipeline; the class names are the stable contract until then.
  */
+
+@import "../styles/tokens.css";
 
 *,
 *::before,
@@ -12,8 +14,16 @@
 
 body {
   margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: var(--font-size-md);
   line-height: 1.5;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 .skip-link {
@@ -22,43 +32,168 @@ body {
 }
 
 .skip-link:focus {
-  left: 1rem;
-  top: 1rem;
-  background: #fff;
-  padding: 0.5rem 1rem;
-  border: 1px solid #000;
+  left: var(--space-4);
+  top: var(--space-4);
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   z-index: 10;
 }
 
 header {
   display: flex;
-  gap: 2rem;
+  gap: var(--space-6);
   align-items: center;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #ddd;
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .brand {
-  font-weight: 700;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
   text-decoration: none;
 }
 
 nav ul {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-4);
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+nav a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+nav a[aria-current="page"] {
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+}
+
 main {
-  padding: 1.5rem;
+  padding: var(--space-5);
   max-width: 60rem;
   margin: 0 auto;
 }
 
 footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid #ddd;
-  color: #555;
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* --- Button --- */
+
+.button {
+  display: inline-block;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button--primary {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.button--primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.button--secondary {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.button--secondary:hover {
+  background: var(--color-surface-muted);
+}
+
+.button--danger {
+  background: var(--color-danger-surface);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- Field --- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 32rem;
+}
+
+.field__label {
+  font-weight: var(--font-weight-medium);
+}
+
+.field__input {
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font: inherit;
+}
+
+.field__input[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+
+.field__hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.field__error {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+}
+
+/* --- Card --- */
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.card__title {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.card__body {
+  padding: var(--space-5);
 }
