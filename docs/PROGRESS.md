@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-108 (Goal detail)
+- Current Task: TASK-109 (Backcasting visualization)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,23 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-108 — Goal detail (2026-09-16): the read-only goal view.
+  The backend already served GET /goals/{goal_id} (TASK-107), so
+  this is a web task: the dynamic route
+  `src/app/goals/[goalId]/page.tsx` renders server-side from the
+  backend via `src/lib/server-api.ts` — the same `API_ORIGIN` knob
+  the rewrites use, because Next rewrites apply only to incoming
+  browser requests, not to a server component's own fetch. Unknown
+  goals map to Next's not-found boundary; an unreachable backend
+  renders the error state rather than crashing the render. The
+  board's list entries now link to each goal's detail page
+  (`next/link`). Structural assertions in `verify-shell.mjs`
+  (route exists, notFound wiring, force-dynamic, board links,
+  server-api uses API_ORIGIN); `npm run verify`, `next build`
+  (route `ƒ /goals/[goalId]`), and the full 2246-test backend
+  chain green. Verified live end to end: create via the /api
+  proxy, server-rendered detail page, 404 for unknown ids.
 
 - TASK-107 — Goal creation (2026-09-16): the first product
   capability end to end. Backend: `InMemoryGoalRepository`

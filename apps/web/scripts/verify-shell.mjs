@@ -110,6 +110,35 @@ check(
   "the API origin is configurable via API_ORIGIN",
 );
 
+// TASK-108 — goal detail: the dynamic route renders server-side
+// from the backend, and the board links into it.
+check(
+  await exists("src/app/goals/[goalId]/page.tsx"),
+  "the goal detail route exists",
+);
+const detail = await read("src/app/goals/[goalId]/page.tsx");
+check(
+  detail.includes("notFound()"),
+  "the goal detail renders not-found for unknown goals",
+);
+check(
+  detail.includes('dynamic = "force-dynamic"'),
+  "the goal detail renders per-request, never prerendered",
+);
+check(
+  board.includes("`/goals/${goal.goal_id}`"),
+  "the goal board links each goal to its detail page",
+);
+check(
+  await exists("src/lib/server-api.ts"),
+  "the server-side API helper exists",
+);
+const serverApi = await read("src/lib/server-api.ts");
+check(
+  serverApi.includes("API_ORIGIN"),
+  "server-side fetch resolves the same API_ORIGIN knob",
+);
+
 const pkg = JSON.parse(await read("package.json"));
 check(
   pkg.dependencies.next === "16.3.5",

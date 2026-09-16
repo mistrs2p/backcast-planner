@@ -425,6 +425,10 @@
   both FeasibilityResults and the workload delta exposed
   (TASK-088).
 
+- Goal detail: server-rendered `/goals/[goalId]` route reading
+  GET /goals/{goal_id} through the shared `API_ORIGIN` knob,
+  not-found boundary for unknown goals, and linked goal entries on
+  the home board (TASK-108).
 - Goal creation: `InMemoryGoalRepository`, `GoalService`
   (create/get/list with `GoalNotFoundError`), and the `/goals` HTTP
   surface — POST 201, GET by id (404), list scoped to the
