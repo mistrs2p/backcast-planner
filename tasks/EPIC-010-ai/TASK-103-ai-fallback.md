@@ -1,7 +1,7 @@
 # TASK-103 — AI fallback
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-010-ai — AI

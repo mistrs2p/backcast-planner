@@ -397,6 +397,12 @@
   reproducible replay runner over the full deterministic arc
   (TASK-102).
 
+- AI fallback: the graceful-degradation policy — the Fallback
+  record with its mandatory reason, and the attempt_* wrappers
+  that fall back on vendor faults and never-validating proposals
+  while permission denials and programming errors stay loud
+  (TASK-103, closes EPIC-010).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with

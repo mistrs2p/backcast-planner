@@ -2,8 +2,8 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-103 (AI fallback)
-- Current Epic: EPIC-010 AI
+- Current Task: TASK-104 (App shell)
+- Current Epic: EPIC-011 Product UX
 
 ## Completed
 - Product/domain design baseline completed before implementation pack generation.
@@ -1134,6 +1134,30 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-103 — AI fallback (2026-09-16): the EPIC-010 closer — the
+  graceful-degradation policy. Every AI operation has a
+  deterministic alternative (hand-written proposals through the
+  same acceptors), so degradation is a designed path, not an
+  apology. `domain/ai_fallback.py`: the frozen `Fallback(reason)`
+  record — mandatory, bounded, an immutable fact with the same
+  discipline as the verbatim proposal records, so the audit trail
+  always says why the AI was bypassed. `application/ai_fallback.py`:
+  `FALLS_BACK_ON = (ProviderCallError, ProposalParseError)` —
+  vendor faults and never-validating proposals (already retried to
+  their limit) degrade; `attempt_strategies/outcomes/tasks` wrap
+  the validated-generation use cases, returning the result and no
+  fallback on success, or the reason the deterministic path must
+  take over. Permission denials and LLMProviderError stay loud —
+  silently degrading a misconfiguration replaces a loud bug with a
+  quiet wrong behavior. Fallback attempts write no proposal
+  record, only their reason. 12 tests
+  (`tests/test_ai_fallback.py`), including the policy's exact
+  failure set and both manual paths still working after a
+  fallback. EPIC-010 is complete: six operation records, the
+  provider port with three vendor adapters, context building,
+  schema validation with retry limits, tool permissions, the
+  evaluation dataset, and fallback.
 
 - TASK-102 — AI evaluation dataset (2026-09-16): a regression net
   for the AI pipeline. `apps/api/evals/ai_operations.json`: six
