@@ -1,7 +1,7 @@
 # TASK-084 — Replanning decision engine
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-009-replanning — Replanning
