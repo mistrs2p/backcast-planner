@@ -2,8 +2,8 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-118 (CI/CD)
-- Current Epic: EPIC-011 Product UX
+- Current Task: TASK-119 (database migration pipeline)
+- Current Epic: EPIC-012 Production
 
 ## Completed
 - Product/domain design baseline completed before implementation pack generation.
@@ -1134,6 +1134,26 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-118 — CI/CD (2026-09-16): the TASK-006 baseline extended
+  into the full pipeline docs/14 asks for. `.github/workflows/ci.yml`
+  now runs three parallel jobs — `validate` (backend suite 2402,
+  contract drift, rules, state, progress, docker artifact checks,
+  CI workflow checks, conventional commits on PRs), `web`
+  (`npm ci`, `npm run verify`, `npm run build` on pinned Node 22,
+  the version the production image runs), and `docker`
+  (`docker compose build` — the pipeline's "build" step, exercising
+  both TASK-117 images from a clean checkout). Every AGENTS.md
+  validation gate now runs on every push/PR to main. New
+  `scripts/check_ci.py` pins the workflow's shape statically —
+  triggers, the three jobs, each job's commands, the Node pin, no
+  credential keys — and runs inside `validate`, so the workflow
+  validates itself; all nine failure paths were probed with mutated
+  copies before trusting the green run. ADR-010 records the CD
+  boundary: CI proves buildability and stops there — no registry
+  push, no deploy, because no production target or credential
+  exists and ADR-009's one-origin baking makes a published image
+  environment-specific; the flow belongs to TASK-128/TASK-132.
 
 - TASK-117 — Production Docker (2026-09-16): docs/10's
   "Docker-first" made real, opening EPIC-012. Two multi-stage
