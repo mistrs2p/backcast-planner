@@ -1,0 +1,45 @@
+# Docker-first local development (TASK-117, docs/10/14): the two
+# services on one network — the browser talks to the web origin
+# only, and Next proxies /api/* to the backend (ADR-008).
+#
+# The backend's persistence is still in-memory (the PostgreSQL
+# repositories arrive with the migration pipeline, TASK-119): a
+# restart starts a clean slate. No database or redis service is
+# wired here yet, and none is pretended — the infrastructure stack
+# (PostgreSQL + Redis, TASK-007) lives in
+# infra/docker-compose.yml, waiting for the repositories that will
+# use it.
+#
+# Usage:
+#   docker compose up --build
+#   web  → http://localhost:3300   (proxies /api to the backend)
+#   api  → http://localhost:8000   (health: GET /health)
+#
+# Configuration comes from the environment (.env, placeholders in
+# .env.example): APP_ENV, LOG_LEVEL. Secrets are never placed here.
+
+services:
+  api:
+    build: ./apps/api
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    ports:
+      - "8000:8000"
+
+  web:
+    build:
+      context: ./apps/web
+      args:
+        # Baked into the build (the /api rewrite destination) — must
+        # match the runtime value below; inside the compose network
+        # the backend is reachable as `api`.
+        API_ORIGIN: http://api:8000
+    environment:
+      # Read again at `next start` by the server-side fetches.
+      API_ORIGIN: http://api:8000
+    ports:
+      - "3300:3000"
+    depends_on:
+      api:
+        condition: service_healthy

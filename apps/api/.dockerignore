@@ -1,0 +1,9 @@
+# Keep the builder context minimal: caches, tooling state, and the
+# evaluation fixtures have no business inside a production image.
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+.venv/
+evals/
+README.md
