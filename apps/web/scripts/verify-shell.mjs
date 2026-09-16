@@ -181,6 +181,46 @@ check(
   "backcast form errors are announced as alerts",
 );
 
+// TASK-110 — milestone UI: checkpoints on the backcasting run.
+check(
+  await exists("src/components/milestone-list.tsx") &&
+    await exists("src/components/milestone-form.tsx"),
+  "the milestone list and form components exist",
+);
+check(
+  await exists("src/lib/milestones.ts"),
+  "the milestone API client exists",
+);
+const milestoneClient = await read("src/lib/milestones.ts");
+check(
+  milestoneClient.includes("`/api/goals/${goalId}/milestones`"),
+  "the milestone client targets the proxied API path",
+);
+const milestoneDetail = await read("src/app/goals/[goalId]/page.tsx");
+check(
+  milestoneDetail.includes("MilestoneList") &&
+    milestoneDetail.includes("MilestoneForm"),
+  "the goal detail composes the milestone list and form",
+);
+const milestoneList = await read("src/components/milestone-list.tsx");
+check(
+  !milestoneList.startsWith('"use client"'),
+  "the milestone list renders on the server",
+);
+check(
+  milestoneList.includes("<ol"),
+  "the milestone list is an ordered list (the path is walked in order)",
+);
+const milestoneForm = await read("src/components/milestone-form.tsx");
+check(
+  milestoneForm.startsWith('"use client"'),
+  "the milestone form is a client component",
+);
+check(
+  milestoneForm.includes("router.refresh()"),
+  "the milestone form refreshes the server-rendered page after submit",
+);
+
 const pkg = JSON.parse(await read("package.json"));
 check(
   pkg.dependencies.next === "16.3.5",

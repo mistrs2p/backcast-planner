@@ -1,13 +1,14 @@
-"""Backcast use cases — steps 1–4 of the pipeline, wired to the
-persistence ports (TASK-109).
+"""Backcast use cases — the pipeline's opening, wired to the
+persistence ports (TASK-109; run start added by TASK-110).
 
 ``docs/04-BACKCASTING-MODEL.md`` opens with the intent layer:
 normalize the goal (done — the goal exists), capture the current
 state, define the desired future, and calculate the gap. This
-service composes those domain operations for one goal and records
-the artifacts so the UI can visualize the chain. The remaining
-pipeline steps (strategies, milestones, planning) belong to later
-tasks; replanning (docs/08) will revisit redefinition.
+service composes those domain operations for one goal, records the
+artifacts, and starts the pipeline run over that context — the run
+milestones and plans attach to. The remaining pipeline steps
+(strategies, outcomes, tasks, scheduling) belong to later tasks;
+replanning (docs/08) will revisit redefinition.
 
 The MVP pins one backcast per goal: one future state (the 1:1 of
 docs/03-DOMAIN-MODEL.md) and the gap calculated for it. Capturing
@@ -23,10 +24,12 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from backcasting.application.goals import GoalNotFoundError
+from backcasting.domain.backcasting_run import BackcastingRun, start_run
 from backcasting.domain.current_state import CurrentState, capture_current_state
 from backcasting.domain.future_state import FutureState, define_future_state
 from backcasting.domain.gap import Gap, calculate_gap
 from backcasting.domain.repositories import (
+    BackcastingRunRepository,
     CurrentStateRepository,
     FutureStateRepository,
     GapRepository,
@@ -42,12 +45,14 @@ class BackcastAlreadyExistsError(Exception):
 @dataclass(frozen=True)
 class BackcastBundle:
     """The backcast's intent layer for one goal, as the UI shows
-    it: where we are, where we're going, and the recorded distance
-    between the two."""
+    it: where we are, where we're going, the recorded distance
+    between the two, and the pipeline run now executing over that
+    context (milestones and plans attach to the run)."""
 
     current: CurrentState
     future: FutureState
     gap: Gap
+    run: BackcastingRun
 
 
 class BackcastService:
@@ -60,11 +65,13 @@ class BackcastService:
         current_states: CurrentStateRepository,
         future_states: FutureStateRepository,
         gaps: GapRepository,
+        runs: BackcastingRunRepository,
     ) -> None:
         self._goals = goals
         self._current_states = current_states
         self._future_states = future_states
         self._gaps = gaps
+        self._runs = runs
 
     def define_backcast(
         self,
@@ -98,10 +105,14 @@ class BackcastService:
         gap = calculate_gap(
             goal, current, future, narrative=gap_narrative
         )
+        run = start_run(goal, current, future, gap)
         self._current_states.save(current)
         self._future_states.save(future)
         self._gaps.save(gap)
-        return BackcastBundle(current=current, future=future, gap=gap)
+        self._runs.save(run)
+        return BackcastBundle(
+            current=current, future=future, gap=gap, run=run
+        )
 
     def get_backcast(self, goal_id: uuid.UUID) -> BackcastBundle | None:
         """The goal's backcast, or ``None`` when none is defined.
@@ -109,11 +120,20 @@ class BackcastService:
         Composed from the recorded artifacts; the latest current
         snapshot is used, so later captures (progress measurement)
         appear here while the destination and its recorded gap stay
-        pinned.
+        pinned. The run is the latest started for the goal — the
+        one the pipeline is executing.
         """
         future = self._future_states.get_for_goal(goal_id)
         gap = self._gaps.get_for_goal(goal_id)
         current = self._current_states.latest_for_goal(goal_id)
-        if future is None or gap is None or current is None:
+        run = self._runs.latest_for_goal(goal_id)
+        if (
+            future is None
+            or gap is None
+            or current is None
+            or run is None
+        ):
             return None
-        return BackcastBundle(current=current, future=future, gap=gap)
+        return BackcastBundle(
+            current=current, future=future, gap=gap, run=run
+        )

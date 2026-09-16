@@ -425,6 +425,12 @@
   both FeasibilityResults and the workload delta exposed
   (TASK-088).
 
+- Milestones: `BackcastingRunRepository` and `MilestoneRepository`
+  ports with in-memory implementations, `define_backcast` now starts
+  the run over its context (surfaced in the backcast response),
+  `MilestoneService`, and POST/GET `/goals/{goal_id}/milestones`;
+  the goal detail page shows the ordered checkpoint list and the
+  add-milestone form (TASK-110).
 - Backcast definition and visualization: `GapRepository` port plus
   in-memory current/future/gap repositories (one-per-goal enforced),
   `BackcastService` composing capture → define → calculate_gap, and

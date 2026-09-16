@@ -12,19 +12,23 @@ from __future__ import annotations
 import threading
 import uuid
 
+from backcasting.domain.backcasting_run import BackcastingRun
 from backcasting.domain.calendar import Calendar
 from backcasting.domain.calendar_event import CalendarEvent
 from backcasting.domain.current_state import CurrentState
 from backcasting.domain.future_state import FutureState
 from backcasting.domain.gap import Gap
 from backcasting.domain.goal import Goal
+from backcasting.domain.milestone import Milestone
 from backcasting.domain.repositories import (
+    BackcastingRunRepository,
     CalendarEventRepository,
     CalendarRepository,
     CurrentStateRepository,
     FutureStateRepository,
     GapRepository,
     GoalRepository,
+    MilestoneRepository,
     RepositoryError,
 )
 
@@ -129,6 +133,57 @@ class InMemoryGapRepository(GapRepository):
     def get_for_goal(self, goal_id: uuid.UUID) -> Gap | None:
         with self._lock:
             return self._by_goal.get(goal_id)
+
+
+class InMemoryBackcastingRunRepository(BackcastingRunRepository):
+    """Run port backed by a dict, safe for concurrent requests."""
+
+    def __init__(self) -> None:
+        self._by_id: dict[uuid.UUID, BackcastingRun] = {}
+        self._lock = threading.Lock()
+
+    def save(self, run: BackcastingRun) -> None:
+        with self._lock:
+            self._by_id[run.run_id] = run
+
+    def get(self, run_id: uuid.UUID) -> BackcastingRun | None:
+        with self._lock:
+            return self._by_id.get(run_id)
+
+    def list_for_goal(self, goal_id: uuid.UUID):
+        with self._lock:
+            runs = [r for r in self._by_id.values() if r.goal_id == goal_id]
+        return tuple(sorted(runs, key=lambda r: (r.started_at, r.run_id)))
+
+    def latest_for_goal(self, goal_id: uuid.UUID) -> BackcastingRun | None:
+        runs = self.list_for_goal(goal_id)
+        return runs[-1] if runs else None
+
+
+class InMemoryMilestoneRepository(MilestoneRepository):
+    """Milestone port backed by a dict, safe for concurrent
+    requests."""
+
+    def __init__(self) -> None:
+        self._by_id: dict[uuid.UUID, Milestone] = {}
+        self._lock = threading.Lock()
+
+    def save(self, milestone: Milestone) -> None:
+        with self._lock:
+            self._by_id[milestone.milestone_id] = milestone
+
+    def get(self, milestone_id: uuid.UUID) -> Milestone | None:
+        with self._lock:
+            return self._by_id.get(milestone_id)
+
+    def list_for_run(self, run_id: uuid.UUID):
+        with self._lock:
+            milestones = [
+                m for m in self._by_id.values() if m.run_id == run_id
+            ]
+        return tuple(
+            sorted(milestones, key=lambda m: (m.target_date, m.milestone_id))
+        )
 
 
 class InMemoryCalendarRepository(CalendarRepository):

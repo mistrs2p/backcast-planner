@@ -3,10 +3,13 @@ import { notFound } from "next/navigation";
 
 import { BackcastChain } from "@/components/backcast-chain";
 import { BackcastForm } from "@/components/backcast-form";
+import { MilestoneForm } from "@/components/milestone-form";
+import { MilestoneList } from "@/components/milestone-list";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { BackcastView } from "@/lib/backcast";
 import type { Goal } from "@/lib/goals";
+import type { MilestoneView } from "@/lib/milestones";
 import { serverGet } from "@/lib/server-api";
 
 export const dynamic = "force-dynamic";
@@ -20,12 +23,12 @@ function formatDate(moment: string): string {
 }
 
 /**
- * One goal (TASK-108) with its backcast (TASK-109): where the user
- * stands, the recorded gap, and the destination the plan will be
- * built backward from. Rendered on the server from the backend's
- * GET endpoints; an unknown goal renders Next's not-found boundary.
- * Before a backcast is defined, the definition form stands in for
- * the visualization.
+ * One goal (TASK-108) with its backcast (TASK-109) and the
+ * milestones pinned on its run (TASK-110). Rendered on the server
+ * from the backend's GET endpoints; an unknown goal renders Next's
+ * not-found boundary. Before a backcast is defined, the definition
+ * form stands in for the visualization; milestones appear once a
+ * run exists to attach them to.
  */
 export default async function GoalDetailPage({
   params,
@@ -74,7 +77,10 @@ export default async function GoalDetailPage({
         {backcast === null ? (
           <BackcastForm goalId={goal.goal_id} />
         ) : (
-          <BackcastChain backcast={backcast} />
+          <div className="flex flex-col gap-6">
+            <BackcastChain backcast={backcast} />
+            <Milestones goalId={goal.goal_id} />
+          </div>
         )}
       </div>
       <p className="mt-6">
@@ -83,5 +89,17 @@ export default async function GoalDetailPage({
         </ButtonLink>
       </p>
     </section>
+  );
+}
+
+async function Milestones({ goalId }: { goalId: string }) {
+  const milestones = await serverGet<MilestoneView[]>(
+    `/goals/${goalId}/milestones`,
+  );
+  return (
+    <>
+      <MilestoneList milestones={milestones ?? []} />
+      <MilestoneForm goalId={goalId} />
+    </>
   );
 }

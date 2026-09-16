@@ -470,6 +470,106 @@
         }
       }
     },
+    "/goals/{goal_id}/milestones": {
+      "post": {
+        "tags": [
+          "milestones"
+        ],
+        "summary": "Define Milestone",
+        "description": "Pin a checkpoint on the goal's current backcasting run\n(docs/04 step 10).",
+        "operationId": "defineMilestone",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MilestoneCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MilestoneResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "milestones"
+        ],
+        "summary": "List Milestones",
+        "description": "The goal's checkpoints on its current run, earliest target\nfirst. Empty while no run exists.",
+        "operationId": "listMilestones",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MilestoneResponse"
+                  },
+                  "title": "Response Listmilestones"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -538,16 +638,20 @@
           },
           "gap": {
             "$ref": "#/components/schemas/GapResponse"
+          },
+          "run": {
+            "$ref": "#/components/schemas/RunResponse"
           }
         },
         "type": "object",
         "required": [
           "current",
           "future",
-          "gap"
+          "gap",
+          "run"
         ],
         "title": "BackcastResponse",
-        "description": "The intent layer of one goal's backcast, as the UI\nvisualizes it: current → gap → future."
+        "description": "The intent layer of one goal's backcast, as the UI\nvisualizes it: current → gap → future, and the pipeline run\nexecuting over that context."
       },
       "CalendarCreate": {
         "properties": {
@@ -945,6 +1049,141 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "MilestoneCreate": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "target_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Target Date"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "target_date"
+        ],
+        "title": "MilestoneCreate"
+      },
+      "MilestoneResponse": {
+        "properties": {
+          "milestone_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Milestone Id"
+          },
+          "run_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Run Id"
+          },
+          "goal_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Goal Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "target_date": {
+            "type": "string",
+            "title": "Target Date"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "milestone_id",
+          "run_id",
+          "goal_id",
+          "title",
+          "description",
+          "target_date",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "MilestoneResponse"
+      },
+      "RunResponse": {
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Run Id"
+          },
+          "goal_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Goal Id"
+          },
+          "current_state_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Current State Id"
+          },
+          "future_state_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Future State Id"
+          },
+          "gap_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Gap Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "started_at": {
+            "type": "string",
+            "title": "Started At"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "run_id",
+          "goal_id",
+          "current_state_id",
+          "future_state_id",
+          "gap_id",
+          "status",
+          "started_at",
+          "completed_at"
+        ],
+        "title": "RunResponse"
       },
       "ValidationError": {
         "properties": {
