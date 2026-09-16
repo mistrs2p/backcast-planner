@@ -315,6 +315,11 @@
   group with the summed workload delta; `PlanChangeSet`'s task
   dimension generalized to `revised_task_ids` (TASK-086).
 
+- Global replan: `replan_plan_globally` — the whole plan re-derived
+  from its task set, workload recomputed via estimate_workload
+  (unestimated tasks surface, not zeroed), one plan version; the
+  third and widest level-2 scope (TASK-087).
+
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

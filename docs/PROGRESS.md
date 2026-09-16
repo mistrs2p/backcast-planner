@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-087 (Global replan)
+- Current Task: TASK-088 (Plan comparison)
 - Current Epic: EPIC-009 Replanning
 
 ## Completed
@@ -1115,6 +1115,25 @@
   its 17 tests and plan_version's 25 still green). 23 tests,
   including the region moving as one decision while an unlinked
   task stays untouched.
+
+- TASK-087 — Global replan (2026-09-16): level 2 at its widest
+  scope — the whole plan re-derived, the Goal/Future untouched.
+  `domain/global_replan.py` with the frozen `GlobalReplan(scope,
+  plan, version)` (scope pinned GLOBAL) and
+  `replan_plan_globally(plan, history, tasks, *, reason,
+  title=None, source_run_id=None, at=None)`. The scope distinction
+  that defines it: local and regional *shift* the plan's workload
+  by their estimate deltas (the rest of the declaration still
+  stands); a global replan changes everything, so there is nothing
+  left to preserve — the workload is recomputed from the task set
+  via `estimate_workload`, whose refusal to sum over unestimated
+  tasks surfaces here too (a global replan that cannot face its own
+  task set's estimates cannot re-derive the plan). A re-derivation
+  landing on the same workload and title changes nothing and is
+  rejected. 15 tests, including the arc from trigger to decision
+  to re-derivation, and the three scopes sharing one version trail
+  (local v1, regional v2, global v3 — 20h declared, 11h
+  recomputed).
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
