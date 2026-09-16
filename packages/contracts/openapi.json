@@ -1066,6 +1066,162 @@
         }
       }
     },
+    "/goals/{goal_id}/plan/replan/local": {
+      "post": {
+        "tags": [
+          "replanning"
+        ],
+        "summary": "Replan Task Locally",
+        "description": "Revise one task of the goal's plan in place (LOCAL scope,\ndocs/08) — the archetypal re-estimate — traced as a plan\nversion.",
+        "operationId": "replanTaskLocally",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocalReplanCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocalReplanResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/goals/{goal_id}/plan/replan/global": {
+      "post": {
+        "tags": [
+          "replanning"
+        ],
+        "summary": "Replan Plan Globally",
+        "description": "Re-derive the goal's plan from its task set (GLOBAL scope,\ndocs/08): workload recomputed, title optionally revised, traced\nas a plan version.",
+        "operationId": "replanPlanGlobally",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GlobalReplanCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobalReplanResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/goals/{goal_id}/plan/versions": {
+      "get": {
+        "tags": [
+          "replanning"
+        ],
+        "summary": "List Plan Versions",
+        "description": "The goal's plan's version trail — every meaningful replan,\nearliest version first.",
+        "operationId": "listPlanVersions",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanVersionResponse"
+                  },
+                  "title": "Response Listplanversions"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -1525,6 +1681,50 @@
         ],
         "title": "GapResponse"
       },
+      "GlobalReplanCreate": {
+        "properties": {
+          "reason": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Reason"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reason"
+        ],
+        "title": "GlobalReplanCreate",
+        "description": "A global replan (the whole plan re-derived): the reason, and\noptionally the re-derived plan's new title."
+      },
+      "GlobalReplanResponse": {
+        "properties": {
+          "plan": {
+            "$ref": "#/components/schemas/PlanResponse"
+          },
+          "version": {
+            "$ref": "#/components/schemas/PlanVersionResponse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "plan",
+          "version"
+        ],
+        "title": "GlobalReplanResponse"
+      },
       "GoalCreate": {
         "properties": {
           "user_id": {
@@ -1606,6 +1806,94 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "LocalReplanCreate": {
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Task Id"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Reason"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "duration_hours": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Hours"
+          },
+          "deadline": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deadline"
+          }
+        },
+        "type": "object",
+        "required": [
+          "task_id",
+          "reason"
+        ],
+        "title": "LocalReplanCreate",
+        "description": "A local replan (one task revised in place): the task, the\nreason the plan changed, and the revision itself — omitted\nfields keep their current value."
+      },
+      "LocalReplanResponse": {
+        "properties": {
+          "plan": {
+            "$ref": "#/components/schemas/PlanResponse"
+          },
+          "task": {
+            "$ref": "#/components/schemas/TaskResponse"
+          },
+          "version": {
+            "$ref": "#/components/schemas/PlanVersionResponse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "plan",
+          "task",
+          "version"
+        ],
+        "title": "LocalReplanResponse"
       },
       "MilestoneCreate": {
         "properties": {
@@ -1862,6 +2150,88 @@
           "updated_at"
         ],
         "title": "PlanResponse"
+      },
+      "PlanVersionResponse": {
+        "properties": {
+          "version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Version Id"
+          },
+          "plan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Plan Id"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "workload_hours": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workload Hours"
+          },
+          "revised_task_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Revised Task Ids"
+          },
+          "source_run_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Run Id"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "version_id",
+          "plan_id",
+          "version",
+          "reason",
+          "title",
+          "workload_hours",
+          "revised_task_ids",
+          "source_run_id",
+          "created_at"
+        ],
+        "title": "PlanVersionResponse",
+        "description": "One traceable version of a plan: why it changed, from which\nrun (if any), and what changed."
       },
       "ProgressResponse": {
         "properties": {

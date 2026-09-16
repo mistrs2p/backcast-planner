@@ -437,6 +437,70 @@ check(
   "progress form errors are announced as alerts",
 );
 
+// TASK-115 — replanning UI: docs/08's level 2 driven by hand on a
+// plan past assembly. Each task row gains a replan form, the whole
+// plan can be re-derived, and the version trail every meaningful
+// replan owes reads alongside.
+check(
+  await exists("src/components/replan-forms.tsx") &&
+    await exists("src/components/plan-versions.tsx"),
+  "the replan forms and version list components exist",
+);
+check(
+  await exists("src/lib/replanning.ts"),
+  "the replanning API client exists",
+);
+const replanningClient = await read("src/lib/replanning.ts");
+check(
+  replanningClient.includes("`/api/goals/${goalId}/plan/replan/local`") &&
+    replanningClient.includes("`/api/goals/${goalId}/plan/replan/global`"),
+  "the replanning client targets the proxied replan paths",
+);
+const replanDetail = await read("src/app/goals/[goalId]/page.tsx");
+check(
+  replanDetail.includes("LocalReplanForm") &&
+    replanDetail.includes("GlobalReplanForm") &&
+    replanDetail.includes("PlanVersionList"),
+  "the goal detail composes the replan forms and version list",
+);
+check(
+  replanDetail.includes("isDraft") &&
+    replanDetail.includes("PlanHistory"),
+  "the replanning surface follows the draft/published split",
+);
+const replanForms = await read("src/components/replan-forms.tsx");
+check(
+  replanForms.startsWith('"use client"'),
+  "the replan forms are client components",
+);
+check(
+  replanForms.includes("replanTaskLocally") &&
+    replanForms.includes("replanPlanGlobally"),
+  "the replan forms call the replan clients",
+);
+check(
+  replanForms.includes("router.refresh()") ||
+    replanForms.includes("usePlanAction"),
+  "the replan forms refresh via the shared plan action hook",
+);
+check(
+  replanForms.includes('type="datetime-local"'),
+  "the local replan form edits the deadline",
+);
+check(
+  replanForms.includes("reason"),
+  "the replan forms demand a reason — a replan is traced",
+);
+const versionList = await read("src/components/plan-versions.tsx");
+check(
+  !versionList.startsWith('"use client"'),
+  "the version list renders on the server",
+);
+check(
+  versionList.includes("reason") && versionList.includes("<ol"),
+  "the version list is an ordered trail showing reasons",
+);
+
 const pkg = JSON.parse(await read("package.json"));
 check(
   pkg.dependencies.next === "16.3.5",

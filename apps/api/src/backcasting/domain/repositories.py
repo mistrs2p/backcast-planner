@@ -42,6 +42,7 @@ from backcasting.domain.outcome import Outcome
 from backcasting.domain.outcome_decomposition import OutcomeDecomposition
 from backcasting.domain.plan import Plan
 from backcasting.domain.plan_explanation import PlanExplanation
+from backcasting.domain.plan_version import PlanVersion
 from backcasting.domain.strategy_generation import StrategyGeneration
 from backcasting.domain.task import Task
 from backcasting.domain.task_generation import TaskGeneration
@@ -213,6 +214,29 @@ class PlanRepository(ABC):
     @abstractmethod
     def list_for_goal(self, goal_id: uuid.UUID) -> Sequence[Plan]:
         """Return the goal's plans, oldest first."""
+
+
+class PlanVersionRepository(ABC):
+    """Persistence port for
+    :class:`~backcasting.domain.plan_version.PlanVersion`.
+
+    Versions are the traceable history a replan produces (docs/08):
+    append-only records keyed to the plan they explain, listed as the
+    trail — version numbers are unique and strictly increasing per
+    plan, so ascending ``version`` is the order the plan got there.
+    """
+
+    @abstractmethod
+    def save(self, version: PlanVersion) -> None:
+        """Insert or replace the version keyed by ``version_id``."""
+
+    @abstractmethod
+    def get(self, version_id: uuid.UUID) -> PlanVersion | None:
+        """Return the version with ``version_id``, or ``None``."""
+
+    @abstractmethod
+    def list_for_plan(self, plan_id: uuid.UUID) -> Sequence[PlanVersion]:
+        """Return the plan's versions, lowest ``version`` first."""
 
 
 class OutcomeRepository(ABC):

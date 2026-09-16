@@ -22,12 +22,14 @@ from backcasting.api.goals import router as goals_router
 from backcasting.api.milestones import router as milestones_router
 from backcasting.api.plans import router as plans_router
 from backcasting.api.progress import router as progress_router
+from backcasting.api.replanning import router as replanning_router
 from backcasting.application.backcast import BackcastService
 from backcasting.application.calendars import CalendarService
 from backcasting.application.goals import GoalService
 from backcasting.application.milestones import MilestoneService
 from backcasting.application.plans import PlanService
 from backcasting.application.progress import ProgressService
+from backcasting.application.replanning import ReplanningService
 from backcasting.domain.repositories import (
     BackcastingRunRepository,
     CalendarEventRepository,
@@ -40,6 +42,7 @@ from backcasting.domain.repositories import (
     MilestoneRepository,
     OutcomeRepository,
     PlanRepository,
+    PlanVersionRepository,
     ProgressSnapshotRepository,
     TaskRepository,
 )
@@ -55,6 +58,7 @@ from backcasting.infrastructure.memory import (
     InMemoryMilestoneRepository,
     InMemoryOutcomeRepository,
     InMemoryPlanRepository,
+    InMemoryPlanVersionRepository,
     InMemoryProgressSnapshotRepository,
     InMemoryTaskRepository,
 )
@@ -82,6 +86,7 @@ def create_app(
     task_repository: TaskRepository | None = None,
     execution_repository: ExecutionRepository | None = None,
     snapshot_repository: ProgressSnapshotRepository | None = None,
+    version_repository: PlanVersionRepository | None = None,
 ) -> FastAPI:
     """Create and configure the FastAPI application.
 
@@ -128,12 +133,19 @@ def create_app(
         execution_repository or InMemoryExecutionRepository(),
         snapshot_repository or InMemoryProgressSnapshotRepository(),
     )
+    app.state.replanning_service = ReplanningService(
+        goals,
+        plans,
+        tasks,
+        version_repository or InMemoryPlanVersionRepository(),
+    )
     app.include_router(calendars_router)
     app.include_router(goals_router)
     app.include_router(backcast_router)
     app.include_router(milestones_router)
     app.include_router(plans_router)
     app.include_router(progress_router)
+    app.include_router(replanning_router)
 
     @app.get("/health", tags=["system"], operation_id="getHealth")
     def health() -> dict[str, str]:

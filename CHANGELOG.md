@@ -425,6 +425,14 @@
   both FeasibilityResults and the workload delta exposed
   (TASK-088).
 
+- Replanning: `PlanVersionRepository` port with an in-memory
+  implementation, `ReplanningService`, and `POST
+  /goals/{goal_id}/plan/replan/local` plus `POST
+  /goals/{goal_id}/plan/replan/global` and `GET
+  /goals/{goal_id}/plan/versions`; a published plan's task rows
+  gain a replan form and the plan section gains the re-derivation
+  form and the version trail (TASK-115).
+
 - Progress: `ExecutionRepository` port with an in-memory
   implementation, `InMemoryProgressSnapshotRepository`,
   `ProgressService`, and `POST /goals/{goal_id}/executions` plus
