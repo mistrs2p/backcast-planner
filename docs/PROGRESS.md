@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-099 (Plan explanation)
+- Current Task: TASK-100 (AI validation)
 - Current Epic: EPIC-010 AI
 
 ## Completed
@@ -1134,6 +1134,25 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-099 — Plan explanation (2026-09-16): docs/09's sixth AI
+  operation — and the one where the record is the whole capability:
+  unlike the five proposal operations there is no deterministic
+  half to parse into, because the explanation is the product.
+  `domain/plan_explanation.py` with the frozen
+  `PlanExplanation(explanation_id, plan_id, snapshot_id, proposal,
+  provider, model, created_at)` — the words verbatim (bounded at
+  20k), tied to both the plan explained and the exact progress
+  snapshot read (a fresh reading deserves a fresh explanation, and
+  the audit trail must show which point in time was explained),
+  with full provenance. `PlanExplanationRepository` port
+  (insert-or-replace, get, list_for_plan earliest first). The use
+  case, `application/plan_explanation.py`: `explain_plan(plan,
+  tasks, snapshot, provider)` refuses a snapshot from another plan
+  and wires the plan-and-progress context, the provider port, and
+  the record; vendor faults propagate as ProviderCallError
+  untouched. 15 tests (`tests/test_ai_plan_explanation.py`),
+  including the fresh-snapshot-fresh-explanation arc.
 
 - TASK-098 — Task generation (2026-09-16): the AI half of
   pipeline step 12 (docs/04). The deterministic half is
