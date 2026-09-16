@@ -1,7 +1,7 @@
 # TASK-095 — Goal interpretation
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-010-ai — AI

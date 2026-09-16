@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-095 (Goal interpretation)
+- Current Task: TASK-096 (Strategy generation)
 - Current Epic: EPIC-010 AI
 
 ## Completed
@@ -1134,6 +1134,26 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-095 — Goal interpretation (2026-09-16): the first AI
+  operation, wired end to end. `domain/goal_interpretation.py`
+  with the frozen `GoalInterpretation(interpretation_id, goal_id,
+  proposal, provider, model, created_at)` — the LLM's proposal kept
+  verbatim (non-empty, bounded at 20k), tied to the goal it reads,
+  carrying its provenance: which provider, which model (the one
+  that answered, not the one requested), when. `record_goal_
+  interpretation` helper and `interpretations_for_goal`
+  (input-order filter). Like every observation, immutable — a
+  re-interpretation is a new record. `GoalInterpretationRepository`
+  port added to repositories.py (insert-or-replace by id, get,
+  list_for_goal earliest first). The use case,
+  `application/goal_interpretation.py`: `interpret_goal(goal,
+  state, provider)` composes the context builder (goal + current
+  state, nothing else), the provider port, and the record — and
+  does nothing else: vendor faults propagate as ProviderCallError
+  untouched (one currency for the TASK-103 fallback), persistence
+  is the caller's wiring. 14 tests, including the reference
+  in-memory fake for the port.
 
 - TASK-094 — Context builder (2026-09-16): docs/09's context
   strategy, made structural. `application/context_builder.py` with
