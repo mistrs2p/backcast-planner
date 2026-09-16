@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-097 (Outcome decomposition)
+- Current Task: TASK-098 (Task generation)
 - Current Epic: EPIC-010 AI
 
 ## Completed
@@ -1134,6 +1134,25 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-097 — Outcome decomposition (2026-09-16): the AI half of
+  pipeline step 11 (docs/04). The deterministic half is
+  `define_outcome` binding an outcome to a plan; this task adds the
+  LLM side: `domain/outcome_decomposition.py` with the frozen
+  `OutcomeDecomposition(decomposition_id, goal_id, future_state_id,
+  proposal, provider, model, created_at)` — the proposal verbatim
+  (bounded at 20k), tied to both the goal and the exact future
+  state it decomposes (a re-derived destination deserves a fresh
+  decomposition, and the audit trail must show which one was read),
+  with full provenance; parsing into outcome titles is TASK-100's
+  validation. `OutcomeDecompositionRepository` port
+  (insert-or-replace, get, list_for_future_state earliest first).
+  The use case, `application/outcome_decomposition.py`:
+  `decompose_outcomes(future, provider)` wires the
+  future-state-only context, the provider port, and the record;
+  vendor faults propagate as ProviderCallError untouched. 13 tests
+  (`tests/test_ai_outcome_decomposition.py`), including the seam to
+  `define_outcome`.
 
 - TASK-096 — Strategy generation (2026-09-16): the AI half of
   pipeline step 8 (docs/04). The deterministic half has existed

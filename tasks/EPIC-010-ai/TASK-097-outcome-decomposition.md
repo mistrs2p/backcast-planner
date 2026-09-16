@@ -1,7 +1,7 @@
 # TASK-097 — Outcome decomposition
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-010-ai — AI
