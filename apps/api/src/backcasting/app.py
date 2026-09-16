@@ -16,6 +16,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 
 from backcasting import __version__
+from backcasting.api.assistant import router as assistant_router
 from backcasting.api.backcast import router as backcast_router
 from backcasting.api.calendars import router as calendars_router
 from backcasting.api.goals import router as goals_router
@@ -23,6 +24,7 @@ from backcasting.api.milestones import router as milestones_router
 from backcasting.api.plans import router as plans_router
 from backcasting.api.progress import router as progress_router
 from backcasting.api.replanning import router as replanning_router
+from backcasting.application.assistant import AssistantService
 from backcasting.application.backcast import BackcastService
 from backcasting.application.calendars import CalendarService
 from backcasting.application.goals import GoalService
@@ -30,6 +32,7 @@ from backcasting.application.milestones import MilestoneService
 from backcasting.application.plans import PlanService
 from backcasting.application.progress import ProgressService
 from backcasting.application.replanning import ReplanningService
+from backcasting.domain.llm_provider import LLMProvider
 from backcasting.domain.repositories import (
     BackcastingRunRepository,
     CalendarEventRepository,
@@ -38,6 +41,7 @@ from backcasting.domain.repositories import (
     ExecutionRepository,
     FutureStateRepository,
     GapRepository,
+    GoalInterpretationRepository,
     GoalRepository,
     MilestoneRepository,
     OutcomeRepository,
@@ -54,6 +58,7 @@ from backcasting.infrastructure.memory import (
     InMemoryExecutionRepository,
     InMemoryFutureStateRepository,
     InMemoryGapRepository,
+    InMemoryGoalInterpretationRepository,
     InMemoryGoalRepository,
     InMemoryMilestoneRepository,
     InMemoryOutcomeRepository,
@@ -87,6 +92,8 @@ def create_app(
     execution_repository: ExecutionRepository | None = None,
     snapshot_repository: ProgressSnapshotRepository | None = None,
     version_repository: PlanVersionRepository | None = None,
+    interpretation_repository: GoalInterpretationRepository | None = None,
+    llm_provider: LLMProvider | None = None,
 ) -> FastAPI:
     """Create and configure the FastAPI application.
 
@@ -107,9 +114,10 @@ def create_app(
     goals = goal_repository or InMemoryGoalRepository()
     runs = run_repository or InMemoryBackcastingRunRepository()
     app.state.goal_service = GoalService(goals)
+    states = current_state_repository or InMemoryCurrentStateRepository()
     app.state.backcast_service = BackcastService(
         goals,
-        current_state_repository or InMemoryCurrentStateRepository(),
+        states,
         future_state_repository or InMemoryFutureStateRepository(),
         gap_repository or InMemoryGapRepository(),
         runs,
@@ -139,6 +147,17 @@ def create_app(
         tasks,
         version_repository or InMemoryPlanVersionRepository(),
     )
+    # The AI assistant (TASK-116): the LLM port is optional wiring —
+    # a server assembled without one answers 503 rather than
+    # pretending. Vendor adapters are optional runtime dependencies
+    # (ADR-006/007); production wiring injects its own.
+    app.state.assistant_service = AssistantService(
+        goals,
+        states,
+        interpretation_repository
+        or InMemoryGoalInterpretationRepository(),
+        llm_provider,
+    )
     app.include_router(calendars_router)
     app.include_router(goals_router)
     app.include_router(backcast_router)
@@ -146,6 +165,7 @@ def create_app(
     app.include_router(plans_router)
     app.include_router(progress_router)
     app.include_router(replanning_router)
+    app.include_router(assistant_router)
 
     @app.get("/health", tags=["system"], operation_id="getHealth")
     def health() -> dict[str, str]:

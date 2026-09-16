@@ -1,7 +1,7 @@
 # TASK-116 — AI assistant
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-011-product-ux — Product UX

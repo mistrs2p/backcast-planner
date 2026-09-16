@@ -20,6 +20,7 @@ from backcasting.domain.execution import Execution
 from backcasting.domain.future_state import FutureState
 from backcasting.domain.gap import Gap
 from backcasting.domain.goal import Goal
+from backcasting.domain.goal_interpretation import GoalInterpretation
 from backcasting.domain.milestone import Milestone
 from backcasting.domain.outcome import Outcome
 from backcasting.domain.plan import Plan
@@ -33,6 +34,7 @@ from backcasting.domain.repositories import (
     ExecutionRepository,
     FutureStateRepository,
     GapRepository,
+    GoalInterpretationRepository,
     GoalRepository,
     MilestoneRepository,
     OutcomeRepository,
@@ -336,6 +338,36 @@ class InMemoryProgressSnapshotRepository(ProgressSnapshotRepository):
                 s for s in self._by_id.values() if s.plan_id == plan_id
             ]
         return tuple(sorted(snapshots, key=lambda s: (s.taken_at, s.snapshot_id)))
+
+
+class InMemoryGoalInterpretationRepository(GoalInterpretationRepository):
+    """Goal-interpretation port backed by a dict, safe for
+    concurrent requests. The AI layer's proposals are recorded
+    verbatim and never revised — a re-interpretation is a new
+    record, so the listing is the goal's reading history."""
+
+    def __init__(self) -> None:
+        self._by_id: dict[uuid.UUID, GoalInterpretation] = {}
+        self._lock = threading.Lock()
+
+    def save(self, interpretation: GoalInterpretation) -> None:
+        with self._lock:
+            self._by_id[interpretation.interpretation_id] = interpretation
+
+    def get(self, interpretation_id: uuid.UUID) -> GoalInterpretation | None:
+        with self._lock:
+            return self._by_id.get(interpretation_id)
+
+    def list_for_goal(self, goal_id: uuid.UUID):
+        with self._lock:
+            readings = [
+                r
+                for r in self._by_id.values()
+                if r.goal_id == goal_id
+            ]
+        return tuple(
+            sorted(readings, key=lambda r: (r.created_at, r.interpretation_id))
+        )
 
 
 class InMemoryCalendarRepository(CalendarRepository):

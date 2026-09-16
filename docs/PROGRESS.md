@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-116 (AI Assistant UI)
+- Current Task: TASK-117 (Production Docker)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,32 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-116 — AI assistant (2026-09-16): docs/09's first
+  operation in the product, end to end. The chain below was built
+  across EPIC-010 (context builder → provider port → verbatim
+  record); this task wires it: the missing
+  `InMemoryGoalInterpretationRepository` (reading history, earliest
+  first), `AssistantService` — the LLM port is optional wiring, and
+  a server assembled without one answers "no AI provider is
+  configured" rather than pretending; a goal without a current
+  state has nothing to read against; a vendor fault surfaces as the
+  port's one failure currency (there is no deterministic fallback
+  for *reading* a goal, unlike strategies/outcomes/tasks) — and two
+  endpoints: `POST|GET
+  /goals/{goal_id}/assistant/interpretations` (contract
+  regenerated; 503 no provider, 502 vendor fault, 404 nothing to
+  read). `create_app` gained the `llm_provider` injection point and
+  a shared current-state repository. On the web, the goal detail
+  grows the assistant's card between the backcast and the
+  milestones: every recorded reading verbatim with its provider and
+  model, and one ask button (the remaining operations —
+  clarification, strategies, outcomes, tasks, explanations — ride
+  the same pattern as their acceptance flows join the product). 15
+  new backend tests (suite: 2402); smoke-tested live through the
+  Next proxy with a fake provider (reading recorded with
+  provenance, history appends, honest 404s, no backcast → no
+  assistant surface).
 
 - TASK-115 — Replanning UI (2026-09-16): docs/08's level 2
   driven by hand, end to end. New backend surface:
