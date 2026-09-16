@@ -285,6 +285,11 @@
   over a chronological series of observed magnitudes; a dip into the
   hysteresis gap holds the run, a clear resets it (TASK-081).
 
+- Cooldown: `Cooldown(period)` with `in_cooldown` /
+  `cooldown_remaining` — the timed stability control; actions are
+  suppressed strictly within the period after the last one, free the
+  moment it ends (TASK-082).
+
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

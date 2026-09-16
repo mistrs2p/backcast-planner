@@ -1,7 +1,7 @@
 # TASK-082 — Cooldown
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-009-replanning — Replanning
