@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-109 (Backcasting visualization)
+- Current Task: TASK-110 (Milestone UI)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,29 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-109 — Backcasting visualization (2026-09-16): pipeline
+  steps 1–4 of docs/04 surfaced as one capability. Backend: a
+  `GapRepository` port (a gap is a recorded calculation, not just a
+  derived value — one per goal in the MVP), in-memory
+  implementations for current/future/gap with the one-per-goal
+  invariants enforced at the port, `BackcastService.define_backcast`
+  composing capture_current_state → define_future_state →
+  calculate_gap with the context validation the domain requires,
+  and `get_backcast` reassembling the bundle from the latest
+  snapshot. HTTP: POST/GET `/goals/{goal_id}/backcast` — 404
+  (unknown goal or nothing defined), 409 (one per goal; redefining
+  arrives with replanning), 422 (blank narratives, past or naive
+  target date). Frontend: the goal detail page renders the chain —
+  Now → The gap → Destination cards — server-side, or the
+  definition form (client component, `router.refresh()` after
+  submit) when no backcast exists. Fixed a real bug the new
+  service exposed: `create_app` was materializing the default
+  goal repository twice, so goal-service writes were invisible to
+  the backcast service. 20 new tests; backend 2266 green;
+  contract regenerated; `npm run verify` and `next build` green;
+  verified live end to end (form → 201 → chain renders → second
+  definition 409).
 
 - TASK-108 — Goal detail (2026-09-16): the read-only goal view.
   The backend already served GET /goals/{goal_id} (TASK-107), so

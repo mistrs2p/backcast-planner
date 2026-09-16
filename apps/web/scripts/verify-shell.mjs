@@ -139,6 +139,48 @@ check(
   "server-side fetch resolves the same API_ORIGIN knob",
 );
 
+// TASK-109 — backcast visualization: the detail page shows the
+// current → gap → future chain, or the definition form when absent.
+check(
+  await exists("src/components/backcast-chain.tsx") &&
+    await exists("src/components/backcast-form.tsx"),
+  "the backcast chain and form components exist",
+);
+check(
+  await exists("src/lib/backcast.ts"),
+  "the backcast API client exists",
+);
+const backcastClient = await read("src/lib/backcast.ts");
+check(
+  backcastClient.includes("/api/goals/${goalId}/backcast") ||
+    backcastClient.includes("`/api/goals/${goalId}/backcast`"),
+  "the backcast client targets the proxied API path",
+);
+const updatedDetail = await read("src/app/goals/[goalId]/page.tsx");
+check(
+  updatedDetail.includes("BackcastForm") &&
+    updatedDetail.includes("BackcastChain"),
+  "the goal detail composes the backcast form and chain",
+);
+const chain = await read("src/components/backcast-chain.tsx");
+check(
+  !chain.startsWith('"use client"'),
+  "the backcast chain renders on the server",
+);
+const backcastForm = await read("src/components/backcast-form.tsx");
+check(
+  backcastForm.startsWith('"use client"'),
+  "the backcast form is a client component",
+);
+check(
+  backcastForm.includes("router.refresh()"),
+  "the backcast form refreshes the server-rendered page after submit",
+);
+check(
+  backcastForm.includes("role=\"alert\""),
+  "backcast form errors are announced as alerts",
+);
+
 const pkg = JSON.parse(await read("package.json"));
 check(
   pkg.dependencies.next === "16.3.5",

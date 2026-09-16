@@ -425,6 +425,12 @@
   both FeasibilityResults and the workload delta exposed
   (TASK-088).
 
+- Backcast definition and visualization: `GapRepository` port plus
+  in-memory current/future/gap repositories (one-per-goal enforced),
+  `BackcastService` composing capture → define → calculate_gap, and
+  POST/GET `/goals/{goal_id}/backcast` (404/409/422 mapping); the
+  goal detail page renders the Now → gap → Destination chain or the
+  definition form (TASK-109).
 - Goal detail: server-rendered `/goals/[goalId]` route reading
   GET /goals/{goal_id} through the shared `API_ORIGIN` knob,
   not-found boundary for unknown goals, and linked goal entries on

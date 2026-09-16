@@ -374,6 +374,102 @@
         }
       }
     },
+    "/goals/{goal_id}/backcast": {
+      "post": {
+        "tags": [
+          "backcast"
+        ],
+        "summary": "Define Backcast",
+        "description": "Define a goal's backcast context: capture the current state,\ndefine the desired future, calculate the gap (pipeline steps\n1–4, docs/04).",
+        "operationId": "defineBackcast",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BackcastCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BackcastResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "backcast"
+        ],
+        "summary": "Get Backcast",
+        "description": "The goal's backcast context, or 404 while none is defined.",
+        "operationId": "getBackcast",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BackcastResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -403,6 +499,56 @@
   },
   "components": {
     "schemas": {
+      "BackcastCreate": {
+        "properties": {
+          "current_narrative": {
+            "type": "string",
+            "title": "Current Narrative"
+          },
+          "future_description": {
+            "type": "string",
+            "title": "Future Description"
+          },
+          "target_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Target Date"
+          },
+          "gap_narrative": {
+            "type": "string",
+            "title": "Gap Narrative",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "current_narrative",
+          "future_description",
+          "target_date"
+        ],
+        "title": "BackcastCreate"
+      },
+      "BackcastResponse": {
+        "properties": {
+          "current": {
+            "$ref": "#/components/schemas/CurrentStateResponse"
+          },
+          "future": {
+            "$ref": "#/components/schemas/FutureStateResponse"
+          },
+          "gap": {
+            "$ref": "#/components/schemas/GapResponse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "current",
+          "future",
+          "gap"
+        ],
+        "title": "BackcastResponse",
+        "description": "The intent layer of one goal's backcast, as the UI\nvisualizes it: current → gap → future."
+      },
       "CalendarCreate": {
         "properties": {
           "user_id": {
@@ -493,6 +639,36 @@
         ],
         "title": "ConflictResponse"
       },
+      "CurrentStateResponse": {
+        "properties": {
+          "state_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "State Id"
+          },
+          "goal_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Goal Id"
+          },
+          "narrative": {
+            "type": "string",
+            "title": "Narrative"
+          },
+          "captured_at": {
+            "type": "string",
+            "title": "Captured At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state_id",
+          "goal_id",
+          "narrative",
+          "captured_at"
+        ],
+        "title": "CurrentStateResponse"
+      },
       "EventCreate": {
         "properties": {
           "title": {
@@ -576,6 +752,117 @@
           "updated_at"
         ],
         "title": "EventResponse"
+      },
+      "FutureStateResponse": {
+        "properties": {
+          "state_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "State Id"
+          },
+          "goal_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Goal Id"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "target_date": {
+            "type": "string",
+            "title": "Target Date"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state_id",
+          "goal_id",
+          "description",
+          "target_date",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "FutureStateResponse"
+      },
+      "GapDimensionResponse": {
+        "properties": {
+          "metric_name": {
+            "type": "string",
+            "title": "Metric Name"
+          },
+          "current_value": {
+            "title": "Current Value"
+          },
+          "target_value": {
+            "title": "Target Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric_name",
+          "current_value",
+          "target_value"
+        ],
+        "title": "GapDimensionResponse"
+      },
+      "GapResponse": {
+        "properties": {
+          "gap_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Gap Id"
+          },
+          "goal_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Goal Id"
+          },
+          "current_state_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Current State Id"
+          },
+          "future_state_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Future State Id"
+          },
+          "calculated_at": {
+            "type": "string",
+            "title": "Calculated At"
+          },
+          "dimensions": {
+            "items": {
+              "$ref": "#/components/schemas/GapDimensionResponse"
+            },
+            "type": "array",
+            "title": "Dimensions"
+          },
+          "narrative": {
+            "type": "string",
+            "title": "Narrative"
+          }
+        },
+        "type": "object",
+        "required": [
+          "gap_id",
+          "goal_id",
+          "current_state_id",
+          "future_state_id",
+          "calculated_at",
+          "dimensions",
+          "narrative"
+        ],
+        "title": "GapResponse"
       },
       "GoalCreate": {
         "properties": {

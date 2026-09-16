@@ -16,18 +16,26 @@ from __future__ import annotations
 from fastapi import FastAPI
 
 from backcasting import __version__
+from backcasting.api.backcast import router as backcast_router
 from backcasting.api.calendars import router as calendars_router
 from backcasting.api.goals import router as goals_router
+from backcasting.application.backcast import BackcastService
 from backcasting.application.calendars import CalendarService
 from backcasting.application.goals import GoalService
 from backcasting.domain.repositories import (
     CalendarEventRepository,
     CalendarRepository,
+    CurrentStateRepository,
+    FutureStateRepository,
+    GapRepository,
     GoalRepository,
 )
 from backcasting.infrastructure.memory import (
     InMemoryCalendarEventRepository,
     InMemoryCalendarRepository,
+    InMemoryCurrentStateRepository,
+    InMemoryFutureStateRepository,
+    InMemoryGapRepository,
     InMemoryGoalRepository,
 )
 
@@ -44,6 +52,9 @@ def create_app(
     calendar_repository: CalendarRepository | None = None,
     event_repository: CalendarEventRepository | None = None,
     goal_repository: GoalRepository | None = None,
+    current_state_repository: CurrentStateRepository | None = None,
+    future_state_repository: FutureStateRepository | None = None,
+    gap_repository: GapRepository | None = None,
 ) -> FastAPI:
     """Create and configure the FastAPI application.
 
@@ -61,11 +72,17 @@ def create_app(
         calendar_repository or InMemoryCalendarRepository(),
         event_repository or InMemoryCalendarEventRepository(),
     )
-    app.state.goal_service = GoalService(
-        goal_repository or InMemoryGoalRepository()
+    goals = goal_repository or InMemoryGoalRepository()
+    app.state.goal_service = GoalService(goals)
+    app.state.backcast_service = BackcastService(
+        goals,
+        current_state_repository or InMemoryCurrentStateRepository(),
+        future_state_repository or InMemoryFutureStateRepository(),
+        gap_repository or InMemoryGapRepository(),
     )
     app.include_router(calendars_router)
     app.include_router(goals_router)
+    app.include_router(backcast_router)
 
     @app.get("/health", tags=["system"], operation_id="getHealth")
     def health() -> dict[str, str]:
