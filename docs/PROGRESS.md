@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-090 (LLM provider interface)
+- Current Task: TASK-091 (OpenAI adapter)
 - Current Epic: EPIC-010 AI
 
 ## Completed
@@ -1134,6 +1134,28 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-090 — LLM provider interface (2026-09-16): the AI boundary
+  port of docs/09 and ADR-006. `domain/llm_provider.py` with the
+  neutral conversation vocabulary — `MessageRole` (system/user/
+  assistant), frozen `Message` (non-empty, bounded) — frozen
+  `LLMRequest(operation, messages, model?, max_output_tokens?,
+  temperature?)` where the operation is mandatory (the audit log and
+  permission checks key on it) and every vendor knob is optional
+  None-means-provider-default, and frozen `LLMResponse(content,
+  model, prompt_tokens?, completion_tokens?)` where the model that
+  actually answered is recorded, not the one requested. The
+  `LLMProvider` ABC: abstract `name` (identity for audit and
+  fallback routing) and abstract `complete(request) -> response`.
+  Two failure currencies, mirroring repositories.py: bad requests
+  and malformed responses raise `LLMProviderError` (programming
+  errors), vendor/transport failures raise `ProviderCallError`
+  (the single type the TASK-103 fallback will catch) so callers
+  never see SDK-specific exceptions. No tools, streaming, or
+  multimodality — the six text operations of docs/09 need none of
+  it, and the tool-permission guardrail arrives as TASK-101.
+  22 tests, including a reference EchoProvider pinning the contract
+  and an AST-level assertion that the module imports stdlib only.
 
 - TASK-089 — Replanning integration (2026-09-16): the epic-closing
   suite (`tests/test_replanning_integration.py`) pinning EPIC-009 end
