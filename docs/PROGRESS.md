@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-106 (Tailwind setup)
+- Current Task: TASK-107 (Goal creation)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,29 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-106 — Tailwind setup (2026-09-16): the Tailwind CSS
+  pipeline over the TASK-105 tokens, per ADR-005's
+  "token-driven component system". `tailwindcss` and
+  `@tailwindcss/postcss` pinned exactly at 4.3.3 (ADR-007
+  baseline), wired through `postcss.config.mjs`; `globals.css`
+  imports `tailwindcss` and aliases the runtime tokens into the
+  theme namespaces with `@theme inline` — colors
+  (`--color-surface: var(--surface)` …), spacing, and radii. The
+  runtime tokens were renamed unprefixed (`--surface`, `--text`,
+  `--radius-medium`, …) because a theme entry must never reference
+  itself; the hand-written component classes follow the same
+  runtime variables. `@theme inline` is the load-bearing choice:
+  the emitted utilities are `bg-surface-muted
+  {background-color:var(--surface-muted)}`,
+  `p-5 {padding:var(--space-5)}` — runtime variables, not
+  build-time-resolved values — so the dark-mode palette swap moves
+  utilities and component classes together, with no frozen light
+  values (verified by grepping the built CSS). The `/design`
+  showcase gained a utilities card exercising the generated
+  classes. Verify scripts updated: shell asserts the 4.3.3 pin,
+  design asserts the PostCSS wiring and the theme mappings;
+  `npm run verify` + `next build` green (4/4 routes).
 
 - TASK-105 — Design system (2026-09-16): the token vocabulary
   and the reusable primitives the feature UIs (TASK-107+) compose

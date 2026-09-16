@@ -80,8 +80,8 @@ check(
   "typescript is pinned to the ADR-007 baseline (5.9.3)",
 );
 check(
-  !("tailwindcss" in pkg.dependencies || "tailwindcss" in pkg.devDependencies),
-  "tailwind is absent — its wiring is TASK-106, not the shell",
+  pkg.devDependencies.tailwindcss === "4.3.3",
+  "tailwind is pinned to the ADR-007 baseline (4.3.3) — wired by TASK-106",
 );
 
 if (failures.length > 0) {

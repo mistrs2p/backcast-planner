@@ -1,10 +1,50 @@
 /*
- * Shell and primitive styles, driven entirely by the tokens
- * (src/styles/tokens.css). TASK-106 folds these into the Tailwind
- * pipeline; the class names are the stable contract until then.
+ * Tailwind pipeline (TASK-106) over the design tokens (TASK-105).
+ *
+ * The @theme inline block aliases the runtime custom properties
+ * into Tailwind's namespaces: utilities are generated from them
+ * (`bg-surface`, `text-text-muted`, `border-border`, `p-5`,
+ * `rounded-medium`) while emitting the runtime variable itself —
+ * so a dark-mode palette swap moves every utility and every
+ * hand-written component class together, at runtime, with no
+ * build-time resolution freezing the light values.
  */
 
+@import "tailwindcss";
 @import "../styles/tokens.css";
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-danger: var(--danger);
+  --color-danger-surface: var(--danger-surface);
+  --color-focus: var(--focus);
+
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+
+  --radius-sm: var(--radius-small);
+  --radius-md: var(--radius-medium);
+  --radius-lg: var(--radius-large);
+}
+
+/*
+ * The hand-written component classes — the primitives' stable
+ * contract — now expressed in the same runtime tokens the
+ * utilities read. New feature UI (TASK-107+) composes utilities;
+ * these classes stay because the primitives own their structure.
+ */
 
 *,
 *::before,
@@ -14,15 +54,15 @@
 
 body {
   margin: 0;
-  background: var(--color-bg);
-  color: var(--color-text);
+  background: var(--bg);
+  color: var(--text);
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: var(--font-size-md);
   line-height: 1.5;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-focus);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
@@ -34,11 +74,11 @@ body {
 .skip-link:focus {
   left: var(--space-4);
   top: var(--space-4);
-  background: var(--color-surface);
-  color: var(--color-text);
+  background: var(--surface);
+  color: var(--text);
   padding: var(--space-2) var(--space-4);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
   z-index: 10;
 }
 
@@ -47,14 +87,14 @@ header {
   gap: var(--space-6);
   align-items: center;
   padding: var(--space-3) var(--space-5);
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
 
 .brand {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text);
+  color: var(--text);
   text-decoration: none;
 }
 
@@ -67,12 +107,12 @@ nav ul {
 }
 
 nav a {
-  color: var(--color-text-muted);
+  color: var(--text-muted);
   text-decoration: none;
 }
 
 nav a[aria-current="page"] {
-  color: var(--color-text);
+  color: var(--text);
   font-weight: var(--font-weight-medium);
 }
 
@@ -84,8 +124,8 @@ main {
 
 footer {
   padding: var(--space-3) var(--space-5);
-  border-top: 1px solid var(--color-border);
-  color: var(--color-text-muted);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
   font-size: var(--font-size-sm);
 }
 
@@ -95,7 +135,7 @@ footer {
   display: inline-block;
   padding: var(--space-2) var(--space-4);
   border: 1px solid transparent;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-small);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
@@ -103,28 +143,28 @@ footer {
 }
 
 .button--primary {
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+  background: var(--primary);
+  color: var(--on-primary);
 }
 
 .button--primary:hover {
-  background: var(--color-primary-hover);
+  background: var(--primary-hover);
 }
 
 .button--secondary {
-  background: var(--color-surface);
-  color: var(--color-text);
-  border-color: var(--color-border);
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
 }
 
 .button--secondary:hover {
-  background: var(--color-surface-muted);
+  background: var(--surface-muted);
 }
 
 .button--danger {
-  background: var(--color-danger-surface);
-  color: var(--color-danger);
-  border-color: var(--color-danger);
+  background: var(--danger-surface);
+  color: var(--danger);
+  border-color: var(--danger);
 }
 
 .button:disabled {
@@ -147,35 +187,35 @@ footer {
 
 .field__input {
   padding: var(--space-2) var(--space-3);
-  background: var(--color-surface);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
   font: inherit;
 }
 
 .field__input[aria-invalid="true"] {
-  border-color: var(--color-danger);
+  border-color: var(--danger);
 }
 
 .field__hint {
   margin: 0;
-  color: var(--color-text-muted);
+  color: var(--text-muted);
   font-size: var(--font-size-sm);
 }
 
 .field__error {
   margin: 0;
-  color: var(--color-danger);
+  color: var(--danger);
   font-size: var(--font-size-sm);
 }
 
 /* --- Card --- */
 
 .card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
   box-shadow: var(--shadow-card);
 }
 
@@ -185,7 +225,7 @@ footer {
   align-items: center;
   gap: var(--space-4);
   padding: var(--space-4) var(--space-5);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--border);
 }
 
 .card__title {

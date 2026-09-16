@@ -37,18 +37,18 @@ async function exists(relativePath) {
 
 const tokens = await read("src/styles/tokens.css");
 const TOKEN_NAMES = [
-  "--color-bg",
-  "--color-surface",
-  "--color-surface-muted",
-  "--color-text",
-  "--color-text-muted",
-  "--color-border",
-  "--color-primary",
-  "--color-primary-hover",
-  "--color-on-primary",
-  "--color-danger",
-  "--color-danger-surface",
-  "--color-focus",
+  "--bg",
+  "--surface",
+  "--surface-muted",
+  "--text",
+  "--text-muted",
+  "--border",
+  "--primary",
+  "--primary-hover",
+  "--on-primary",
+  "--danger",
+  "--danger-surface",
+  "--focus",
   "--space-1",
   "--space-2",
   "--space-3",
@@ -64,9 +64,9 @@ const TOKEN_NAMES = [
   "--font-weight-medium",
   "--font-weight-semibold",
   "--font-weight-bold",
-  "--radius-sm",
-  "--radius-md",
-  "--radius-lg",
+  "--radius-small",
+  "--radius-medium",
+  "--radius-large",
   "--shadow-card",
 ];
 for (const token of TOKEN_NAMES) {
@@ -77,9 +77,35 @@ check(
   "the palette swaps for dark mode",
 );
 check(
-  tokens.includes("--color-primary:") &&
-    tokens.includes("--color-primary-hover:"),
+  tokens.includes("--primary:") && tokens.includes("--primary-hover:"),
   "interactive colors declare hover states",
+);
+
+// --- The Tailwind pipeline (TASK-106) ---
+
+const globals = await read("src/app/globals.css");
+check(
+  globals.includes('@import "tailwindcss";'),
+  "globals imports the Tailwind pipeline",
+);
+check(
+  globals.includes("@theme inline"),
+  "the theme aliases the runtime tokens inline",
+);
+for (const alias of [
+  "--color-surface: var(--surface)",
+  "--color-text-muted: var(--text-muted)",
+  "--color-border: var(--border)",
+  "--color-primary: var(--primary)",
+  "--spacing-5: var(--space-5)",
+  "--radius-lg: var(--radius-large)",
+]) {
+  check(globals.includes(alias), `theme maps ${alias}`);
+}
+const postcss = await read("postcss.config.mjs");
+check(
+  postcss.includes('"@tailwindcss/postcss"'),
+  "PostCSS runs the Tailwind plugin",
 );
 
 // --- Primitives ---
