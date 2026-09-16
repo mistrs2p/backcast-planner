@@ -1,7 +1,7 @@
 # TASK-089 — Replanning integration
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-009-replanning — Replanning
