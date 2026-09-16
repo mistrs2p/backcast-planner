@@ -2,8 +2,8 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-089 (Replanning integration)
-- Current Epic: EPIC-009 Replanning
+- Current Task: TASK-090 (LLM provider interface)
+- Current Epic: EPIC-010 AI
 
 ## Completed
 - Product/domain design baseline completed before implementation pack generation.
@@ -1134,6 +1134,26 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-089 — Replanning integration (2026-09-16): the epic-closing
+  suite (`tests/test_replanning_integration.py`) pinning EPIC-009 end
+  to end over one realistic situation. The automatic arc: cumulative
+  weekly progress snapshots -> progress variance -> shortfall
+  magnitudes -> threshold -> persistence -> triggers on record
+  (progress behind, evenings worked) -> policy -> decision (ACT
+  REPLAN) -> global re-derivation -> `compare_plans` adoption under
+  shared buffer/capacity -> the version trail. The stability
+  branches: one slow-then-recovered week resets the run and decides
+  nothing; hysteresis holds through a dip into the gap; a re-confirmed
+  condition waits out its cooldown. The other modes: SUGGEST proposes
+  (minimum-change picks REPLAN over goal revision; the goal revision
+  itself is only ever proposed), MANUAL holds. The overwork arc runs
+  the same machinery in the other direction: sustainability's
+  arithmetic against the declared windows, the utilization adapter
+  feeding the same threshold vocabulary, the behavior trigger on
+  record, and a suggestion rather than an act — the pace is the
+  user's. 7 tests, no new product code — the composition is the
+  capability. EPIC-009 complete.
 
 - TASK-088 — Plan comparison (2026-09-16): current vs candidate,
   mechanically. `domain/plan_comparison.py` with `PreferredPlan`

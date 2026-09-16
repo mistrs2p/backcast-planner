@@ -320,6 +320,13 @@
   (unestimated tasks surface, not zeroed), one plan version; the
   third and widest level-2 scope (TASK-087).
 
+- Replanning integration tests: the epic-closing suite composing
+  signals, thresholds, persistence, triggers, policy, decision,
+  replan scope, comparison, and the version trail end to end —
+  slip-to-adoption, cooldown, hysteresis, noise, the three modes,
+  and the overwork direction through sustainability's utilization
+  (TASK-089).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with
