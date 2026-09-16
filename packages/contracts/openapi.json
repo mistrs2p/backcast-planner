@@ -926,6 +926,146 @@
         }
       }
     },
+    "/goals/{goal_id}/executions": {
+      "post": {
+        "tags": [
+          "progress"
+        ],
+        "summary": "Record Execution",
+        "description": "Record one sitting of actual work on one of the goal's plan's\ntasks — the Actual of docs/07's triad, recorded as given.",
+        "operationId": "recordExecution",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExecutionCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecutionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/goals/{goal_id}/progress": {
+      "post": {
+        "tags": [
+          "progress"
+        ],
+        "summary": "Take Snapshot",
+        "description": "Take one progress snapshot of the goal's plan, now.",
+        "operationId": "takeProgressSnapshot",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgressResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "progress"
+        ],
+        "summary": "Get Progress",
+        "description": "The latest progress snapshot of the goal's plan, or 404 while\nnone has been taken.",
+        "operationId": "getProgress",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgressResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -1212,6 +1352,67 @@
           "updated_at"
         ],
         "title": "EventResponse"
+      },
+      "ExecutionCreate": {
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Task Id"
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End"
+          }
+        },
+        "type": "object",
+        "required": [
+          "task_id",
+          "start",
+          "end"
+        ],
+        "title": "ExecutionCreate"
+      },
+      "ExecutionResponse": {
+        "properties": {
+          "execution_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Execution Id"
+          },
+          "task_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Task Id"
+          },
+          "start": {
+            "type": "string",
+            "title": "Start"
+          },
+          "end": {
+            "type": "string",
+            "title": "End"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "execution_id",
+          "task_id",
+          "start",
+          "end",
+          "created_at"
+        ],
+        "title": "ExecutionResponse"
       },
       "FutureStateResponse": {
         "properties": {
@@ -1661,6 +1862,77 @@
           "updated_at"
         ],
         "title": "PlanResponse"
+      },
+      "ProgressResponse": {
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Snapshot Id"
+          },
+          "plan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Plan Id"
+          },
+          "taken_at": {
+            "type": "string",
+            "title": "Taken At"
+          },
+          "task_count": {
+            "type": "integer",
+            "title": "Task Count"
+          },
+          "completed_task_count": {
+            "type": "integer",
+            "title": "Completed Task Count"
+          },
+          "planned_hours": {
+            "type": "number",
+            "title": "Planned Hours"
+          },
+          "actual_hours": {
+            "type": "number",
+            "title": "Actual Hours"
+          },
+          "remaining_hours": {
+            "type": "number",
+            "title": "Remaining Hours"
+          },
+          "progress": {
+            "type": "number",
+            "title": "Progress"
+          },
+          "completion_rate": {
+            "type": "number",
+            "title": "Completion Rate"
+          },
+          "plan_status": {
+            "type": "string",
+            "title": "Plan Status"
+          },
+          "plan_workload_hours": {
+            "type": "number",
+            "title": "Plan Workload Hours"
+          }
+        },
+        "type": "object",
+        "required": [
+          "snapshot_id",
+          "plan_id",
+          "taken_at",
+          "task_count",
+          "completed_task_count",
+          "planned_hours",
+          "actual_hours",
+          "remaining_hours",
+          "progress",
+          "completion_rate",
+          "plan_status",
+          "plan_workload_hours"
+        ],
+        "title": "ProgressResponse",
+        "description": "A snapshot plus the plan's workload basis (hours)."
       },
       "RunResponse": {
         "properties": {

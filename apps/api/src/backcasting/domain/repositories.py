@@ -29,6 +29,7 @@ from typing import Sequence
 
 from backcasting.domain.calendar import Calendar
 from backcasting.domain.calendar_event import CalendarEvent
+from backcasting.domain.execution import Execution
 from backcasting.domain.feedback import Feedback
 from backcasting.domain.backcasting_run import BackcastingRun
 from backcasting.domain.current_state import CurrentState
@@ -244,6 +245,27 @@ class TaskRepository(ABC):
     @abstractmethod
     def list_for_plan(self, plan_id: uuid.UUID) -> Sequence[Task]:
         """Return the plan's tasks, oldest first."""
+
+
+class ExecutionRepository(ABC):
+    """Persistence port for :class:`~backcasting.domain.execution.Execution`.
+
+    An Execution is a recorded fact ("what actually happened",
+    docs/07) — append-only history, never revised; a correction is
+    another sitting. Listed per task, earliest start first.
+    """
+
+    @abstractmethod
+    def save(self, execution: Execution) -> None:
+        """Insert the execution keyed by ``execution_id``."""
+
+    @abstractmethod
+    def get(self, execution_id: uuid.UUID) -> Execution | None:
+        """Return the execution with ``execution_id``, or ``None``."""
+
+    @abstractmethod
+    def list_for_task(self, task_id: uuid.UUID) -> Sequence[Execution]:
+        """Return the task's sittings, earliest ``start`` first."""
 
 
 class CalendarRepository(ABC):

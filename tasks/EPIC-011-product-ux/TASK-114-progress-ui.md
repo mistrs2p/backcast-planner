@@ -1,7 +1,7 @@
 # TASK-114 — Progress UI
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-011-product-ux — Product UX

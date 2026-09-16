@@ -21,22 +21,26 @@ from backcasting.api.calendars import router as calendars_router
 from backcasting.api.goals import router as goals_router
 from backcasting.api.milestones import router as milestones_router
 from backcasting.api.plans import router as plans_router
+from backcasting.api.progress import router as progress_router
 from backcasting.application.backcast import BackcastService
 from backcasting.application.calendars import CalendarService
 from backcasting.application.goals import GoalService
 from backcasting.application.milestones import MilestoneService
 from backcasting.application.plans import PlanService
+from backcasting.application.progress import ProgressService
 from backcasting.domain.repositories import (
     BackcastingRunRepository,
     CalendarEventRepository,
     CalendarRepository,
     CurrentStateRepository,
+    ExecutionRepository,
     FutureStateRepository,
     GapRepository,
     GoalRepository,
     MilestoneRepository,
     OutcomeRepository,
     PlanRepository,
+    ProgressSnapshotRepository,
     TaskRepository,
 )
 from backcasting.infrastructure.memory import (
@@ -44,12 +48,14 @@ from backcasting.infrastructure.memory import (
     InMemoryCalendarEventRepository,
     InMemoryCalendarRepository,
     InMemoryCurrentStateRepository,
+    InMemoryExecutionRepository,
     InMemoryFutureStateRepository,
     InMemoryGapRepository,
     InMemoryGoalRepository,
     InMemoryMilestoneRepository,
     InMemoryOutcomeRepository,
     InMemoryPlanRepository,
+    InMemoryProgressSnapshotRepository,
     InMemoryTaskRepository,
 )
 
@@ -74,6 +80,8 @@ def create_app(
     plan_repository: PlanRepository | None = None,
     outcome_repository: OutcomeRepository | None = None,
     task_repository: TaskRepository | None = None,
+    execution_repository: ExecutionRepository | None = None,
+    snapshot_repository: ProgressSnapshotRepository | None = None,
 ) -> FastAPI:
     """Create and configure the FastAPI application.
 
@@ -103,19 +111,29 @@ def create_app(
     )
     milestones = milestone_repository or InMemoryMilestoneRepository()
     app.state.milestone_service = MilestoneService(goals, runs, milestones)
+    plans = plan_repository or InMemoryPlanRepository()
+    tasks = task_repository or InMemoryTaskRepository()
     app.state.plan_service = PlanService(
         goals,
         runs,
-        plan_repository or InMemoryPlanRepository(),
+        plans,
         outcome_repository or InMemoryOutcomeRepository(),
-        task_repository or InMemoryTaskRepository(),
+        tasks,
         milestones,
+    )
+    app.state.progress_service = ProgressService(
+        goals,
+        plans,
+        tasks,
+        execution_repository or InMemoryExecutionRepository(),
+        snapshot_repository or InMemoryProgressSnapshotRepository(),
     )
     app.include_router(calendars_router)
     app.include_router(goals_router)
     app.include_router(backcast_router)
     app.include_router(milestones_router)
     app.include_router(plans_router)
+    app.include_router(progress_router)
 
     @app.get("/health", tags=["system"], operation_id="getHealth")
     def health() -> dict[str, str]:
