@@ -57,6 +57,15 @@ export default function DesignPage() {
           the surface the feature UIs compose.
         </p>
       </Card>
+
+      <Card title="Utilities">
+        <p className="rounded-md bg-surface-muted p-5 text-text-muted">
+          Tailwind utilities reading the same tokens: this box uses
+          <code> rounded-md bg-surface-muted p-5 text-text-muted</code>,
+          and it follows the dark-mode palette swap like everything
+          else.
+        </p>
+      </Card>
     </section>
   );
 }

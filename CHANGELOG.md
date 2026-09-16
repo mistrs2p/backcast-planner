@@ -414,6 +414,11 @@
   primitives — Button/ButtonLink, TextField, Card — with a living
   style guide at /design and structural verification (TASK-105).
 
+- Tailwind setup: tailwindcss 4.3.3 via @tailwindcss/postcss,
+  with the design tokens aliased into the theme through @theme
+  inline so utilities emit runtime variables and follow the
+  dark-mode swap (TASK-106).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with
