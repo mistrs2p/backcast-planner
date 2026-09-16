@@ -279,6 +279,12 @@
   the `variance_shortfall` / `utilization` / `completion_shortfall`
   adapters reducing signal records to the slip being judged (TASK-080).
 
+- Persistence detection: `Persistence(required)` (the confirming
+  run length), `PersistenceReading` with `confirms()`, and
+  `assess_persistence` — the threshold hysteresis state machine run
+  over a chronological series of observed magnitudes; a dip into the
+  hysteresis gap holds the run, a clear resets it (TASK-081).
+
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

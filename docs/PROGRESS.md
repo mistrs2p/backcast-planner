@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-081 (Persistence detection)
+- Current Task: TASK-082 (Cooldown)
 - Current Epic: EPIC-009 Replanning
 
 ## Completed
@@ -994,6 +994,25 @@
   detection (TASK-081) counts consecutive crossings of these;
   cooldown (TASK-082) times them. 30 tests, including the recovery
   wiring where week two's work falls through the exit bound.
+
+- TASK-081 — Persistence detection (2026-09-16): the same
+  condition, observed repeatedly. `domain/persistence.py` with
+  `Persistence(required)` — the count of consecutive observations
+  that confirms a condition (int, at least 1) — the frozen
+  `PersistenceReading(active, consecutive)` with `confirms()`
+  (an inactive reading never confirms; an inactive condition cannot
+  claim a run), and `assess_persistence(threshold, magnitudes)`:
+  TASK-080's hysteresis state machine run over a chronological
+  series of observed magnitudes. Semantics: entering wins (an
+  observation at the enter bound enters or re-enters, even on equal
+  bounds); an observation at or below the exit bound clears and
+  resets; an observation in the hysteresis gap holds — the run
+  counts on, which is the point: a condition that dipped without
+  recovering has not stopped being a state of the world. Bad
+  magnitudes restate ThresholdError as PersistenceError. 21 tests,
+  including the wiring where one hour a week on an 8h task (slips
+  7h/6h/5h, cumulative snapshots) confirms at three weeks, and a
+  single bad week between clear ones never does.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
