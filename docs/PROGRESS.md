@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-101 (Tool permissions)
+- Current Task: TASK-102 (AI evaluation dataset)
 - Current Epic: EPIC-010 AI
 
 ## Completed
@@ -1134,6 +1134,30 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-101 — Tool permissions (2026-09-16): docs/09's
+  permission-validation and tool-allowlist guardrails. In this
+  architecture the LLM has no free-form tools — everything the
+  reasoning layer can do is one of the six AI operations, carried
+  on every LLMRequest — so the operation name is the tool and the
+  allowlist is a set of operation names. `domain/tool_permissions.py`:
+  `AI_OPERATIONS` (the six, kept in lockstep with the context
+  builder's instruction table by test), the frozen
+  `ToolPermissions` allowlist with `permits`/`require`/
+  `require_request`, and `grant_operations`/`all_operations`/
+  `no_operations` constructors. Construction is strict: unknown
+  operation names are configuration errors, not silent no-ops; an
+  empty allowlist (a deployment with no AI) is valid. The
+  enforcement point is structural: `application/permission_guard.py`'s
+  `PermittedProvider` wraps any provider and validates each
+  request's operation before the vendor is reached — a denied
+  operation raises before any request leaves the process; vendor
+  faults propagate untouched. Environment wiring: `Settings`
+  gains `ai_operations` parsed from a comma-separated
+  `AI_OPERATIONS` env var (unset permits all six, empty denies
+  all, unknown names fail fast), with a commented line in
+  `.env.example`. 20 tests (`tests/test_tool_permissions.py`),
+  including the env → Settings → allowlist → guard arc.
 
 - TASK-100 — AI validation (2026-09-16): docs/09's
   schema-validation guardrail — the layer every AI-operation record
