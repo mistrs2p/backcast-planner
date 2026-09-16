@@ -1,0 +1,6 @@
+# Keep the builder context minimal: dependencies and build output
+# are produced inside the image, never shipped in.
+node_modules/
+.next/
+tsconfig.tsbuildinfo/
+README.md

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Production Docker: multi-stage non-root healthchecked images for
+  the API and web apps (`apps/api/Dockerfile`, `apps/web/Dockerfile`),
+  a Docker-first root `docker-compose.yml` (web gated on the api health
+  check; the app services complement TASK-007's `infra/docker-compose.yml`
+  infrastructure stack), and `scripts/check_docker.py` pinning the
+  structural invariants (TASK-117; ADR-009).
 - Repository bootstrap: execution pack committed, monorepo skeleton materialized
   (`apps/`, `packages/contracts/`, `infra/`, `scripts/`, `tests/`), pytest harness
   and repository-structure tests added (TASK-001).

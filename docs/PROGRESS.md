@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-117 (Production Docker)
+- Current Task: TASK-118 (CI/CD)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,28 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-117 — Production Docker (2026-09-16): docs/10's
+  "Docker-first" made real, opening EPIC-012. Two multi-stage
+  images — `apps/api/Dockerfile` (builder compiles the package into
+  a venv; runtime ships venv + source on python:3.12-slim, non-root,
+  HEALTHCHECK on `/health`, uvicorn CMD) and `apps/web/Dockerfile`
+  (builder installs and builds; runtime ships the built app on
+  node:22-alpine, non-root, HEALTHCHECK on the home route) — plus
+  `.dockerignore` for each and a root `docker-compose.yml`: two
+  services on one network, `web` gated on `api`'s health check,
+  config from the environment, no secrets, no database pretended
+  (in-memory persistence until TASK-119; the file says so).
+  `API_ORIGIN` is set at BOTH build (ARG — the rewrite destination
+  is baked) and runtime (ENV — server-side fetches) after the
+  TASK-111 lesson; ADR-009 records the topology and the deliberate
+  non-use of `output: "standalone"`. New
+  `scripts/check_docker.py` pins the structural invariants
+  statically (multi-stage, non-root, healthchecks, dockerignores,
+  API_ORIGIN agreement, no secret keys in compose). Validated live:
+  `docker compose up --build` → both containers healthy, 8/8 checks
+  (health on both, goal created and read through the proxy, detail
+  page rendered, assistant's honest 503, both containers non-root).
 
 - TASK-116 — AI assistant (2026-09-16): docs/09's first
   operation in the product, end to end. The chain below was built
