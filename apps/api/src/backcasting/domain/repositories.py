@@ -33,6 +33,7 @@ from backcasting.domain.feedback import Feedback
 from backcasting.domain.current_state import CurrentState
 from backcasting.domain.future_state import FutureState
 from backcasting.domain.goal import Goal
+from backcasting.domain.goal_interpretation import GoalInterpretation
 from backcasting.domain.measurement import Measurement
 from backcasting.domain.progress import ProgressSnapshot
 from backcasting.domain.schedule import Schedule
@@ -255,3 +256,25 @@ class TriggerRepository(ABC):
     @abstractmethod
     def list_all(self) -> Sequence[Trigger]:
         """Return every trigger, earliest ``observed_at`` first."""
+
+class GoalInterpretationRepository(ABC):
+    """Persistence port for
+    :class:`~backcasting.domain.goal_interpretation.GoalInterpretation`.
+
+    The AI layer's proposals, recorded verbatim with provenance and
+    never revised (ADR-002) — a re-interpretation is a new record.
+    """
+
+    @abstractmethod
+    def save(self, interpretation: GoalInterpretation) -> None:
+        """Insert or replace the interpretation keyed by
+        ``interpretation_id``."""
+
+    @abstractmethod
+    def get(self, interpretation_id: uuid.UUID) -> GoalInterpretation | None:
+        """Return the interpretation with ``interpretation_id``, or
+        ``None``."""
+
+    @abstractmethod
+    def list_for_goal(self, goal_id: uuid.UUID) -> Sequence[GoalInterpretation]:
+        """Return the goal's interpretations, earliest first."""

@@ -356,6 +356,12 @@
   signatures take exactly the records each operation needs
   (TASK-094).
 
+- Goal interpretation: the first AI operation wired — the
+  `GoalInterpretation` record with provenance (provider, model,
+  when), its repository port, and the `interpret_goal` use case
+  composing context builder, provider port, and record
+  (TASK-095).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with
