@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-092 (Anthropic adapter)
+- Current Task: TASK-093 (Google adapter)
 - Current Epic: EPIC-010 AI
 
 ## Completed
@@ -1134,6 +1134,29 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-092 — Anthropic adapter (2026-09-16): the second vendor
+  behind the LLM port, over an API that differs in kind.
+  `infrastructure/anthropic_provider.py` with
+  `AnthropicProvider(LLMProvider)` — name "anthropic", the same
+  lazy-import/injected-client/api-key-exclusive construction as the
+  OpenAI adapter. Vendor-shape translation: neutral SYSTEM turns
+  are hoisted out of the conversation into the vendor's top-level
+  `system` parameter (multiple system turns joined blank-line
+  separated; no system turn means no parameter); the vendor's
+  required `max_tokens` is resolved from the request or the
+  adapter's `default_max_output_tokens` (module default 1024,
+  constructor-overridable) so the port's None-means-default holds;
+  temperature passes through only when set — and is never clamped:
+  the vendor's narrower 0–1 range rejects out-of-range values,
+  which surface as ProviderCallError rather than a silently
+  changed proposal. Response translation joins the text blocks'
+  text (non-text blocks skipped), records the model that answered,
+  maps input/output tokens to prompt/completion. Every vendor
+  fault — including no text blocks and a missing model — is
+  ProviderCallError with the original exception chained. 23 tests
+  against a recording fake, including the side-by-side wiring:
+  two vendors, one interface, indistinguishable except by name.
 
 - TASK-091 — OpenAI adapter (2026-09-16): the first vendor behind
   the LLM port. `infrastructure/openai_provider.py` with
