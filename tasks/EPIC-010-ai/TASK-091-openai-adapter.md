@@ -1,7 +1,7 @@
 # TASK-091 — OpenAI adapter
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-010-ai — AI

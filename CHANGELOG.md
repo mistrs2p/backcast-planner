@@ -333,6 +333,11 @@
   (`ProviderCallError`) and one for invariant violations
   (`LLMProviderError`); vendor adapters implement it (TASK-090).
 
+- OpenAI adapter: `OpenAIProvider` implements the neutral LLM
+  port over the OpenAI SDK — lazy import, injected-client testing,
+  default-model resolution, and every vendor fault chained into
+  `ProviderCallError` (TASK-091).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with

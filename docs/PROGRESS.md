@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-091 (OpenAI adapter)
+- Current Task: TASK-092 (Anthropic adapter)
 - Current Epic: EPIC-010 AI
 
 ## Completed
@@ -1134,6 +1134,24 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-091 — OpenAI adapter (2026-09-16): the first vendor behind
+  the LLM port. `infrastructure/openai_provider.py` with
+  `OpenAIProvider(LLMProvider)` — name "openai", injected SDK client
+  (or lazy default client, optionally with an explicit api_key;
+  never both) and a `default_model` resolving the neutral request's
+  None-means-provider-default. Translation out: neutral Message
+  turns become vendor chat messages verbatim, `max_output_tokens`
+  crosses as `max_completion_tokens`, temperature passes through,
+  and unset knobs stay out of the vendor call entirely. Translation
+  back: content, the model that actually answered, and the usage
+  counts when present. Every vendor fault — connection, auth,
+  timeout, empty choices, unusable content, missing model, absent
+  SDK — surfaces as `ProviderCallError` with the original exception
+  chained, so the fallback logic (TASK-103) sees one currency; the
+  SDK imports lazily so wiring the adapter never requires the
+  package. 18 tests against an injected fake client — no network,
+  no SDK, no secrets.
 
 - TASK-090 — LLM provider interface (2026-09-16): the AI boundary
   port of docs/09 and ADR-006. `domain/llm_provider.py` with the
