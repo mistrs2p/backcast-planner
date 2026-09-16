@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-080 (Thresholds)
+- Current Task: TASK-081 (Persistence detection)
 - Current Epic: EPIC-009 Replanning
 
 ## Completed
@@ -974,6 +974,26 @@
   list_all, earliest observed_at first) — the stability controls
   read trigger history. 19 tests, including the wiring where a
   behavioral signal becomes a BEHAVIOR trigger.
+
+- TASK-080 — Thresholds (2026-09-16): the magnitude bounds of
+  docs/08's stability controls — how far a reading must slip before
+  it is trigger-worthy at all. `domain/threshold.py` with `Measure`
+  (SHORTFALL — a duration; UTILIZATION and COMPLETION — rates), the
+  frozen `Threshold` (measure, enter_bound, exit_bound defaulting to
+  enter_bound): bounds are type-checked per measure family,
+  non-negative, and exit must not exceed enter. Setting the bounds
+  apart is hysteresis — 4h-behind enters, 2h-recovered clears, and
+  the gap between does not flap; evaluation is enter-wins at the
+  boundary (`is_exceeded` at >=, `has_cleared` at <=). The
+  adapters reduce records to the slip a threshold weighs:
+  `variance_shortfall` (the unfavorable side of any Variance — a
+  favorable variance contributes zero, whatever its size),
+  `utilization` (None, no declared workable time, reads as 0 — the
+  beyond-capacity judgement lives in the reading's own status), and
+  `completion_shortfall` (1 - completion_rate). Persistence
+  detection (TASK-081) counts consecutive crossings of these;
+  cooldown (TASK-082) times them. 30 tests, including the recovery
+  wiring where week two's work falls through the exit bound.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

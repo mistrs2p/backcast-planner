@@ -1,7 +1,7 @@
 # TASK-080 — Thresholds
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-009-replanning — Replanning

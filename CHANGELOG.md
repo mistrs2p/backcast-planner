@@ -273,6 +273,12 @@
   `triggers_of_kind`, plus the `TriggerRepository` port — the input the
   stability controls (thresholds, cooldown, hysteresis) will judge (TASK-079).
 
+- Thresholds: stability-control magnitude bounds — `Measure`
+  (duration shortfall / rate), the frozen `Threshold` with
+  enter/exit bounds (hysteresis; exit must not exceed enter), and
+  the `variance_shortfall` / `utilization` / `completion_shortfall`
+  adapters reducing signal records to the slip being judged (TASK-080).
+
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
