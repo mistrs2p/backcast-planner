@@ -302,6 +302,13 @@
   selection from the proposed candidates, persistence confirmation
   against the policy, and mode/cooldown gating (TASK-084).
 
+- Local replan: `replan_task_locally` — one task revised in place
+  (estimate/deadline/title), the plan workload shifted by the
+  estimate delta, traced as a PlanVersion; `PlanChangeSet` gained
+  `revised_task_id` so task-level revisions are meaningful plan
+  versions, and `ReplanScope` (local/regional/global) joins the
+  replanning vocabulary (TASK-085).
+
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

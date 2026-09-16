@@ -67,6 +67,17 @@ class ReplanningMode(str, Enum):
     AUTOMATIC = "automatic"
 
 
+class ReplanScope(str, Enum):
+    """How much of the execution plan a replan touches, narrowest
+    first: one task (local, TASK-085), a related group (regional,
+    TASK-086), or the whole plan (global, TASK-087). All three are
+    level 2 — the Goal/Future stay untouched."""
+
+    LOCAL = "local"
+    REGIONAL = "regional"
+    GLOBAL = "global"
+
+
 _LEVEL_ORDER = (
     ReplanningLevel.RESCHEDULE,
     ReplanningLevel.REPLAN,

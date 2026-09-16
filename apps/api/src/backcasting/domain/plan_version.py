@@ -12,8 +12,9 @@ Modeling decisions within the spec's latitude:
   the plan they belong to, with strictly increasing per-plan version
   numbers. The current state of the plan lives in the :class:`Plan`
   value itself; versions explain how it got there.
-- A version's :class:`PlanChangeSet` covers the *content* fields a
-  replan may modify — ``title`` and ``workload``. Lifecycle moves
+- A version's :class:`PlanChangeSet` covers the *content* a
+  replan may modify — the plan's ``title`` and ``workload``, and,
+  for a local replan (TASK-085), the task it revised. Lifecycle moves
   (ACTIVE → SUPERSEDED, …) are not change-set content: they flow
   through :func:`backcasting.domain.plan.transition_plan` with their
   own rules, and a caller composes the two when a replan both changes
@@ -54,6 +55,7 @@ class PlanChangeSet:
 
     title: str | None = None
     workload: timedelta | None = None
+    revised_task_id: uuid.UUID | None = None
 
     def __post_init__(self) -> None:
         if self.title is not None:
@@ -69,6 +71,10 @@ class PlanChangeSet:
                 raise PlanVersionError(
                     "workload must be a non-negative timedelta or None"
                 )
+        if self.revised_task_id is not None and not isinstance(
+            self.revised_task_id, uuid.UUID
+        ):
+            raise PlanVersionError("revised_task_id must be a UUID or None")
 
 
 @dataclass(frozen=True)
@@ -153,7 +159,11 @@ def apply_plan_version(
     workload = (
         change_set.workload if change_set.workload is not None else plan.workload
     )
-    if title == plan.title and workload == plan.workload:
+    if (
+        title == plan.title
+        and workload == plan.workload
+        and change_set.revised_task_id is None
+    ):
         raise PlanVersionError(
             "change set changes nothing; a plan version must be a meaningful replan"
         )
