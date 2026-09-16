@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-083 (Replanning policy)
+- Current Task: TASK-084 (Replanning decision engine)
 - Current Epic: EPIC-009 Replanning
 
 ## Completed
@@ -1027,6 +1027,27 @@
   (TASK-084). `at` must not precede the action it asks about.
   15 tests, including the wiring where a re-confirmed condition
   waits out its week before the system may act again.
+
+- TASK-083 — Replanning policy (2026-09-16): docs/08's vocabulary
+  assembled into one stance. `domain/replanning_policy.py` with
+  `ReplanningLevel` (RESCHEDULE / REPLAN / GOAL_REVISION, the
+  adaptation ladder) and `ReplanningMode` (MANUAL / SUGGEST /
+  AUTOMATIC); the frozen `ReplanningPolicy(mode, cooldown,
+  persistence)` — one plan's assembled stability controls plus its
+  mode. The policy gates, it does not choose (which level a
+  condition warrants is TASK-084's decision engine): `permits()`
+  (only AUTOMATIC acts, only on the lower levels, only outside
+  cooldown — a goal revision is never automatic, docs/08's
+  "explicitly change the destination": the destination is the
+  user's) and `suggests()` (only SUGGEST proposes; suggestions are
+  cooled down like actions — a suggestion just declined is not
+  repeated hourly; MANUAL neither acts nor proposes; AUTOMATIC has
+  no need to suggest what it may do). `minimal_level` is the
+  minimum-change principle, docs/08's fourth stability control: the
+  lowest level that addresses the condition wins — the same ladder
+  docs/06 fixes for conflicts. Levels are distinct from
+  conflict_resolution's ResolutionAction (per-displacement outcome)
+  and trace through plan_version. 24 tests.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
