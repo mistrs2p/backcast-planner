@@ -1,7 +1,7 @@
 # TASK-087 — Global replan
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-009-replanning — Replanning
