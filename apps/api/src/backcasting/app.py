@@ -20,10 +20,12 @@ from backcasting.api.backcast import router as backcast_router
 from backcasting.api.calendars import router as calendars_router
 from backcasting.api.goals import router as goals_router
 from backcasting.api.milestones import router as milestones_router
+from backcasting.api.plans import router as plans_router
 from backcasting.application.backcast import BackcastService
 from backcasting.application.calendars import CalendarService
 from backcasting.application.goals import GoalService
 from backcasting.application.milestones import MilestoneService
+from backcasting.application.plans import PlanService
 from backcasting.domain.repositories import (
     BackcastingRunRepository,
     CalendarEventRepository,
@@ -33,6 +35,9 @@ from backcasting.domain.repositories import (
     GapRepository,
     GoalRepository,
     MilestoneRepository,
+    OutcomeRepository,
+    PlanRepository,
+    TaskRepository,
 )
 from backcasting.infrastructure.memory import (
     InMemoryBackcastingRunRepository,
@@ -43,6 +48,9 @@ from backcasting.infrastructure.memory import (
     InMemoryGapRepository,
     InMemoryGoalRepository,
     InMemoryMilestoneRepository,
+    InMemoryOutcomeRepository,
+    InMemoryPlanRepository,
+    InMemoryTaskRepository,
 )
 
 API_TITLE = "Backcasting Planner API"
@@ -63,6 +71,9 @@ def create_app(
     gap_repository: GapRepository | None = None,
     run_repository: BackcastingRunRepository | None = None,
     milestone_repository: MilestoneRepository | None = None,
+    plan_repository: PlanRepository | None = None,
+    outcome_repository: OutcomeRepository | None = None,
+    task_repository: TaskRepository | None = None,
 ) -> FastAPI:
     """Create and configure the FastAPI application.
 
@@ -90,15 +101,21 @@ def create_app(
         gap_repository or InMemoryGapRepository(),
         runs,
     )
-    app.state.milestone_service = MilestoneService(
+    milestones = milestone_repository or InMemoryMilestoneRepository()
+    app.state.milestone_service = MilestoneService(goals, runs, milestones)
+    app.state.plan_service = PlanService(
         goals,
         runs,
-        milestone_repository or InMemoryMilestoneRepository(),
+        plan_repository or InMemoryPlanRepository(),
+        outcome_repository or InMemoryOutcomeRepository(),
+        task_repository or InMemoryTaskRepository(),
+        milestones,
     )
     app.include_router(calendars_router)
     app.include_router(goals_router)
     app.include_router(backcast_router)
     app.include_router(milestones_router)
+    app.include_router(plans_router)
 
     @app.get("/health", tags=["system"], operation_id="getHealth")
     def health() -> dict[str, str]:

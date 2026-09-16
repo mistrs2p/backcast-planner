@@ -221,6 +221,60 @@ check(
   "the milestone form refreshes the server-rendered page after submit",
 );
 
+// TASK-111 — plan UI: the goal detail grows the plan section —
+// begin from the finished run, assemble outcomes and tasks on the
+// DRAFT, and publish with the computed workload.
+check(
+  await exists("src/components/plan-view.tsx") &&
+    await exists("src/components/plan-forms.tsx"),
+  "the plan view and forms components exist",
+);
+check(
+  await exists("src/lib/plans.ts"),
+  "the plan API client exists",
+);
+const planClient = await read("src/lib/plans.ts");
+check(
+  planClient.includes("`/api/goals/${goalId}/plan`"),
+  "the plan client targets the proxied API path",
+);
+const planDetail = await read("src/app/goals/[goalId]/page.tsx");
+check(
+  planDetail.includes("PlanView") &&
+    planDetail.includes("BeginPlanForm") &&
+    planDetail.includes("AddOutcomeForm") &&
+    planDetail.includes("AddTaskForm") &&
+    planDetail.includes("PublishPlanButton"),
+  "the goal detail composes the plan view and assembly forms",
+);
+check(
+  planDetail.includes("/plan`") &&
+    planDetail.includes('status === "draft"'),
+  "the plan section follows the draft/published split",
+);
+const planView = await read("src/components/plan-view.tsx");
+check(
+  !planView.startsWith('"use client"'),
+  "the plan view renders on the server",
+);
+check(
+  planView.includes("workload_hours"),
+  "the plan view shows the computed workload",
+);
+const planForms = await read("src/components/plan-forms.tsx");
+check(
+  planForms.startsWith('"use client"'),
+  "the plan forms are client components",
+);
+check(
+  planForms.includes("router.refresh()"),
+  "the plan forms refresh the server-rendered page after submit",
+);
+check(
+  planForms.includes("role=\"alert\""),
+  "plan form errors are announced as alerts",
+);
+
 const pkg = JSON.parse(await read("package.json"));
 check(
   pkg.dependencies.next === "16.3.5",

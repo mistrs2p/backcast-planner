@@ -20,6 +20,8 @@ from backcasting.domain.future_state import FutureState
 from backcasting.domain.gap import Gap
 from backcasting.domain.goal import Goal
 from backcasting.domain.milestone import Milestone
+from backcasting.domain.outcome import Outcome
+from backcasting.domain.plan import Plan
 from backcasting.domain.repositories import (
     BackcastingRunRepository,
     CalendarEventRepository,
@@ -29,8 +31,12 @@ from backcasting.domain.repositories import (
     GapRepository,
     GoalRepository,
     MilestoneRepository,
+    OutcomeRepository,
+    PlanRepository,
     RepositoryError,
+    TaskRepository,
 )
+from backcasting.domain.task import Task
 
 
 class InMemoryGoalRepository(GoalRepository):
@@ -184,6 +190,73 @@ class InMemoryMilestoneRepository(MilestoneRepository):
         return tuple(
             sorted(milestones, key=lambda m: (m.target_date, m.milestone_id))
         )
+
+
+class InMemoryPlanRepository(PlanRepository):
+    """Plan port backed by a dict, safe for concurrent requests."""
+
+    def __init__(self) -> None:
+        self._by_id: dict[uuid.UUID, Plan] = {}
+        self._lock = threading.Lock()
+
+    def save(self, plan: Plan) -> None:
+        with self._lock:
+            self._by_id[plan.plan_id] = plan
+
+    def get(self, plan_id: uuid.UUID) -> Plan | None:
+        with self._lock:
+            return self._by_id.get(plan_id)
+
+    def list_for_goal(self, goal_id: uuid.UUID):
+        with self._lock:
+            plans = [p for p in self._by_id.values() if p.goal_id == goal_id]
+        return tuple(sorted(plans, key=lambda p: (p.created_at, p.plan_id)))
+
+
+class InMemoryOutcomeRepository(OutcomeRepository):
+    """Outcome port backed by a dict, safe for concurrent requests."""
+
+    def __init__(self) -> None:
+        self._by_id: dict[uuid.UUID, Outcome] = {}
+        self._lock = threading.Lock()
+
+    def save(self, outcome: Outcome) -> None:
+        with self._lock:
+            self._by_id[outcome.outcome_id] = outcome
+
+    def get(self, outcome_id: uuid.UUID) -> Outcome | None:
+        with self._lock:
+            return self._by_id.get(outcome_id)
+
+    def list_for_plan(self, plan_id: uuid.UUID):
+        with self._lock:
+            outcomes = [
+                o for o in self._by_id.values() if o.plan_id == plan_id
+            ]
+        return tuple(
+            sorted(outcomes, key=lambda o: (o.created_at, o.outcome_id))
+        )
+
+
+class InMemoryTaskRepository(TaskRepository):
+    """Task port backed by a dict, safe for concurrent requests."""
+
+    def __init__(self) -> None:
+        self._by_id: dict[uuid.UUID, Task] = {}
+        self._lock = threading.Lock()
+
+    def save(self, task: Task) -> None:
+        with self._lock:
+            self._by_id[task.task_id] = task
+
+    def get(self, task_id: uuid.UUID) -> Task | None:
+        with self._lock:
+            return self._by_id.get(task_id)
+
+    def list_for_plan(self, plan_id: uuid.UUID):
+        with self._lock:
+            tasks = [t for t in self._by_id.values() if t.plan_id == plan_id]
+        return tuple(sorted(tasks, key=lambda t: (t.created_at, t.task_id)))
 
 
 class InMemoryCalendarRepository(CalendarRepository):

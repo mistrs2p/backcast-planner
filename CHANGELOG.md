@@ -425,6 +425,14 @@
   both FeasibilityResults and the workload delta exposed
   (TASK-088).
 
+- Plans: `PlanRepository`, `OutcomeRepository`, and `TaskRepository`
+  ports with in-memory implementations; `PlanService` (begin from
+  the completed run, assemble outcomes and tasks on the DRAFT,
+  publish with the computed workload); POST/GET
+  `/goals/{goal_id}/plan` plus `.../outcomes`, `.../tasks`,
+  `.../publish`; and the goal detail page's plan section — begin,
+  assemble, publish, with the workload shown (TASK-111).
+
 - Milestones: `BackcastingRunRepository` and `MilestoneRepository`
   ports with in-memory implementations, `define_backcast` now starts
   the run over its context (surfaced in the backcast response),

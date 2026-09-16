@@ -37,9 +37,12 @@ from backcasting.domain.gap import Gap
 from backcasting.domain.goal import Goal
 from backcasting.domain.goal_interpretation import GoalInterpretation
 from backcasting.domain.milestone import Milestone
+from backcasting.domain.outcome import Outcome
 from backcasting.domain.outcome_decomposition import OutcomeDecomposition
+from backcasting.domain.plan import Plan
 from backcasting.domain.plan_explanation import PlanExplanation
 from backcasting.domain.strategy_generation import StrategyGeneration
+from backcasting.domain.task import Task
 from backcasting.domain.task_generation import TaskGeneration
 from backcasting.domain.measurement import Measurement
 from backcasting.domain.progress import ProgressSnapshot
@@ -188,6 +191,59 @@ class MilestoneRepository(ABC):
     @abstractmethod
     def list_for_run(self, run_id: uuid.UUID) -> Sequence[Milestone]:
         """Return the run's milestones, earliest target first."""
+
+
+class PlanRepository(ABC):
+    """Persistence port for :class:`~backcasting.domain.plan.Plan`.
+
+    A goal owns plans over time (docs/03 "Goal 1:N Plans"); the MVP
+    keeps one per goal — replanning (docs/08) introduces versioned
+    successors.
+    """
+
+    @abstractmethod
+    def save(self, plan: Plan) -> None:
+        """Insert or replace the plan keyed by ``plan_id``."""
+
+    @abstractmethod
+    def get(self, plan_id: uuid.UUID) -> Plan | None:
+        """Return the plan with ``plan_id``, or ``None``."""
+
+    @abstractmethod
+    def list_for_goal(self, goal_id: uuid.UUID) -> Sequence[Plan]:
+        """Return the goal's plans, oldest first."""
+
+
+class OutcomeRepository(ABC):
+    """Persistence port for :class:`~backcasting.domain.outcome.Outcome`."""
+
+    @abstractmethod
+    def save(self, outcome: Outcome) -> None:
+        """Insert or replace the outcome keyed by ``outcome_id``."""
+
+    @abstractmethod
+    def get(self, outcome_id: uuid.UUID) -> Outcome | None:
+        """Return the outcome with ``outcome_id``, or ``None``."""
+
+    @abstractmethod
+    def list_for_plan(self, plan_id: uuid.UUID) -> Sequence[Outcome]:
+        """Return the plan's outcomes, oldest first."""
+
+
+class TaskRepository(ABC):
+    """Persistence port for :class:`~backcasting.domain.task.Task`."""
+
+    @abstractmethod
+    def save(self, task: Task) -> None:
+        """Insert or replace the task keyed by ``task_id``."""
+
+    @abstractmethod
+    def get(self, task_id: uuid.UUID) -> Task | None:
+        """Return the task with ``task_id``, or ``None``."""
+
+    @abstractmethod
+    def list_for_plan(self, plan_id: uuid.UUID) -> Sequence[Task]:
+        """Return the plan's tasks, oldest first."""
 
 
 class CalendarRepository(ABC):
