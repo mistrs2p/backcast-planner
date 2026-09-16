@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-104 (App shell)
+- Current Task: TASK-105 (Design system)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,25 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-104 — App shell (2026-09-16): the EPIC-011 opener — the
+  Next.js skeleton the feature UIs land in. `apps/web` scaffolded
+  to the ADR-007 baseline (next 16.3.5, react/react-dom 19.3.0,
+  typescript 5.9.3, exact pins; @types pinned to what the registry
+  serves): root layout with `lang`, a skip link to the main
+  landmark, the `SiteHeader` (server component — the shell has no
+  client state) with labelled primary navigation (Goals, the MVP's
+  single entry point; every other area lives inside a goal's
+  detail view), a footer, and the goals home route. Styling is
+  deliberately minimal plain CSS: design tokens are TASK-105 and
+  the Tailwind pipeline TASK-106, so the shell ships structure
+  only (and the verify script asserts tailwindcss is absent from
+  package.json until then). Automated checks: `npm run verify`
+  (scripts/verify-shell.mjs — landmarks, skip link, nav labels,
+  route presence, version pins — plus `tsc --noEmit`) and
+  `next build` (3/3 static pages, Next's mandatory tsconfig
+  adjustments kept). No JS test runner exists in the baseline and
+  none was added silently. `*.tsbuildinfo` ignored.
 
 - TASK-103 — AI fallback (2026-09-16): the EPIC-010 closer — the
   graceful-degradation policy. Every AI operation has a

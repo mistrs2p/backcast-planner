@@ -1,7 +1,7 @@
 # TASK-104 — App shell
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-011-product-ux — Product UX

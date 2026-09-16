@@ -403,6 +403,12 @@
   while permission denials and programming errors stay loud
   (TASK-103, closes EPIC-010).
 
+- App shell: the Next.js 16 skeleton for apps/web — root layout
+  with landmarks and skip link, labelled primary navigation, and
+  the goals home route, pinned to the ADR-007 baseline with
+  structural verification and a green production build
+  (TASK-104).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with
