@@ -1,7 +1,7 @@
 # TASK-085 — Local replan
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-009-replanning — Replanning

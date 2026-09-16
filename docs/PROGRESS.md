@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-085 (Local replan)
+- Current Task: TASK-086 (Regional replan)
 - Current Epic: EPIC-009 Replanning
 
 ## Completed
@@ -1068,6 +1068,29 @@
   with the trace in a plan version. 18 tests, including the full
   wiring from sittings to decision and the same condition waiting
   out its cooldown.
+
+- TASK-085 — Local replan (2026-09-16): level 2 at its narrowest
+  scope — one task revised in place, the Goal/Future untouched.
+  `domain/local_replan.py` with the frozen `LocalReplan(scope,
+  plan, task, version)` (scope pinned LOCAL; task and version must
+  belong to the plan) and `replan_task_locally(plan, history,
+  task, *, reason, ...)`: the revision flows through `revise_task`
+  (title/description/duration/deadline; None keeps), the plan's
+  workload moves by the estimate's delta — the plan keeps whatever
+  basis its workload was declared on; a local replan shifts it, it
+  does not recompute it, and an estimate landing on an unestimated
+  task grows the workload by its full amount — and the trace is a
+  PlanVersion whose change set names the revised task. To support
+  that, `PlanChangeSet` gained `revised_task_id` (backward
+  compatible, None-keeps) and `apply_plan_version`'s
+  meaningfulness check now accepts a task revision without a
+  workload move (a re-committed deadline is a meaningful replan
+  that changes no sizes). A revision that changes nothing is
+  rejected; negative resulting workloads surface the plan-version
+  invariant. `ReplanScope` (LOCAL/REGIONAL/GLOBAL) added to
+  replanning_policy as the shared scope ladder for TASK-086/087.
+  17 tests, including the arc from trigger to decision to the
+  re-estimate.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
