@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -127,7 +128,12 @@ export function GoalBoard() {
             <ul className="flex flex-col gap-4">
               {load.goals.map((goal) => (
                 <li key={goal.goal_id} className="rounded-md bg-surface-muted p-4">
-                  <p className="font-semibold text-text">{goal.title}</p>
+                  <Link
+                    href={`/goals/${goal.goal_id}`}
+                    className="font-semibold text-text underline"
+                  >
+                    {goal.title}
+                  </Link>
                   {goal.description ? (
                     <p className="text-text-muted">{goal.description}</p>
                   ) : null}

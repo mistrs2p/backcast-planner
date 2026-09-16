@@ -1,7 +1,7 @@
 # TASK-108 — Goal detail
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-011-product-ux — Product UX
