@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-107 (Goal creation)
+- Current Task: TASK-108 (Goal detail)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,27 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-107 — Goal creation (2026-09-16): the first product
+  capability end to end. Backend: `InMemoryGoalRepository`
+  (insert-or-replace, `(created_at, goal_id)` ordering),
+  `GoalService` (create/get/list with `GoalNotFoundError` as the
+  presentation-layer's 404 signal), and the `/goals` HTTP surface
+  — POST 201, GET by id (404 unknown), GET list scoped to the
+  client-supplied `user_id` (no auth in the MVP, the calendars
+  convention); domain violations map to 422. The OpenAPI contract
+  regenerates with the three goal operations (ADR-008). Frontend:
+  the goals home becomes interactive — a client-side `GoalBoard`
+  composing the TASK-105/106 primitives (TextField, Button, Card),
+  mirroring the domain's title rule client-side with the server's
+  message shown for anything past it; `next.config.ts` rewrites
+  `/api/*` to the backend (`API_ORIGIN`, default localhost:8000)
+  so the browser talks to one origin; and the browser-identity
+  convention (`src/lib/user.ts`) holds a localStorage UUID — a
+  scoping convention, not a security boundary, replaced when
+  EPIC-012 brings auth. 25 new tests (repo/service/HTTP/contract),
+  structural assertions in `verify-shell.mjs`; backend 2246 green,
+  `npm run verify` and `next build` green.
 
 - TASK-106 — Tailwind setup (2026-09-16): the Tailwind CSS
   pipeline over the TASK-105 tokens, per ADR-005's

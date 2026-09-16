@@ -17,14 +17,18 @@ from fastapi import FastAPI
 
 from backcasting import __version__
 from backcasting.api.calendars import router as calendars_router
+from backcasting.api.goals import router as goals_router
 from backcasting.application.calendars import CalendarService
+from backcasting.application.goals import GoalService
 from backcasting.domain.repositories import (
     CalendarEventRepository,
     CalendarRepository,
+    GoalRepository,
 )
 from backcasting.infrastructure.memory import (
     InMemoryCalendarEventRepository,
     InMemoryCalendarRepository,
+    InMemoryGoalRepository,
 )
 
 API_TITLE = "Backcasting Planner API"
@@ -39,6 +43,7 @@ def create_app(
     *,
     calendar_repository: CalendarRepository | None = None,
     event_repository: CalendarEventRepository | None = None,
+    goal_repository: GoalRepository | None = None,
 ) -> FastAPI:
     """Create and configure the FastAPI application.
 
@@ -56,7 +61,11 @@ def create_app(
         calendar_repository or InMemoryCalendarRepository(),
         event_repository or InMemoryCalendarEventRepository(),
     )
+    app.state.goal_service = GoalService(
+        goal_repository or InMemoryGoalRepository()
+    )
     app.include_router(calendars_router)
+    app.include_router(goals_router)
 
     @app.get("/health", tags=["system"], operation_id="getHealth")
     def health() -> dict[str, str]:

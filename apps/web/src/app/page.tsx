@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 
+import { GoalBoard } from "@/components/goal-board";
+
 export const metadata: Metadata = {
   title: "Goals",
 };
 
 /**
- * The goals home — the MVP's single entry point. Goal creation
- * arrives with TASK-107 and the list with the API wiring; the
- * shell provides the frame they land in.
+ * The goals home — the MVP's single entry point (TASK-107). The
+ * page is a server shell; the board (creation form plus the user's
+ * goal list) is a client component because it talks to the API
+ * under the browser's user-id convention.
  */
 export default function GoalsPage() {
   return (
@@ -17,7 +20,7 @@ export default function GoalsPage() {
         Define where you want to be; the system works backwards to
         determine what must happen and what you can do now.
       </p>
-      <p>Goal creation arrives with the next milestone.</p>
+      <GoalBoard />
     </section>
   );
 }

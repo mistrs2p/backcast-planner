@@ -425,6 +425,16 @@
   both FeasibilityResults and the workload delta exposed
   (TASK-088).
 
+- Goal creation: `InMemoryGoalRepository`, `GoalService`
+  (create/get/list with `GoalNotFoundError`), and the `/goals` HTTP
+  surface — POST 201, GET by id (404), list scoped to the
+  client-supplied `user_id`; domain violations 422, contract
+  regenerated (TASK-107).
+- Goal creation UX: the goals home composes an interactive
+  `GoalBoard` (form + list) from the design-system primitives,
+  `next.config.ts` proxies `/api/*` to the backend via `API_ORIGIN`,
+  and the browser-identity convention holds a localStorage UUID
+  (MVP-only; auth arrives with EPIC-012) (TASK-107).
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
