@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-110 (Milestone UI)
+- Current Task: TASK-111 (Plan UI)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,27 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-110 — Milestone UI (2026-09-16): checkpoints on the
+  backcasting run. The domain already required milestones to be
+  defined during a RUNNING run, so `define_backcast` now starts the
+  run over its context (`start_run` validates the gap belongs to
+  exactly that current/future pair) and the run ships in the
+  backcast bundle and API response. New ports:
+  `BackcastingRunRepository` (list/latest per goal) and
+  `MilestoneRepository` (list per run, earliest target first) with
+  in-memory implementations; `MilestoneService` pins checkpoints on
+  the goal's current run — 404 for an unknown goal or a goal with
+  no run yet, 422 for the domain's refusals (blank title, target at
+  or before now, a finished run). HTTP: POST/GET
+  `/goals/{goal_id}/milestones`. Frontend: below the backcast chain,
+  a server-rendered ordered `MilestoneList` (the path walked in
+  order) plus the client-side `MilestoneForm` with
+  `router.refresh()`. 20 new tests (backcast run assertions
+  extended); backend 2286 green; contract regenerated; `npm run
+  verify` and `next build` green; verified live end to end
+  (backcast → two milestones ordered on the page → 422 past target
+  → 404 without backcast).
 
 - TASK-109 — Backcasting visualization (2026-09-16): pipeline
   steps 1–4 of docs/04 surfaced as one capability. Backend: a

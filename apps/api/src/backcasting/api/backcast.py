@@ -25,6 +25,7 @@ from backcasting.application.backcast import (
     BackcastService,
 )
 from backcasting.application.goals import GoalNotFoundError
+from backcasting.domain.backcasting_run import BackcastingRun
 from backcasting.domain.current_state import CurrentStateError
 from backcasting.domain.future_state import FutureStateError
 from backcasting.domain.gap import Gap, GapDimension, GapError
@@ -70,13 +71,26 @@ class GapResponse(BaseModel):
     narrative: str
 
 
+class RunResponse(BaseModel):
+    run_id: uuid.UUID
+    goal_id: uuid.UUID
+    current_state_id: uuid.UUID
+    future_state_id: uuid.UUID
+    gap_id: uuid.UUID
+    status: str
+    started_at: str
+    completed_at: str | None
+
+
 class BackcastResponse(BaseModel):
     """The intent layer of one goal's backcast, as the UI
-    visualizes it: current → gap → future."""
+    visualizes it: current → gap → future, and the pipeline run
+    executing over that context."""
 
     current: CurrentStateResponse
     future: FutureStateResponse
     gap: GapResponse
+    run: RunResponse
 
 
 class BackcastCreate(BaseModel):
@@ -108,6 +122,21 @@ def _gap_response(gap: Gap) -> GapResponse:
     )
 
 
+def _run_response(run: BackcastingRun) -> RunResponse:
+    return RunResponse(
+        run_id=run.run_id,
+        goal_id=run.goal_id,
+        current_state_id=run.current_state_id,
+        future_state_id=run.future_state_id,
+        gap_id=run.gap_id,
+        status=run.status.value,
+        started_at=run.started_at.isoformat(),
+        completed_at=(
+            run.completed_at.isoformat() if run.completed_at else None
+        ),
+    )
+
+
 def _backcast_response(bundle: BackcastBundle) -> BackcastResponse:
     return BackcastResponse(
         current=CurrentStateResponse(
@@ -125,6 +154,7 @@ def _backcast_response(bundle: BackcastBundle) -> BackcastResponse:
             updated_at=bundle.future.updated_at.isoformat(),
         ),
         gap=_gap_response(bundle.gap),
+        run=_run_response(bundle.run),
     )
 
 

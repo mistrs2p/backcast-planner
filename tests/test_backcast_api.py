@@ -18,11 +18,13 @@ from backcasting.application.backcast import (
     BackcastService,
 )
 from backcasting.application.goals import GoalNotFoundError
+from backcasting.domain.backcasting_run import BackcastingRunStatus
 from backcasting.domain.current_state import capture_current_state
 from backcasting.domain.future_state import define_future_state
 from backcasting.domain.gap import calculate_gap
 from backcasting.domain.repositories import RepositoryError
 from backcasting.infrastructure.memory import (
+    InMemoryBackcastingRunRepository,
     InMemoryCurrentStateRepository,
     InMemoryFutureStateRepository,
     InMemoryGapRepository,
@@ -40,6 +42,7 @@ def _service() -> BackcastService:
         InMemoryCurrentStateRepository(),
         InMemoryFutureStateRepository(),
         InMemoryGapRepository(),
+        InMemoryBackcastingRunRepository(),
     )
 
 
@@ -145,6 +148,12 @@ class TestBackcastService:
         assert bundle.gap.narrative == "42.2km of distance to cross"
         assert bundle.gap.current_state_id == bundle.current.state_id
         assert bundle.gap.future_state_id == bundle.future.state_id
+        # the run started over exactly this context
+        assert bundle.run.goal_id == goal.goal_id
+        assert bundle.run.status is BackcastingRunStatus.RUNNING
+        assert bundle.run.current_state_id == bundle.current.state_id
+        assert bundle.run.future_state_id == bundle.future.state_id
+        assert bundle.run.gap_id == bundle.gap.gap_id
         # all three artifacts are retrievable
         assert service.get_backcast(goal.goal_id) == bundle
 

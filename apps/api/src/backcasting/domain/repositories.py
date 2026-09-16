@@ -30,11 +30,13 @@ from typing import Sequence
 from backcasting.domain.calendar import Calendar
 from backcasting.domain.calendar_event import CalendarEvent
 from backcasting.domain.feedback import Feedback
+from backcasting.domain.backcasting_run import BackcastingRun
 from backcasting.domain.current_state import CurrentState
 from backcasting.domain.future_state import FutureState
 from backcasting.domain.gap import Gap
 from backcasting.domain.goal import Goal
 from backcasting.domain.goal_interpretation import GoalInterpretation
+from backcasting.domain.milestone import Milestone
 from backcasting.domain.outcome_decomposition import OutcomeDecomposition
 from backcasting.domain.plan_explanation import PlanExplanation
 from backcasting.domain.strategy_generation import StrategyGeneration
@@ -138,6 +140,54 @@ class GapRepository(ABC):
     @abstractmethod
     def get_for_goal(self, goal_id: uuid.UUID) -> Gap | None:
         """Return the goal's gap, or ``None``."""
+
+
+class BackcastingRunRepository(ABC):
+    """Persistence port for
+    :class:`~backcasting.domain.backcasting_run.BackcastingRun`.
+
+    A goal accumulates runs over time (replanning re-runs the
+    engine, docs/03); the latest run is the one the pipeline is
+    currently executing.
+    """
+
+    @abstractmethod
+    def save(self, run: BackcastingRun) -> None:
+        """Insert or replace the run keyed by ``run_id``."""
+
+    @abstractmethod
+    def get(self, run_id: uuid.UUID) -> BackcastingRun | None:
+        """Return the run with ``run_id``, or ``None``."""
+
+    @abstractmethod
+    def list_for_goal(self, goal_id: uuid.UUID) -> Sequence[BackcastingRun]:
+        """Return the goal's runs, oldest start first."""
+
+    @abstractmethod
+    def latest_for_goal(self, goal_id: uuid.UUID) -> BackcastingRun | None:
+        """Return the most recently started run, or ``None``."""
+
+
+class MilestoneRepository(ABC):
+    """Persistence port for
+    :class:`~backcasting.domain.milestone.Milestone`.
+
+    Milestones belong to a run (generated during it, docs/04 step
+    10); listing is therefore per-run, earliest target first — the
+    order the path is walked.
+    """
+
+    @abstractmethod
+    def save(self, milestone: Milestone) -> None:
+        """Insert or replace the milestone keyed by ``milestone_id``."""
+
+    @abstractmethod
+    def get(self, milestone_id: uuid.UUID) -> Milestone | None:
+        """Return the milestone with ``milestone_id``, or ``None``."""
+
+    @abstractmethod
+    def list_for_run(self, run_id: uuid.UUID) -> Sequence[Milestone]:
+        """Return the run's milestones, earliest target first."""
 
 
 class CalendarRepository(ABC):
