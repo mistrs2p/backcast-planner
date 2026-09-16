@@ -425,6 +425,12 @@
   both FeasibilityResults and the workload delta exposed
   (TASK-088).
 
+- Task revision: `PATCH /goals/{goal_id}/plan/tasks/{task_id}` —
+  assembly-time editing of a task on the DRAFT plan (title,
+  description, estimate, deadline; omitted fields keep their
+  value), with the plan UI's "Edit task" forms and a deadline
+  field on task creation (TASK-112).
+
 - Plans: `PlanRepository`, `OutcomeRepository`, and `TaskRepository`
   ports with in-memory implementations; `PlanService` (begin from
   the completed run, assemble outcomes and tasks on the DRAFT,

@@ -44,7 +44,12 @@ from backcasting.domain.repositories import (
     PlanRepository,
     TaskRepository,
 )
-from backcasting.domain.task import Task, create_task, serve_outcomes
+from backcasting.domain.task import (
+    Task,
+    create_task,
+    revise_task,
+    serve_outcomes,
+)
 
 
 class PlanAlreadyExistsError(Exception):
@@ -60,6 +65,11 @@ class PlanNotDraftError(Exception):
     """Raised when an assembly step targets a plan that is no longer
     a DRAFT — a published plan is frozen; changes arrive as a new
     plan version."""
+
+
+class NoTaskError(LookupError):
+    """Raised when a task revision names a task that is not on the
+    goal's plan."""
 
 
 @dataclass(frozen=True)
@@ -186,6 +196,51 @@ class PlanService:
             )
         self._tasks.save(task)
         return task
+
+    def revise_task(
+        self,
+        *,
+        goal_id: uuid.UUID,
+        task_id: uuid.UUID,
+        title: str | None = None,
+        description: str | None = None,
+        duration_hours: float | None = None,
+        deadline: datetime | None = None,
+    ) -> Task:
+        """Revise a task on the goal's DRAFT plan (TASK-112).
+
+        Assembly-time editing: ``None`` fields keep their current
+        value (the domain's :func:`~backcasting.domain.task.revise_task`
+        semantics — clearing a duration or deadline is an explicit
+        reset the domain does not offer). The plan's workload is
+        untouched here; it is (re)computed at publish. Revising a
+        published plan's task is the replanning ladder's LOCAL scope
+        (docs/08) with a traced version — a different use case, not
+        this one.
+
+        Raises :class:`NoTaskError` when the task is not on this
+        goal's plan and :class:`PlanNotDraftError` when the plan is
+        no longer a draft.
+        """
+        plan = self._draft_for(goal_id)
+        task = self._tasks.get(task_id)
+        if task is None or task.plan_id != plan.plan_id:
+            raise NoTaskError(f"no task {task_id} on this plan")
+        duration = (
+            timedelta(hours=duration_hours)
+            if duration_hours is not None
+            else None
+        )
+        revised = revise_task(
+            task,
+            updated_at=datetime.now(timezone.utc),
+            title=title,
+            description=description,
+            duration=duration,
+            deadline=deadline,
+        )
+        self._tasks.save(revised)
+        return revised
 
     def publish(self, goal_id: uuid.UUID) -> PlanBundle:
         """Close the goal's DRAFT plan into a CANDIDATE with its

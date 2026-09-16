@@ -15,9 +15,12 @@ import { addOutcome, addTask, beginPlan, publishPlan } from "@/lib/plans";
  * add tasks, and publish with the computed workload. The domain
  * holds the rules (publishing needs at least one estimated task);
  * these forms surface the server's message when it refuses.
+ *
+ * TASK-112 adds the deadline field to task creation, and shares the
+ * action hook with the task revision forms (task-forms.tsx).
  */
 
-function usePlanAction(goalId: string) {
+export function usePlanAction(goalId: string) {
   const router = useRouter();
   const [error, setError] = useState<string>();
   const [busy, setBusy] = useState(false);
@@ -40,7 +43,7 @@ function usePlanAction(goalId: string) {
   return { error, busy, run };
 }
 
-function ErrorLine({ error }: { error?: string }) {
+export function ErrorLine({ error }: { error?: string }) {
   if (!error) {
     return null;
   }
@@ -148,6 +151,7 @@ export function AddTaskForm({
   const { error, busy, run } = usePlanAction(goalId);
   const [title, setTitle] = useState("");
   const [duration, setDuration] = useState("");
+  const [deadline, setDeadline] = useState("");
   const [description, setDescription] = useState("");
   const [serving, setServing] = useState<Record<string, boolean>>({});
 
@@ -171,11 +175,15 @@ export function AddTaskForm({
               title: trimmed,
               description: description.trim(),
               duration_hours: hours,
+              deadline: deadline
+                ? new Date(deadline).toISOString()
+                : undefined,
               outcome_ids: selectedOutcomes,
             }),
           ).then(() => {
             setTitle("");
             setDuration("");
+            setDeadline("");
             setDescription("");
             setServing({});
           });
@@ -197,7 +205,15 @@ export function AddTaskForm({
           step="0.5"
           value={duration}
           onChange={(event) => setDuration(event.target.value)}
-          hint="Required before the plan can publish."
+          hint="Required before the plan can publish — you can add or fix it later."
+        />
+        <TextField
+          label="Deadline"
+          name="task-deadline"
+          type="datetime-local"
+          value={deadline}
+          onChange={(event) => setDeadline(event.target.value)}
+          hint="Optional — the latest acceptable moment."
         />
         <TextField
           label="Description"

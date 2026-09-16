@@ -1,5 +1,7 @@
+import type { ReactNode } from "react";
+
 import { Card } from "@/components/ui/card";
-import type { PlanBundleView } from "@/lib/plans";
+import type { PlanBundleView, TaskView } from "@/lib/plans";
 
 function formatHours(hours: number): string {
   if (hours === 0) {
@@ -9,14 +11,26 @@ function formatHours(hours: number): string {
   return `${rounded}h`;
 }
 
+function formatDate(moment: string): string {
+  return new Date(moment).toLocaleDateString();
+}
+
 /**
  * The plan view (TASK-111): what must happen and the workload it
  * requires — outcomes the plan commits to, tasks that execute
- them, and the computed workload once published. Pure display; a
+ * them, and the computed workload once published. Pure display; a
  * server component by default. Assembly forms render alongside
- * while the plan is still a DRAFT (see plan-forms.tsx).
+ * while the plan is still a DRAFT (see plan-forms.tsx), and
+ * ``taskEdit`` (TASK-112) lets the page attach a revision form to
+ * each task row for the same reason.
  */
-export function PlanView({ bundle }: { bundle: PlanBundleView }) {
+export function PlanView({
+  bundle,
+  taskEdit,
+}: {
+  bundle: PlanBundleView;
+  taskEdit?: (task: TaskView) => ReactNode;
+}) {
   const { plan, outcomes, tasks } = bundle;
   return (
     <Card
@@ -70,6 +84,13 @@ export function PlanView({ bundle }: { bundle: PlanBundleView }) {
                   ) : (
                     <span className="text-text-muted"> · unestimated</span>
                   )}
+                  {task.deadline ? (
+                    <span className="text-text-muted">
+                      {" "}
+                      · due {formatDate(task.deadline)}
+                    </span>
+                  ) : null}
+                  {taskEdit ? taskEdit(task) : null}
                 </li>
               ))}
             </ul>

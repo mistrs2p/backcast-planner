@@ -275,6 +275,56 @@ check(
   "plan form errors are announced as alerts",
 );
 
+// TASK-112 — task UI: assembly-time task revision. Each task row on
+// a DRAFT plan carries an edit form; creation gains a deadline
+// field; the domain's omit-keeps-value semantics ride the PATCH.
+check(
+  await exists("src/components/task-forms.tsx"),
+  "the task revision form component exists",
+);
+const taskForms = await read("src/components/task-forms.tsx");
+check(
+  taskForms.startsWith('"use client"'),
+  "the task revision form is a client component",
+);
+check(
+  taskForms.includes("reviseTask"),
+  "the task revision form calls the revise client",
+);
+check(
+  taskForms.includes("router.refresh()") ||
+    taskForms.includes("usePlanAction"),
+  "the task revision form refreshes via the shared plan action hook",
+);
+check(
+  taskForms.includes('type="datetime-local"'),
+  "the task revision form edits the deadline",
+);
+const planClient112 = await read("src/lib/plans.ts");
+check(
+  planClient112.includes("`/api/goals/${goalId}/plan/tasks/${taskId}`"),
+  "the revise client targets the proxied task path",
+);
+const planView112 = await read("src/components/plan-view.tsx");
+check(
+  planView112.includes("taskEdit"),
+  "the plan view can attach a per-task edit slot",
+);
+check(
+  planView112.includes("task.deadline"),
+  "the plan view shows task deadlines",
+);
+const taskDetail112 = await read("src/app/goals/[goalId]/page.tsx");
+check(
+  taskDetail112.includes("TaskEditForm"),
+  "the goal detail attaches revision forms to draft task rows",
+);
+const planForms112 = await read("src/components/plan-forms.tsx");
+check(
+  planForms112.includes('type="datetime-local"'),
+  "task creation offers a deadline field",
+);
+
 const pkg = JSON.parse(await read("package.json"));
 check(
   pkg.dependencies.next === "16.3.5",

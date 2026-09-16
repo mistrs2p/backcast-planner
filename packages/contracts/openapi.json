@@ -774,6 +774,70 @@
         }
       }
     },
+    "/goals/{goal_id}/plan/tasks/{task_id}": {
+      "patch": {
+        "tags": [
+          "plans"
+        ],
+        "summary": "Revise Task",
+        "description": "Revise a task on the goal's DRAFT plan (TASK-112) —\nassembly-time editing; omitted fields keep their value. Revising\na published plan's task is the replanning ladder's concern\n(docs/08), not this endpoint's.",
+        "operationId": "reviseTask",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          },
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskRevise"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/goals/{goal_id}/plan/publish": {
       "post": {
         "tags": [
@@ -1737,6 +1801,59 @@
           "updated_at"
         ],
         "title": "TaskResponse"
+      },
+      "TaskRevise": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "duration_hours": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Hours"
+          },
+          "deadline": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deadline"
+          }
+        },
+        "type": "object",
+        "title": "TaskRevise",
+        "description": "A task revision (TASK-112): omitted fields keep their current\nvalue — the domain's ``revise_task`` semantics."
       },
       "ValidationError": {
         "properties": {

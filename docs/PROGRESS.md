@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-112 (Task UI)
+- Current Task: TASK-113 (Calendar UI)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,24 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-112 — Task UI (2026-09-16): assembly-time task revision. A
+  task on a DRAFT plan is editable — fix a title, land a missing
+  estimate, set or move a deadline — closing the gap TASK-111 left
+  open: tasks could be added without an estimate, but publishing
+  refuses unestimated ones, so such a plan could never publish.
+  Revision rides the domain's `revise_task` (omitted fields keep
+  their value; the plan's workload stays untouched until publish
+  recomputes it); revising a published plan's task is the
+  replanning ladder's LOCAL scope (docs/08) and is rejected here
+  (409 `PlanNotDraftError`), as is a task that is not on the goal's
+  plan (404 `NoTaskError`). New endpoint: `PATCH
+  /goals/{goal_id}/plan/tasks/{task_id}` (contract regenerated).
+  On the web, `TaskEditForm` (client, collapsed behind "Edit task"
+  on each draft task row) and a deadline field on task creation;
+  `PlanView` gained a per-task edit slot and shows deadlines. 23
+  tests; smoke-tested live through the Next proxy (revise → publish
+  sums the revised estimates; late revision 409; unknown task 404).
 
 - TASK-111 — Plan UI (2026-09-16): plan assembly and publishing.
   Beginning a plan finishes the goal's run and opens a DRAFT with

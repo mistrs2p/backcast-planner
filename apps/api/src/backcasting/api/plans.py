@@ -2,11 +2,13 @@
 
 Exposes the plan use cases (``backcasting.application.plans`` —
 docs/04 steps 11–12 and 15) over HTTP, scoped under the goal the
-plan executes for.
+plan executes for. TASK-112 adds task revision: assembly-time
+editing of a task on the DRAFT plan.
 
 Status mapping:
 
-- unknown goal, no run to plan from, or no plan yet → 404
+- unknown goal, no run to plan from, no plan yet, or a task that is
+  not on the goal's plan → 404
 - a second plan for a goal, or assembly on a published plan → 409
 - domain violations (blank titles, non-positive durations,
   publishing without estimated tasks) → 422
@@ -23,6 +25,7 @@ from backcasting.application.goals import GoalNotFoundError
 from backcasting.application.milestones import NoBackcastRunError
 from backcasting.application.plans import (
     NoPlanError,
+    NoTaskError,
     PlanAlreadyExistsError,
     PlanBundle,
     PlanNotDraftError,
@@ -58,6 +61,16 @@ class TaskCreate(BaseModel):
     duration_hours: float | None = Field(default=None, gt=0)
     deadline: AwareDatetime | None = None
     outcome_ids: list[uuid.UUID] = []
+
+
+class TaskRevise(BaseModel):
+    """A task revision (TASK-112): omitted fields keep their current
+    value — the domain's ``revise_task`` semantics."""
+
+    title: str | None = None
+    description: str | None = None
+    duration_hours: float | None = Field(default=None, gt=0)
+    deadline: AwareDatetime | None = None
 
 
 class PlanResponse(BaseModel):
@@ -154,7 +167,7 @@ def _bundle_response(bundle: PlanBundle) -> PlanBundleResponse:
     )
 
 
-_NOT_FOUND = (GoalNotFoundError, NoBackcastRunError, NoPlanError)
+_NOT_FOUND = (GoalNotFoundError, NoBackcastRunError, NoPlanError, NoTaskError)
 _CONFLICT = (PlanAlreadyExistsError, PlanNotDraftError)
 _DOMAIN_ERRORS = (
     PlanError,
@@ -261,6 +274,43 @@ def add_task(
             duration_hours=payload.duration_hours,
             deadline=payload.deadline,
             outcome_ids=tuple(payload.outcome_ids),
+        )
+    except _NOT_FOUND as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)
+        ) from exc
+    except _CONFLICT as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT, detail=str(exc)
+        ) from exc
+    except _DOMAIN_ERRORS as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return _task_response(task)
+
+
+@router.patch(
+    "/goals/{goal_id}/plan/tasks/{task_id}",
+    operation_id="reviseTask",
+    response_model=TaskResponse,
+)
+def revise_task(
+    goal_id: uuid.UUID,
+    task_id: uuid.UUID,
+    payload: TaskRevise,
+    request: Request,
+) -> TaskResponse:
+    """Revise a task on the goal's DRAFT plan (TASK-112) —
+    assembly-time editing; omitted fields keep their value. Revising
+    a published plan's task is the replanning ladder's concern
+    (docs/08), not this endpoint's."""
+    try:
+        task = _service(request).revise_task(
+            goal_id=goal_id,
+            task_id=task_id,
+            title=payload.title,
+            description=payload.description,
+            duration_hours=payload.duration_hours,
+            deadline=payload.deadline,
         )
     except _NOT_FOUND as exc:
         raise HTTPException(
