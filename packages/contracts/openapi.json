@@ -1222,6 +1222,96 @@
         }
       }
     },
+    "/goals/{goal_id}/assistant/interpretations": {
+      "post": {
+        "tags": [
+          "assistant"
+        ],
+        "summary": "Interpret Goal",
+        "description": "Ask the wired AI provider to read the goal against its\ncurrent state (docs/09's first operation), recording the\nproposal verbatim with its provenance.",
+        "operationId": "interpretGoal",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InterpretationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "assistant"
+        ],
+        "summary": "List Interpretations",
+        "description": "The goal's reading history — every recorded proposal with its\nprovenance, earliest first.",
+        "operationId": "listGoalInterpretations",
+        "parameters": [
+          {
+            "name": "goal_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Goal Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InterpretationResponse"
+                  },
+                  "title": "Response Listgoalinterpretations"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "tags": [
@@ -1806,6 +1896,47 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "InterpretationResponse": {
+        "properties": {
+          "interpretation_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Interpretation Id"
+          },
+          "goal_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Goal Id"
+          },
+          "proposal": {
+            "type": "string",
+            "title": "Proposal"
+          },
+          "provider": {
+            "type": "string",
+            "title": "Provider"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "interpretation_id",
+          "goal_id",
+          "proposal",
+          "provider",
+          "model",
+          "created_at"
+        ],
+        "title": "InterpretationResponse",
+        "description": "One AI proposal reading a goal, with its provenance — the\nprovider and the model that actually answered."
       },
       "LocalReplanCreate": {
         "properties": {

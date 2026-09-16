@@ -425,6 +425,12 @@
   both FeasibilityResults and the workload delta exposed
   (TASK-088).
 
+- AI assistant: `InMemoryGoalInterpretationRepository`,
+  `AssistantService`, and `POST|GET
+  /goals/{goal_id}/assistant/interpretations` (503 when no LLM is
+  wired); the goal detail grows the assistant's reading history
+  with provenance and the ask button (TASK-116).
+
 - Replanning: `PlanVersionRepository` port with an in-memory
   implementation, `ReplanningService`, and `POST
   /goals/{goal_id}/plan/replan/local` plus `POST

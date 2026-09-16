@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { AssistantCard } from "@/components/assistant-card";
+import { InterpretGoalButton } from "@/components/assistant-forms";
 import { BackcastChain } from "@/components/backcast-chain";
 import { BackcastForm } from "@/components/backcast-form";
 import { MilestoneForm } from "@/components/milestone-form";
@@ -26,6 +28,7 @@ import { TaskEditForm } from "@/components/task-forms";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { BackcastView } from "@/lib/backcast";
+import type { InterpretationView } from "@/lib/assistant";
 import type { Goal } from "@/lib/goals";
 import type { MilestoneView } from "@/lib/milestones";
 import type { PlanBundleView } from "@/lib/plans";
@@ -44,13 +47,14 @@ function formatDate(moment: string): string {
 }
 
 /**
- * One goal (TASK-108) with its backcast (TASK-109), the milestones
- * pinned on its run (TASK-110), the plan executing it (TASK-111)
- * — whose tasks stay revisable while the plan is a DRAFT
- * (TASK-112) and replannable once it is published, with every
- * meaningful replan traced as a plan version (TASK-115) — and the
- * progress of actually doing it (TASK-114). Rendered on the server
- * from the backend's GET endpoints; an unknown goal renders Next's
+ * One goal (TASK-108) with its backcast (TASK-109), the AI
+ * assistant's readings of it (TASK-116), the milestones pinned on
+ * its run (TASK-110), the plan executing it (TASK-111) — whose
+ * tasks stay revisable while the plan is a DRAFT (TASK-112) and
+ * replannable once it is published, with every meaningful replan
+ * traced as a plan version (TASK-115) — and the progress of
+ * actually doing it (TASK-114). Rendered on the server from the
+ * backend's GET endpoints; an unknown goal renders Next's
  * not-found boundary. Before a backcast is defined, the definition
  * form stands in for the visualization; milestones and the plan
  * follow from the run.
@@ -104,6 +108,7 @@ export default async function GoalDetailPage({
         ) : (
           <div className="flex flex-col gap-6">
             <BackcastChain backcast={backcast} />
+            <Assistant goalId={goal.goal_id} />
             <Milestones goalId={goal.goal_id} />
             <Plan goalId={goal.goal_id} />
           </div>
@@ -126,6 +131,18 @@ async function Milestones({ goalId }: { goalId: string }) {
     <>
       <MilestoneList milestones={milestones ?? []} />
       <MilestoneForm goalId={goalId} />
+    </>
+  );
+}
+
+async function Assistant({ goalId }: { goalId: string }) {
+  const interpretations = await serverGet<InterpretationView[]>(
+    `/goals/${goalId}/assistant/interpretations`,
+  );
+  return (
+    <>
+      <AssistantCard interpretations={interpretations ?? []} />
+      <InterpretGoalButton goalId={goalId} />
     </>
   );
 }

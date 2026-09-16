@@ -501,6 +501,60 @@ check(
   "the version list is an ordered trail showing reasons",
 );
 
+// TASK-116 — AI assistant UI: docs/09's first operation in the
+// product. The goal detail grows the assistant's card — every
+// recorded reading with its provenance — and the ask button, with
+// the server's honest failures surfaced (no provider wired is not
+// hidden).
+check(
+  await exists("src/components/assistant-card.tsx") &&
+    await exists("src/components/assistant-forms.tsx"),
+  "the assistant card and form components exist",
+);
+check(
+  await exists("src/lib/assistant.ts"),
+  "the assistant API client exists",
+);
+const assistantClient = await read("src/lib/assistant.ts");
+check(
+  assistantClient.includes(
+    "`/api/goals/${goalId}/assistant/interpretations`",
+  ),
+  "the assistant client targets the proxied API path",
+);
+const assistantDetail = await read("src/app/goals/[goalId]/page.tsx");
+check(
+  assistantDetail.includes("AssistantCard") &&
+    assistantDetail.includes("InterpretGoalButton"),
+  "the goal detail composes the assistant card and ask button",
+);
+const assistantCard = await read("src/components/assistant-card.tsx");
+check(
+  !assistantCard.startsWith('"use client"'),
+  "the assistant card renders on the server",
+);
+check(
+  assistantCard.includes("provider") && assistantCard.includes("model"),
+  "the assistant card shows each reading's provenance",
+);
+const assistantForms = await read("src/components/assistant-forms.tsx");
+check(
+  assistantForms.startsWith('"use client"'),
+  "the assistant form is a client component",
+);
+check(
+  assistantForms.includes("interpretGoal"),
+  "the assistant form calls the interpret client",
+);
+check(
+  assistantForms.includes("router.refresh()"),
+  "the assistant form refreshes the server-rendered page after submit",
+);
+check(
+  assistantForms.includes('role="alert"'),
+  "assistant errors are announced as alerts",
+);
+
 const pkg = JSON.parse(await read("package.json"));
 check(
   pkg.dependencies.next === "16.3.5",
