@@ -372,6 +372,11 @@
   future state it decomposes, its repository port, and the
   `decompose_outcomes` use case (TASK-097).
 
+- Task generation: the AI half of pipeline step 12 — the
+  `TaskGeneration` record with provenance tied to the plan whose
+  outcomes were decomposed, its repository port, and the
+  `generate_tasks` use case (TASK-098).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with
