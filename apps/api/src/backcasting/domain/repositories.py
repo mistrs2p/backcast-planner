@@ -34,6 +34,7 @@ from backcasting.domain.current_state import CurrentState
 from backcasting.domain.future_state import FutureState
 from backcasting.domain.goal import Goal
 from backcasting.domain.goal_interpretation import GoalInterpretation
+from backcasting.domain.outcome_decomposition import OutcomeDecomposition
 from backcasting.domain.strategy_generation import StrategyGeneration
 from backcasting.domain.measurement import Measurement
 from backcasting.domain.progress import ProgressSnapshot
@@ -300,3 +301,28 @@ class StrategyGenerationRepository(ABC):
     @abstractmethod
     def list_for_goal(self, goal_id: uuid.UUID) -> Sequence[StrategyGeneration]:
         """Return the goal's generations, earliest first."""
+
+class OutcomeDecompositionRepository(ABC):
+    """Persistence port for
+    :class:`~backcasting.domain.outcome_decomposition.OutcomeDecomposition`.
+
+    The AI layer's outcome decompositions, recorded verbatim with
+    provenance and never revised — a re-decomposition is a new
+    record.
+    """
+
+    @abstractmethod
+    def save(self, decomposition: OutcomeDecomposition) -> None:
+        """Insert or replace the decomposition keyed by
+        ``decomposition_id``."""
+
+    @abstractmethod
+    def get(self, decomposition_id: uuid.UUID) -> OutcomeDecomposition | None:
+        """Return the decomposition with ``decomposition_id``, or
+        ``None``."""
+
+    @abstractmethod
+    def list_for_future_state(
+        self, future_state_id: uuid.UUID
+    ) -> Sequence[OutcomeDecomposition]:
+        """Return the future state's decompositions, earliest first."""

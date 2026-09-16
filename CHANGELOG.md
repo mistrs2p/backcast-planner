@@ -367,6 +367,11 @@
   and the `generate_strategies` use case feeding the existing
   deterministic acceptance (TASK-096).
 
+- Outcome decomposition: the AI half of pipeline step 11 — the
+  `OutcomeDecomposition` record with provenance tied to the exact
+  future state it decomposes, its repository port, and the
+  `decompose_outcomes` use case (TASK-097).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with
