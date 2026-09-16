@@ -1,7 +1,7 @@
 # TASK-081 — Persistence detection
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-009-replanning — Replanning
