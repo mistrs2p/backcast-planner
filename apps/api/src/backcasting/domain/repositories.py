@@ -36,6 +36,7 @@ from backcasting.domain.goal import Goal
 from backcasting.domain.measurement import Measurement
 from backcasting.domain.progress import ProgressSnapshot
 from backcasting.domain.schedule import Schedule
+from backcasting.domain.trigger import Trigger
 from backcasting.domain.user import Email, User
 
 
@@ -231,3 +232,26 @@ class FeedbackRepository(ABC):
     @abstractmethod
     def list_all(self) -> Sequence[Feedback]:
         """Return every feedback, earliest ``created_at`` first."""
+
+
+class TriggerRepository(ABC):
+    """Persistence port for :class:`~backcasting.domain.trigger.Trigger`.
+
+    The observed conditions the stability controls (docs/08) judge:
+    persistence thresholds, cooldown, and hysteresis all read the
+    trigger history. Like every observation, a trigger is an
+    immutable fact — it is never revised, only superseded by later
+    observations.
+    """
+
+    @abstractmethod
+    def save(self, trigger: Trigger) -> None:
+        """Insert or replace the trigger keyed by ``trigger_id``."""
+
+    @abstractmethod
+    def get(self, trigger_id: uuid.UUID) -> Trigger | None:
+        """Return the trigger with ``trigger_id``, or ``None``."""
+
+    @abstractmethod
+    def list_all(self) -> Sequence[Trigger]:
+        """Return every trigger, earliest ``observed_at`` first."""
