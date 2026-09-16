@@ -1,16 +1,23 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+
 const NAV_ITEMS = [
   { href: "/", label: "Goals" },
+  { href: "/calendar", label: "Calendar" },
 ] as const;
 
 /**
  * The shell's global navigation.
  *
- * The MVP opens on Goals — every other area (backcast, plan,
- * schedule, progress) lives inside a goal's detail view, so the
- * top level stays a single entry point. Server component on
- * purpose: the shell has no client state.
+ * The MVP opens on Goals — every goal-scoped area (backcast, plan,
+ * tasks) lives inside a goal's detail view. The calendar is
+ * user-scoped (TASK-113), so it joins the top level. Marking the
+ * current entry needs the pathname, which only a client component
+ * can see — the one piece of client state the shell carries.
  */
 export function SiteHeader() {
+  const pathname = usePathname();
   return (
     <header>
       <a href="/" className="brand">
@@ -22,7 +29,7 @@ export function SiteHeader() {
             <li key={item.href}>
               <a
                 href={item.href}
-                aria-current={item.href === "/" ? "page" : undefined}
+                aria-current={pathname === item.href ? "page" : undefined}
               >
                 {item.label}
               </a>

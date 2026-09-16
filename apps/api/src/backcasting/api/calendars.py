@@ -128,6 +128,25 @@ def create_calendar(payload: CalendarCreate, request: Request) -> CalendarRespon
 
 
 @router.get(
+    "/users/{user_id}/calendar",
+    response_model=CalendarResponse,
+    operation_id="getCalendarForUser",
+)
+def get_calendar_for_user(
+    user_id: uuid.UUID, request: Request
+) -> CalendarResponse:
+    """The user's calendar (TASK-113's read path — the browser holds
+    the user id), or 404 while they own none."""
+    calendar = _service(request).get_for_user(user_id)
+    if calendar is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"no calendar for user {user_id}",
+        )
+    return _calendar_response(calendar)
+
+
+@router.get(
     "/calendars/{calendar_id}",
     response_model=CalendarResponse,
     operation_id="getCalendar",

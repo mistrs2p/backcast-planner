@@ -325,6 +325,64 @@ check(
   "task creation offers a deadline field",
 );
 
+// TASK-113 — calendar UI: the user-scoped calendar joins the top
+// level. The board resolves the browser-held user's calendar, lists
+// events, surfaces conflicts, and places new events.
+check(
+  await exists("src/app/calendar/page.tsx"),
+  "the calendar route exists",
+);
+const calendarPage = await read("src/app/calendar/page.tsx");
+check(
+  calendarPage.includes("<CalendarBoard />"),
+  "the calendar page renders the calendar board",
+);
+check(
+  await exists("src/components/calendar-board.tsx"),
+  "the calendar board component exists",
+);
+const calendarBoard = await read("src/components/calendar-board.tsx");
+check(
+  calendarBoard.startsWith('"use client"'),
+  "the calendar board is a client component (user id is browser-held)",
+);
+check(
+  calendarBoard.includes("getCalendarForUser") &&
+    calendarBoard.includes("browserUserId"),
+  "the board resolves the user's calendar from the browser user id",
+);
+check(
+  calendarBoard.includes("listConflicts"),
+  "the board surfaces event conflicts",
+);
+check(
+  calendarBoard.includes('type="datetime-local"'),
+  "event placement uses datetime inputs",
+);
+check(
+  calendarBoard.includes("role=\"alert\""),
+  "calendar board errors are announced as alerts",
+);
+check(
+  await exists("src/lib/calendars.ts"),
+  "the calendar API client exists",
+);
+const calendarClient = await read("src/lib/calendars.ts");
+check(
+  calendarClient.includes("`/api/users/${userId}/calendar`") &&
+    calendarClient.includes("`/api/calendars/${calendarId}/events`"),
+  "the calendar client targets the proxied API paths",
+);
+const header113 = await read("src/components/site-header.tsx");
+check(
+  header113.includes('"/calendar"') && header113.includes("Calendar"),
+  "navigation links the calendar",
+);
+check(
+  header113.includes("usePathname"),
+  "navigation marks the current entry from the pathname",
+);
+
 const pkg = JSON.parse(await read("package.json"));
 check(
   pkg.dependencies.next === "16.3.5",

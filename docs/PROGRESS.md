@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-113 (Calendar UI)
+- Current Task: TASK-114 (Progress UI)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,22 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-113 — Calendar UI (2026-09-16): the user-scoped calendar
+  joins the top level. New read path `GET /users/{user_id}/calendar`
+  (the browser holds the user id — the MVP's scoping convention —
+  so the lookup is by user, not by a calendar id the client would
+  have to remember); contract regenerated. On the web: the
+  `/calendar` route with `CalendarBoard` (client, like the goal
+  board) — create the one-per-user calendar with an optional IANA
+  home zone, list events earliest first, place events with aware
+  datetime inputs, and surface the domain's conflict detection as
+  an alert list when events overlap. The site header became a
+  client component to mark the current entry from the pathname
+  (two top-level areas now). 5 new backend tests (suite: 2342);
+  smoke-tested live through the Next proxy (404 → create → 200,
+  one-per-user 409, ordered events, the overlap detected and named,
+  backwards event 422).
 
 - TASK-112 — Task UI (2026-09-16): assembly-time task revision. A
   task on a DRAFT plan is editable — fix a title, land a missing
