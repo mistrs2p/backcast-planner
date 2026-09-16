@@ -290,6 +290,12 @@
   suppressed strictly within the period after the last one, free the
   moment it ends (TASK-082).
 
+- Replanning policy: `ReplanningLevel` / `ReplanningMode` (docs/08's
+  ladder and modes), the frozen `ReplanningPolicy(mode, cooldown,
+  persistence)` with `permits` / `suggests` gates (goal revision is
+  never automatic; suggestions are cooled down too), and
+  `minimal_level` — the minimum-change principle (TASK-083).
+
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

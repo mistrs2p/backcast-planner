@@ -1,7 +1,7 @@
 # TASK-083 — Replanning policy
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-009-replanning — Replanning
