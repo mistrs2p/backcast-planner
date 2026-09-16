@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-084 (Replanning decision engine)
+- Current Task: TASK-085 (Local replan)
 - Current Epic: EPIC-009 Replanning
 
 ## Completed
@@ -1048,6 +1048,26 @@
   docs/06 fixes for conflicts. Levels are distinct from
   conflict_resolution's ResolutionAction (per-displacement outcome)
   and trace through plan_version. 24 tests.
+
+- TASK-084 — Replanning decision engine (2026-09-16): the last
+  joint of docs/08's adaptation machinery — proposal in, decision
+  out. `domain/decision_engine.py` with `DecisionAction`
+  (ACT/SUGGEST/HOLD), the frozen `ReplanningDecision(action,
+  level, reason)` — acting and suggesting require a level; reason
+  is a machine-readable slug naming the control that decided — and
+  `decide_response(policy, reading, levels, *, last_offered_at,
+  at)`. Per ADR-002, the reasoning layer proposes the candidate
+  levels; the engine enforces: the reading must confirm against
+  the policy's own persistence ("not-persistent"), the
+  minimum-change principle picks among the candidates
+  ("no-candidate" when empty), and the policy gates say act /
+  suggest / hold ("manual-mode", "cooldown",
+  "goal-revision-requires-user"). The engine never invents a
+  level; executing it is downstream (rescheduling for level 1,
+  TASK-085 through TASK-087 for level 2, the user for level 3),
+  with the trace in a plan version. 18 tests, including the full
+  wiring from sittings to decision and the same condition waiting
+  out its cooldown.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.

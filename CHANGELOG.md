@@ -296,6 +296,12 @@
   never automatic; suggestions are cooled down too), and
   `minimal_level` — the minimum-change principle (TASK-083).
 
+- Replanning decision engine: `DecisionAction`
+  (act/suggest/hold) and the frozen `ReplanningDecision` with
+  reason slugs, plus `decide_response` — minimum-change level
+  selection from the proposed candidates, persistence confirmation
+  against the policy, and mode/cooldown gating (TASK-084).
+
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
