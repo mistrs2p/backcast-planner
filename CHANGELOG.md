@@ -392,6 +392,11 @@
   the six AI operations, the enforcing PermittedProvider wrapper,
   and the AI_OPERATIONS environment wiring (TASK-101).
 
+- AI evaluation dataset: six golden cases in
+  apps/api/evals/ai_operations.json plus the strict loader and
+  reproducible replay runner over the full deterministic arc
+  (TASK-102).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with

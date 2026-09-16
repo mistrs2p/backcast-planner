@@ -1,0 +1,106 @@
+[
+  {
+    "case_id": "strategy-marathon-conservative",
+    "operation": "strategy-generation",
+    "goal": {
+      "title": "Run a marathon",
+      "description": "Finish the city marathon in under five hours."
+    },
+    "current_state": {
+      "narrative": "Running comfortably around 10 km a week, one easy pace, no speed work."
+    },
+    "future_state": {
+      "description": "A marathon finished under five hours, strong through the last hour.",
+      "target_date": "2026-10-11"
+    },
+    "gap_narrative": "Endurance is the binding constraint: the long run must grow from 10 km to 38 km without injury.",
+    "expected_response": "[{\"name\": \"Conservative build-up\", \"rationale\": \"Add roughly ten percent volume per week so the aerobic base arrives without injury.\"}, {\"name\": \"Race-pace rehearsal\", \"rationale\": \"Monthly blocks at target pace teach the body the effort it must hold.\"}]"
+  },
+  {
+    "case_id": "strategy-language-steady-contact",
+    "operation": "strategy-generation",
+    "goal": {
+      "title": "Reach conversational Spanish",
+      "description": "Hold an unscripted thirty-minute conversation about everyday life."
+    },
+    "current_state": {
+      "narrative": "High-school Spanish, rusty: greetings and numbers survive, little else."
+    },
+    "future_state": {
+      "description": "A thirty-minute unscripted conversation held with a native speaker, comfortably.",
+      "target_date": "2026-12-15"
+    },
+    "gap_narrative": "Vocabulary and listening speed are the constraints; grammar can lag behind.",
+    "expected_response": "[{\"name\": \"Daily contact\", \"rationale\": \"Thirty minutes every day beats three hours on Sunday for retention.\"}, {\"name\": \"Output early\", \"rationale\": \"Speaking from week one, badly, builds the recall the conversation will need.\"}]"
+  },
+  {
+    "case_id": "outcome-marathon-two-pillars",
+    "operation": "outcome-decomposition",
+    "goal": {
+      "title": "Run a marathon",
+      "description": "Finish the city marathon in under five hours."
+    },
+    "current_state": {
+      "narrative": "Running comfortably around 10 km a week."
+    },
+    "future_state": {
+      "description": "A marathon finished under five hours, strong through the last hour.",
+      "target_date": "2026-10-11"
+    },
+    "plan_workload_hours": 160,
+    "expected_response": "[\"Aerobic base built\", \"Race logistics settled\"]"
+  },
+  {
+    "case_id": "outcome-language-fluency-pillars",
+    "operation": "outcome-decomposition",
+    "goal": {
+      "title": "Reach conversational Spanish",
+      "description": "Hold an unscripted thirty-minute conversation about everyday life."
+    },
+    "current_state": {
+      "narrative": "High-school Spanish, rusty."
+    },
+    "future_state": {
+      "description": "A thirty-minute unscripted conversation held with a native speaker, comfortably.",
+      "target_date": "2026-12-15"
+    },
+    "plan_workload_hours": 90,
+    "expected_response": "[\"Working vocabulary of two thousand words\", \"Listening comprehension at native conversational speed\", \"A weekly speaking habit\"]"
+  },
+  {
+    "case_id": "task-marathon-training-block",
+    "operation": "task-generation",
+    "goal": {
+      "title": "Run a marathon",
+      "description": "Finish the city marathon in under five hours."
+    },
+    "current_state": {
+      "narrative": "Running comfortably around 10 km a week."
+    },
+    "future_state": {
+      "description": "A marathon finished under five hours, strong through the last hour.",
+      "target_date": "2026-10-11"
+    },
+    "plan_workload_hours": 160,
+    "outcome_titles": ["Aerobic base built", "Race logistics settled"],
+    "expected_response": "[{\"title\": \"Weekly long run\", \"description\": \"Easy pace, growing by two kilometres a week.\", \"duration_hours\": 2, \"outcomes\": [\"Aerobic base built\"]}, {\"title\": \"Midweek tempo session\", \"duration_hours\": 0.75, \"outcomes\": [\"Aerobic base built\"]}, {\"title\": \"Register for the race\", \"duration_hours\": 0.5, \"deadline\": \"2026-06-01T09:00:00Z\", \"outcomes\": [\"Race logistics settled\"]}]"
+  },
+  {
+    "case_id": "task-language-weekly-rhythm",
+    "operation": "task-generation",
+    "goal": {
+      "title": "Reach conversational Spanish",
+      "description": "Hold an unscripted thirty-minute conversation about everyday life."
+    },
+    "current_state": {
+      "narrative": "High-school Spanish, rusty."
+    },
+    "future_state": {
+      "description": "A thirty-minute unscripted conversation held with a native speaker, comfortably.",
+      "target_date": "2026-12-15"
+    },
+    "plan_workload_hours": 90,
+    "outcome_titles": ["Working vocabulary of two thousand words", "Listening comprehension at native conversational speed", "A weekly speaking habit"],
+    "expected_response": "[{\"title\": \"Daily spaced-repetition review\", \"duration_hours\": 0.5, \"outcomes\": [\"Working vocabulary of two thousand words\"]}, {\"title\": \"Podcast listening session\", \"duration_hours\": 1, \"outcomes\": [\"Listening comprehension at native conversational speed\"]}, {\"title\": \"Language-exchange call\", \"description\": \"Thirty minutes with a native speaker, twice counted once.\", \"duration_hours\": 1, \"outcomes\": [\"A weekly speaking habit\", \"Listening comprehension at native conversational speed\"]}]"
+  }
+]

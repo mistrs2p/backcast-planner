@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-102 (AI evaluation dataset)
+- Current Task: TASK-103 (AI fallback)
 - Current Epic: EPIC-010 AI
 
 ## Completed
@@ -1134,6 +1134,27 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-102 — AI evaluation dataset (2026-09-16): a regression net
+  for the AI pipeline. `apps/api/evals/ai_operations.json`: six
+  golden cases (two per evaluable operation — strategy generation,
+  outcome decomposition, task generation; the prose-only operations
+  have no deterministic target to evaluate against), each carrying
+  the backcast anchors and one golden response.
+  `application/evaluation.py`: `load_dataset` (strict — unknown
+  operations, duplicate case ids, bad dates/workloads, and missing
+  per-operation fields are dataset errors), `run_case`/`run_dataset`
+  — each case replays through the full deterministic arc: build the
+  records, build the context, feed the golden response through a
+  scripted provider, parse under the operation's schema, and pass
+  the parsed proposals through the deterministic acceptors
+  (accept_proposed_strategies behind calculate_gap + start_run,
+  define_outcome, accept_proposed_tasks), reporting one verdict per
+  case. Reproducible by construction: ids are UUID v5 of the case
+  id and timestamps a fixed epoch, so a case that flips means the
+  code changed. 17 tests (`tests/test_ai_evaluation.py`),
+  including every-dataset-case-green, coverage of all three
+  operations, honest failure detail, and reproducibility.
 
 - TASK-101 — Tool permissions (2026-09-16): docs/09's
   permission-validation and tool-allowlist guardrails. In this
