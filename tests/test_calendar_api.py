@@ -438,6 +438,41 @@ class TestCalendarHttpApi:
         assert response.status_code == 404
 
 
+class TestCalendarForUser:
+    """The by-user lookup the calendar UI resolves from (TASK-113)."""
+
+    def test_service_returns_none_before_creation(self) -> None:
+        assert _service().get_for_user(uuid.uuid4()) is None
+
+    def test_service_returns_the_users_calendar(self) -> None:
+        service = _service()
+        user_id = uuid.uuid4()
+        calendar = service.create_calendar(user_id=user_id)
+        assert service.get_for_user(user_id) is calendar
+        assert service.get_for_user(uuid.uuid4()) is None
+
+    def test_http_404_before_creation(self, client) -> None:
+        response = client.get(f"/users/{uuid.uuid4()}/calendar")
+        assert response.status_code == 404
+        assert "no calendar for user" in response.json()["detail"]
+
+    def test_http_returns_the_calendar_after_creation(self, client) -> None:
+        user_id = uuid.uuid4()
+        created = client.post(
+            "/calendars", json={"user_id": str(user_id), "timezone": "Asia/Tehran"}
+        ).json()
+        response = client.get(f"/users/{user_id}/calendar")
+        assert response.status_code == 200
+        body = response.json()
+        assert body["calendar_id"] == created["calendar_id"]
+        assert body["user_id"] == str(user_id)
+        assert body["timezone"] == "Asia/Tehran"
+
+    def test_http_contract_path(self, client) -> None:
+        schema = client.app.openapi()
+        assert "/users/{user_id}/calendar" in schema["paths"]
+
+
 class TestContract:
     def test_openapi_documents_calendar_routes(self, client) -> None:
         schema = client.app.openapi()

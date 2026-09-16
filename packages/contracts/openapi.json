@@ -48,6 +48,50 @@
         }
       }
     },
+    "/users/{user_id}/calendar": {
+      "get": {
+        "tags": [
+          "calendars"
+        ],
+        "summary": "Get Calendar For User",
+        "description": "The user's calendar (TASK-113's read path — the browser holds\nthe user id), or 404 while they own none.",
+        "operationId": "getCalendarForUser",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalendarResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/calendars/{calendar_id}": {
       "get": {
         "tags": [

@@ -83,6 +83,16 @@ class CalendarService:
             raise CalendarNotFoundError(f"no calendar {calendar_id}")
         return calendar
 
+    def get_for_user(self, user_id) -> Calendar | None:
+        """The user's calendar, or ``None`` when they own none yet.
+
+        The read path the calendar UI resolves from — the browser
+        holds the user id (the MVP's scoping convention), so the
+        lookup is by user, not by a calendar id the client would
+        have to remember separately (TASK-113).
+        """
+        return self._calendars.get_by_user(user_id)
+
     def add_event(
         self,
         calendar_id,

@@ -425,6 +425,10 @@
   both FeasibilityResults and the workload delta exposed
   (TASK-088).
 
+- Calendar UI: `GET /users/{user_id}/calendar` read path plus the
+  `/calendar` page — create the one-per-user calendar, list and
+  place events, and see conflicts surfaced (TASK-113).
+
 - Task revision: `PATCH /goals/{goal_id}/plan/tasks/{task_id}` —
   assembly-time editing of a task on the DRAFT plan (title,
   description, estimate, deadline; omitted fields keep their
