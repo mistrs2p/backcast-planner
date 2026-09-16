@@ -5,6 +5,7 @@ import { BackcastChain } from "@/components/backcast-chain";
 import { BackcastForm } from "@/components/backcast-form";
 import { MilestoneForm } from "@/components/milestone-form";
 import { MilestoneList } from "@/components/milestone-list";
+import { PlanVersionList } from "@/components/plan-versions";
 import {
   AddOutcomeForm,
   AddTaskForm,
@@ -12,6 +13,10 @@ import {
   PublishPlanButton,
 } from "@/components/plan-forms";
 import { PlanView } from "@/components/plan-view";
+import {
+  GlobalReplanForm,
+  LocalReplanForm,
+} from "@/components/replan-forms";
 import {
   RecordWorkForm,
   TakeSnapshotButton,
@@ -25,6 +30,7 @@ import type { Goal } from "@/lib/goals";
 import type { MilestoneView } from "@/lib/milestones";
 import type { PlanBundleView } from "@/lib/plans";
 import type { ProgressView as ProgressSnapshotView } from "@/lib/progress";
+import type { PlanVersionView } from "@/lib/replanning";
 import { serverGet } from "@/lib/server-api";
 
 export const dynamic = "force-dynamic";
@@ -41,11 +47,13 @@ function formatDate(moment: string): string {
  * One goal (TASK-108) with its backcast (TASK-109), the milestones
  * pinned on its run (TASK-110), the plan executing it (TASK-111)
  * — whose tasks stay revisable while the plan is a DRAFT
- * (TASK-112) — and the progress of actually doing it (TASK-114).
- * Rendered on the server from the backend's GET endpoints; an
- * unknown goal renders Next's not-found boundary. Before a
- * backcast is defined, the definition form stands in for the
- * visualization; milestones and the plan follow from the run.
+ * (TASK-112) and replannable once it is published, with every
+ * meaningful replan traced as a plan version (TASK-115) — and the
+ * progress of actually doing it (TASK-114). Rendered on the server
+ * from the backend's GET endpoints; an unknown goal renders Next's
+ * not-found boundary. Before a backcast is defined, the definition
+ * form stands in for the visualization; milestones and the plan
+ * follow from the run.
  */
 export default async function GoalDetailPage({
   params,
@@ -138,7 +146,7 @@ async function Plan({ goalId }: { goalId: string }) {
         taskEdit={
           isDraft
             ? (task) => <TaskEditForm goalId={goalId} task={task} />
-            : undefined
+            : (task) => <LocalReplanForm goalId={goalId} task={task} />
         }
       />
       {isDraft ? (
@@ -150,8 +158,22 @@ async function Plan({ goalId }: { goalId: string }) {
             disabled={!hasEstimatedTask}
           />
         </>
-      ) : null}
+      ) : (
+        <PlanHistory goalId={goalId} />
+      )}
       <Progress goalId={goalId} tasks={bundle.tasks} />
+    </>
+  );
+}
+
+async function PlanHistory({ goalId }: { goalId: string }) {
+  const versions = await serverGet<PlanVersionView[]>(
+    `/goals/${goalId}/plan/versions`,
+  );
+  return (
+    <>
+      <PlanVersionList versions={versions ?? []} />
+      <GlobalReplanForm goalId={goalId} />
     </>
   );
 }

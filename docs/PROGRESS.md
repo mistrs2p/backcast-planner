@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-115 (Replanning UI)
+- Current Task: TASK-116 (AI Assistant UI)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,29 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-115 — Replanning UI (2026-09-16): docs/08's level 2
+  driven by hand, end to end. New backend surface:
+  `PlanVersionRepository` port (the trail, lowest version first)
+  with an in-memory implementation, `ReplanningService` — a local
+  replan revises one task of a plan past assembly through
+  `replan_task_locally` (workload shifted by the estimate's delta,
+  version naming the task); a global replan re-derives the plan
+  through `replan_plan_globally` (workload recomputed, title
+  optionally revised); both refuse a DRAFT (assembly is TASK-112's
+  free edit — a replan is a *traced* change) — and three
+  endpoints: `POST /goals/{goal_id}/plan/replan/local`, `POST
+  /goals/{goal_id}/plan/replan/global`, `GET
+  /goals/{goal_id}/plan/versions` (contract regenerated). Regional
+  scope stays out: the product does not surface the dependency
+  graph yet, so a region cannot be seeded or shown. On the web, a
+  published plan's task rows carry a replan form (reason required —
+  a replan without a why is not traceable; new estimate and
+  deadline), the plan section grows a re-derive-the-whole-plan form
+  and the version history (empty until the first replan). 24 new
+  backend tests (suite: 2387); smoke-tested live through the Next
+  proxy (local 5h→8h shift with v1, global retitle with v2, trail
+  read, no-change 422, draft 409, unknown goal 404).
 
 - TASK-114 — Progress UI (2026-09-16): the Actual side of
   docs/07's triad, end to end. New backend surface:

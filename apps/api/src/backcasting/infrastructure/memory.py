@@ -23,6 +23,7 @@ from backcasting.domain.goal import Goal
 from backcasting.domain.milestone import Milestone
 from backcasting.domain.outcome import Outcome
 from backcasting.domain.plan import Plan
+from backcasting.domain.plan_version import PlanVersion
 from backcasting.domain.progress import ProgressSnapshot
 from backcasting.domain.repositories import (
     BackcastingRunRepository,
@@ -36,6 +37,7 @@ from backcasting.domain.repositories import (
     MilestoneRepository,
     OutcomeRepository,
     PlanRepository,
+    PlanVersionRepository,
     ProgressSnapshotRepository,
     RepositoryError,
     TaskRepository,
@@ -215,6 +217,31 @@ class InMemoryPlanRepository(PlanRepository):
         with self._lock:
             plans = [p for p in self._by_id.values() if p.goal_id == goal_id]
         return tuple(sorted(plans, key=lambda p: (p.created_at, p.plan_id)))
+
+
+class InMemoryPlanVersionRepository(PlanVersionRepository):
+    """Plan-version port backed by a dict, safe for concurrent
+    requests. The trail order is the version number itself — unique
+    and strictly increasing per plan."""
+
+    def __init__(self) -> None:
+        self._by_id: dict[uuid.UUID, PlanVersion] = {}
+        self._lock = threading.Lock()
+
+    def save(self, version: PlanVersion) -> None:
+        with self._lock:
+            self._by_id[version.version_id] = version
+
+    def get(self, version_id: uuid.UUID) -> PlanVersion | None:
+        with self._lock:
+            return self._by_id.get(version_id)
+
+    def list_for_plan(self, plan_id: uuid.UUID):
+        with self._lock:
+            versions = [
+                v for v in self._by_id.values() if v.plan_id == plan_id
+            ]
+        return tuple(sorted(versions, key=lambda v: v.version))
 
 
 class InMemoryOutcomeRepository(OutcomeRepository):
