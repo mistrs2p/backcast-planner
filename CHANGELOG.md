@@ -382,6 +382,11 @@
   snapshot it reads, its repository port, and the `explain_plan`
   use case (TASK-099).
 
+- AI validation: docs/09's schema-validation and retry-limit
+  guardrails — strict JSON proposal parsing into StrategyProposal,
+  outcome-title, and TaskProposal shapes, plus the
+  retry-limited `generate_validated_*` use cases (TASK-100).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with

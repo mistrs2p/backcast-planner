@@ -27,6 +27,7 @@ import uuid
 from dataclasses import dataclass
 from datetime import datetime
 
+from backcasting.domain.outcome import Outcome
 from backcasting.domain.timezone import UTC, require_utc
 
 MAX_PROPOSAL_LENGTH = 20_000
@@ -103,6 +104,29 @@ def record_task_generation(
         model=model,
         created_at=created_at if created_at is not None else datetime.now(UTC),
     )
+
+
+def plan_anchor(outcomes: tuple) -> uuid.UUID:
+    """The plan a task generation is anchored to: the one plan the
+    ``outcomes`` (a non-empty tuple of
+    :class:`~backcasting.domain.outcome.Outcome`) all belong to."""
+    if not isinstance(outcomes, tuple):
+        raise TaskGenerationError("outcomes must be a tuple of Outcome")
+    for outcome in outcomes:
+        if not isinstance(outcome, Outcome):
+            raise TaskGenerationError("outcomes must be Outcome instances")
+    if not outcomes:
+        raise TaskGenerationError(
+            "at least one outcome is required — no anchor to generate from"
+        )
+    plan_id = outcomes[0].plan_id
+    for outcome in outcomes[1:]:
+        if outcome.plan_id != plan_id:
+            raise TaskGenerationError(
+                "outcomes must share one plan — a generation is anchored "
+                "to a single plan"
+            )
+    return plan_id
 
 
 def generations_for_plan(
