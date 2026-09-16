@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-094 (Context builder)
+- Current Task: TASK-095 (Goal interpretation)
 - Current Epic: EPIC-010 AI
 
 ## Completed
@@ -1134,6 +1134,31 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-094 — Context builder (2026-09-16): docs/09's context
+  strategy, made structural. `application/context_builder.py` with
+  frozen `ContextSection(heading, body)` rendered under `##`
+  headings, `build_context(operation, sections, *, model?,
+  max_output_tokens?, temperature?)` assembling one system message
+  (the operation's fixed instruction from OPERATION_INSTRUCTIONS —
+  all six of docs/09's operations, each ending with the ADR-002
+  reminder "You propose; the system validates and enforces") and
+  one user message (the sections in order, blank-line joined);
+  unknown operations are rejected outright — a generic fallback
+  instruction would silently produce the unspecific context the
+  strategy forbids. Curated record renderers select fields, not
+  records (ids and bookkeeping stay out): goal (title +
+  description), current state (narrative), future state
+  (description + target date), outcomes (bulleted), plan (title,
+  workload, task list with durations or "no estimate yet"),
+  progress (planned/worked/remaining/completed). The per-operation
+  composers — goal interpretation and clarification (goal +
+  current state), strategy (all three anchors), outcome
+  decomposition (future only), task generation (outcomes only),
+  explanation (plan + progress) — each take exactly the records
+  their operation needs, so "do not resend full history" is a
+  signature, not a convention. Output is a complete LLMRequest the
+  operations hand straight to any vendor. 25 tests.
 
 - TASK-093 — Google adapter (2026-09-16): the third vendor behind
   the LLM port, completing the adapter set. `infrastructure/
