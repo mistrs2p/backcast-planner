@@ -5,11 +5,19 @@ import { BackcastChain } from "@/components/backcast-chain";
 import { BackcastForm } from "@/components/backcast-form";
 import { MilestoneForm } from "@/components/milestone-form";
 import { MilestoneList } from "@/components/milestone-list";
+import {
+  AddOutcomeForm,
+  AddTaskForm,
+  BeginPlanForm,
+  PublishPlanButton,
+} from "@/components/plan-forms";
+import { PlanView } from "@/components/plan-view";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { BackcastView } from "@/lib/backcast";
 import type { Goal } from "@/lib/goals";
 import type { MilestoneView } from "@/lib/milestones";
+import type { PlanBundleView } from "@/lib/plans";
 import { serverGet } from "@/lib/server-api";
 
 export const dynamic = "force-dynamic";
@@ -23,12 +31,12 @@ function formatDate(moment: string): string {
 }
 
 /**
- * One goal (TASK-108) with its backcast (TASK-109) and the
- * milestones pinned on its run (TASK-110). Rendered on the server
- * from the backend's GET endpoints; an unknown goal renders Next's
- * not-found boundary. Before a backcast is defined, the definition
- * form stands in for the visualization; milestones appear once a
- * run exists to attach them to.
+ * One goal (TASK-108) with its backcast (TASK-109), the milestones
+ * pinned on its run (TASK-110), and the plan executing it
+ * (TASK-111). Rendered on the server from the backend's GET
+ * endpoints; an unknown goal renders Next's not-found boundary.
+ * Before a backcast is defined, the definition form stands in for
+ * the visualization; milestones and the plan follow from the run.
  */
 export default async function GoalDetailPage({
   params,
@@ -80,6 +88,7 @@ export default async function GoalDetailPage({
           <div className="flex flex-col gap-6">
             <BackcastChain backcast={backcast} />
             <Milestones goalId={goal.goal_id} />
+            <Plan goalId={goal.goal_id} />
           </div>
         )}
       </div>
@@ -100,6 +109,32 @@ async function Milestones({ goalId }: { goalId: string }) {
     <>
       <MilestoneList milestones={milestones ?? []} />
       <MilestoneForm goalId={goalId} />
+    </>
+  );
+}
+
+async function Plan({ goalId }: { goalId: string }) {
+  const bundle = await serverGet<PlanBundleView>(`/goals/${goalId}/plan`);
+  if (bundle === null) {
+    return <BeginPlanForm goalId={goalId} />;
+  }
+  const isDraft = bundle.plan.status === "draft";
+  const hasEstimatedTask = bundle.tasks.some(
+    (task) => task.duration_hours !== null,
+  );
+  return (
+    <>
+      <PlanView bundle={bundle} />
+      {isDraft ? (
+        <>
+          <AddOutcomeForm goalId={goalId} />
+          <AddTaskForm goalId={goalId} outcomes={bundle.outcomes} />
+          <PublishPlanButton
+            goalId={goalId}
+            disabled={!hasEstimatedTask}
+          />
+        </>
+      ) : null}
     </>
   );
 }

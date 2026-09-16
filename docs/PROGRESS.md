@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-111 (Plan UI)
+- Current Task: TASK-112 (Task UI)
 - Current Epic: EPIC-011 Product UX
 
 ## Completed
@@ -1134,6 +1134,27 @@
   to re-derivation, and the three scopes sharing one version trail
   (local v1, regional v2, global v3 — 20h declared, 11h
   recomputed).
+
+- TASK-111 — Plan UI (2026-09-16): plan assembly and publishing.
+  Beginning a plan finishes the goal's run and opens a DRAFT with
+  run provenance; outcomes (optionally bound to a milestone of the
+  goal) and tasks (with hour estimates, optionally serving
+  outcomes) assemble on the draft; publishing computes the workload
+  as the sum of task estimates and freezes the plan as CANDIDATE —
+  one plan per goal, enforced at the service and HTTP layers (409).
+  New ports: `PlanRepository`, `OutcomeRepository`, `TaskRepository`
+  with in-memory implementations; `PlanService`; and five endpoints
+  (`POST/GET /goals/{goal_id}/plan`, `.../plan/outcomes`,
+  `.../plan/tasks`, `.../plan/publish`) with the full status
+  mapping (unestimated tasks at publish surface as 422 via
+  `TaskEstimationError`, frozen plans as 409). The goal detail page
+  grows the plan section: `BeginPlanForm` before a plan exists,
+  `PlanView` with assembly forms while DRAFT (publish disabled
+  until a task carries an estimate), and the status plus computed
+  workload once published. 28 tests; the contract is regenerated
+  and the flow was smoke-tested live through the Next proxy (begin
+  → outcome/task → publish → candidate with 3h workload, late
+  assembly 409, unestimated hints).
 
 - TASK-110 — Milestone UI (2026-09-16): checkpoints on the
   backcasting run. The domain already required milestones to be
