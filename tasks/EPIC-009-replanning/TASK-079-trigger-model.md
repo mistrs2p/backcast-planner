@@ -1,7 +1,7 @@
 # TASK-079 — Trigger model
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-009-replanning — Replanning

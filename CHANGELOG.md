@@ -263,6 +263,16 @@
   the records — work outside declared availability, work outside
   the placed times — stated as factual Feedback records, present
   only when the behavior is; EPIC-008 complete (TASK-078).
+- Implicit feedback: behavioral signals derived from the execution
+  records — `detect_work_outside_availability` (work past the declared
+  availability, commitments included) and `detect_work_outside_placements`
+  (work off the placed times); both return IMPLICIT `Feedback` records,
+  `None` when the behavior is absent (TASK-078).
+- Trigger model: `TriggerKind` (the ten replanning trigger sources of
+  docs/08), the frozen `Trigger` record with `raise_trigger` and
+  `triggers_of_kind`, plus the `TriggerRepository` port — the input the
+  stability controls (thresholds, cooldown, hysteresis) will judge (TASK-079).
+
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,

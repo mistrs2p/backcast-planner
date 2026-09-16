@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-079 (Trigger model)
+- Current Task: TASK-080 (Thresholds)
 - Current Epic: EPIC-009 Replanning
 
 ## Completed
@@ -942,6 +942,38 @@
   are new statements. `FeedbackRepository` port added (save / get /
   list_for_subject / list_all, earliest created_at first).
   18 tests.
+
+- TASK-078 — Implicit feedback (2026-09-16): docs/02's other half,
+  "implicit behavioral signals" (docs/07) — derived mechanically from
+  the behavior records, stated as factual sentences, returned only
+  when the behavior is present (absence is not a signal).
+  `detect_work_outside_availability(executions, windows, events=(),
+  *, at)` — per sitting, workable time over the sitting's own
+  interval (the shared capacity semantics: availability minus
+  commitments); the rest is behavior contradicting the declaration.
+  `detect_work_outside_placements(executions, schedules, *, at)` —
+  only sittings of tasks carrying at least one placement count (no
+  placement is a planning concern, not a behavioral one); inside is
+  the overlap with that task's placements. Both return `Feedback`
+  with kind IMPLICIT via `record_feedback` — derived signals share
+  the record, so they store, filter, and travel like explicit
+  statements. 15 tests. EPIC-008 complete.
+- TASK-079 — Trigger model (2026-09-16): the record the replanning
+  layer's judgement is made about (docs/08). `domain/trigger.py`
+  with `TriggerKind` — the ten trigger sources verbatim (progress,
+  capacity, time, calendar, constraint, resource, dependency,
+  behavior, goal, system) — the frozen `Trigger` (trigger_id, kind,
+  detail, observed_at; detail stripped and bounded at 2000 chars,
+  observed_at UTC), `raise_trigger`, and `triggers_of_kind` (input
+  order). A trigger states what was seen and when; it decides
+  nothing — persistence thresholds (TASK-080/081), cooldown
+  (TASK-082), and the reschedule/replan/goal-revision ladder are
+  upstream, and detection (which signal raises which trigger) stays
+  with the signals modules per ADR-002. Immutable like every
+  observation. `TriggerRepository` port added (save / get /
+  list_all, earliest observed_at first) — the stability controls
+  read trigger history. 19 tests, including the wiring where a
+  behavioral signal becomes a BEHAVIOR trigger.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
