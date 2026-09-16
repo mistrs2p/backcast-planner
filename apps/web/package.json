@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "verify": "node scripts/verify-shell.mjs && tsc --noEmit"
+    "verify": "node scripts/verify-shell.mjs && node scripts/verify-design.mjs && tsc --noEmit"
   },
   "dependencies": {
     "next": "16.3.5",

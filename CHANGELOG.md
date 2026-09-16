@@ -409,6 +409,11 @@
   structural verification and a green production build
   (TASK-104).
 
+- Design system: the token vocabulary (semantic colors with a
+  dark-mode swap, spacing, type, radii) and the accessible
+  primitives — Button/ButtonLink, TextField, Card — with a living
+  style guide at /design and structural verification (TASK-105).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with
