@@ -35,6 +35,7 @@ from backcasting.domain.future_state import FutureState
 from backcasting.domain.goal import Goal
 from backcasting.domain.goal_interpretation import GoalInterpretation
 from backcasting.domain.outcome_decomposition import OutcomeDecomposition
+from backcasting.domain.plan_explanation import PlanExplanation
 from backcasting.domain.strategy_generation import StrategyGeneration
 from backcasting.domain.task_generation import TaskGeneration
 from backcasting.domain.measurement import Measurement
@@ -349,3 +350,26 @@ class TaskGenerationRepository(ABC):
     @abstractmethod
     def list_for_plan(self, plan_id: uuid.UUID) -> Sequence[TaskGeneration]:
         """Return the plan's task generations, earliest first."""
+
+
+class PlanExplanationRepository(ABC):
+    """Persistence port for
+    :class:`~backcasting.domain.plan_explanation.PlanExplanation`.
+
+    The AI layer's plan explanations, recorded verbatim with
+    provenance and never revised — a re-explanation is a new record.
+    """
+
+    @abstractmethod
+    def save(self, explanation: PlanExplanation) -> None:
+        """Insert or replace the explanation keyed by
+        ``explanation_id``."""
+
+    @abstractmethod
+    def get(self, explanation_id: uuid.UUID) -> PlanExplanation | None:
+        """Return the explanation with ``explanation_id``, or
+        ``None``."""
+
+    @abstractmethod
+    def list_for_plan(self, plan_id: uuid.UUID) -> Sequence[PlanExplanation]:
+        """Return the plan's explanations, earliest first."""

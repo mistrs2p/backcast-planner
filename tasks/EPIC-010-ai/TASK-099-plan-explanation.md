@@ -1,7 +1,7 @@
 # TASK-099 — Plan explanation
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-010-ai — AI

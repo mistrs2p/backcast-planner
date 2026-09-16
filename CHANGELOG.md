@@ -377,6 +377,11 @@
   outcomes were decomposed, its repository port, and the
   `generate_tasks` use case (TASK-098).
 
+- Plan explanation: docs/09's sixth AI operation — the
+  `PlanExplanation` record with provenance tied to the plan and the
+  snapshot it reads, its repository port, and the `explain_plan`
+  use case (TASK-099).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with
