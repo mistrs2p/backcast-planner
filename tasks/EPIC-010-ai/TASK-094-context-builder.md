@@ -1,7 +1,7 @@
 # TASK-094 — Context builder
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-010-ai — AI

@@ -350,6 +350,12 @@
   riding in the config object, the raising `text` property caught
   into `ProviderCallError` (TASK-093).
 
+- Context builder: operation-specific LLM request assembly —
+  fixed per-operation system instructions, curated record renderers
+  that select fields rather than dump records, and composers whose
+  signatures take exactly the records each operation needs
+  (TASK-094).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with
