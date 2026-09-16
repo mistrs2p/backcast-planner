@@ -320,6 +320,12 @@
   (unestimated tasks surface, not zeroed), one plan version; the
   third and widest level-2 scope (TASK-087).
 
+- Plan comparison: `compare_plans` — current vs candidate under
+  the same buffer and capacity; feasibility first, then strictly
+  more slack, ties keep the current plan (minimum-change), with
+  both FeasibilityResults and the workload delta exposed
+  (TASK-088).
+
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
