@@ -1,5 +1,22 @@
 name: CI
 
+# CI/CD pipeline (TASK-006 baseline, extended by TASK-118).
+#
+# Every AGENTS.md validation gate runs here, as parallel jobs:
+#   validate — the backend test suite and every repository validator
+#              (contracts, rules, state, progress, docker artifacts,
+#              and this workflow's own structural checks)
+#   web      — the frontend gates: npm run verify (shell + design
+#              checks, typecheck) and the production build
+#   docker   — docs/14's pipeline step "build": both production
+#              images must build from a clean checkout
+#
+# The CD side beyond proving buildability — publishing images and
+# deploying them — is deliberately not here: there is no production
+# target or registry credential yet, and ADR-009's one-origin baking
+# makes a published image environment-specific. The deployment flow
+# arrives with TASK-128/TASK-132 (ADR-010).
+
 on:
   push:
     branches: [main]
@@ -43,6 +60,51 @@ jobs:
       - name: Progress docs check
         run: python scripts/progress.py check
 
+      - name: Docker artifact checks
+        run: python scripts/check_docker.py
+
+      - name: CI workflow checks
+        run: python scripts/check_ci.py
+
       - name: Conventional commit check (pull requests)
         if: github.event_name == 'pull_request'
         run: python scripts/git_workflow.py check-commits --base origin/main
+
+  web:
+    name: Web verify and build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify (shell, design, and type checks)
+        run: npm run verify
+
+      - name: Build
+        run: npm run build
+
+  docker:
+    name: Docker image build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build the production images
+        # Exercises both Dockerfiles exactly as the local environment
+        # does — a change that breaks the images fails CI here, not
+        # at deploy time.
+        run: docker compose build

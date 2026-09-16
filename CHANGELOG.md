@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- CI/CD: the CI workflow now runs every validation gate as parallel
+  jobs — backend suite and validators, web verify/build on pinned
+  Node 22, and a `docker compose build` of both production images —
+  with `scripts/check_ci.py` pinning the workflow's structural
+  invariants (TASK-118; ADR-010).
 - Production Docker: multi-stage non-root healthchecked images for
   the API and web apps (`apps/api/Dockerfile`, `apps/web/Dockerfile`),
   a Docker-first root `docker-compose.yml` (web gated on the api health
