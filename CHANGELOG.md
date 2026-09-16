@@ -327,6 +327,12 @@
   and the overwork direction through sustainability's utilization
   (TASK-089).
 
+- LLM provider interface: the provider-neutral AI port —
+  `Message`/`LLMRequest`/`LLMResponse` vocabulary and the
+  `LLMProvider` ABC with one failure currency for vendor trouble
+  (`ProviderCallError`) and one for invariant violations
+  (`LLMProviderError`); vendor adapters implement it (TASK-090).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with

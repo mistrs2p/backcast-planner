@@ -1,7 +1,7 @@
 # TASK-090 — LLM provider interface
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-010-ai — AI
