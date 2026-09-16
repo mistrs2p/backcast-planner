@@ -309,6 +309,12 @@
   versions, and `ReplanScope` (local/regional/global) joins the
   replanning vocabulary (TASK-085).
 
+- Regional replan: `dependency_region` (a seed's dependency-connected
+  group, both directions, topologically ordered), `TaskRevision`,
+  and `replan_tasks_regionally` — one plan version for the whole
+  group with the summed workload delta; `PlanChangeSet`'s task
+  dimension generalized to `revised_task_ids` (TASK-086).
+
 - Capacity integration tests: the epic-closing suite wiring recurrence
   and exceptions into the capacity chain and on into
   `execute_backcasting` — feasible and infeasible end-to-end paths,
