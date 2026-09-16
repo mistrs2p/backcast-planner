@@ -362,6 +362,11 @@
   composing context builder, provider port, and record
   (TASK-095).
 
+- Strategy generation: the AI half of pipeline step 8 — the
+  `StrategyGeneration` record with provenance, its repository port,
+  and the `generate_strategies` use case feeding the existing
+  deterministic acceptance (TASK-096).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with
