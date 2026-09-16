@@ -2,7 +2,7 @@
 
 ## Current
 - Phase: Implementation
-- Current Task: TASK-082 (Cooldown)
+- Current Task: TASK-083 (Replanning policy)
 - Current Epic: EPIC-009 Replanning
 
 ## Completed
@@ -1013,6 +1013,20 @@
   including the wiring where one hour a week on an 8h task (slips
   7h/6h/5h, cumulative snapshots) confirms at three weeks, and a
   single bad week between clear ones never does.
+
+- TASK-082 — Cooldown (2026-09-16): the timed half of docs/08's
+  stability controls — persistence asks "has this held?", cooldown
+  asks "did we just act on it?". `domain/cooldown.py` with
+  `Cooldown(period)` (non-negative timedelta; zero is no cooldown at
+  all), `in_cooldown(cooldown, last_action_at, *, at)` — suppressed
+  strictly within the period, free at the moment it ends — and
+  `cooldown_remaining` (the suppressed time left, zero when free).
+  The clock is deliberately just a clock: which actions start which
+  clocks (per trigger kind, per plan, per run) is bookkeeping for
+  the replanning policy (TASK-083) and the decision engine
+  (TASK-084). `at` must not precede the action it asks about.
+  15 tests, including the wiring where a re-confirmed condition
+  waits out its week before the system may act again.
 
 ## Notes
 - This file is historical. Keep the current state in `PROJECT_STATE.json`.
