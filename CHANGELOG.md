@@ -387,6 +387,11 @@
   outcome-title, and TaskProposal shapes, plus the
   retry-limited `generate_validated_*` use cases (TASK-100).
 
+- Tool permissions: docs/09's permission-validation and
+  tool-allowlist guardrails — the ToolPermissions allowlist over
+  the six AI operations, the enforcing PermittedProvider wrapper,
+  and the AI_OPERATIONS environment wiring (TASK-101).
+
 - Plan comparison: `compare_plans` — current vs candidate under
   the same buffer and capacity; feasibility first, then strictly
   more slack, ties keep the current plan (minimum-change), with

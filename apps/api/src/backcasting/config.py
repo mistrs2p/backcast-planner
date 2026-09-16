@@ -16,6 +16,9 @@ Rules:
 - ``LLM_PROVIDER``, when set, must be one of the providers supported by the
   LLM abstraction (openai / anthropic / google); ``LLM_MODEL`` requires a
   provider.
+- ``AI_OPERATIONS``, when set, must be a comma-separated list of known AI
+  operation names (the tool allowlist, docs/09); unset permits all six.
+  An empty value denies all — a deployment with no AI.
 
 This module is stdlib-only by design: dependency selection and pinning happen
 in TASK-009 (technology verification). It lives in the application layer, not
@@ -30,6 +33,8 @@ from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import Mapping
+
+from backcasting.domain.tool_permissions import AI_OPERATIONS
 
 PLACEHOLDER_SECRETS = {"replace-me", "change-me", "secret", "password", "your-jwt-secret"}
 
@@ -62,6 +67,7 @@ class Settings:
     jwt_secret: str
     llm_provider: str | None = None
     llm_model: str | None = None
+    ai_operations: frozenset[str] = frozenset(AI_OPERATIONS)
 
     @property
     def is_production(self) -> bool:
@@ -131,6 +137,25 @@ def _validate(raw: Mapping[str, str]) -> Settings:
     if llm_model is not None and llm_provider is None:
         problems.append("LLM_MODEL requires LLM_PROVIDER to be set")
 
+    ai_operations_raw = raw.get("AI_OPERATIONS")
+    if ai_operations_raw is None:
+        ai_operations = frozenset(AI_OPERATIONS)
+    elif ai_operations_raw.strip():
+        ai_operations = frozenset(
+            part.strip()
+            for part in ai_operations_raw.split(",")
+            if part.strip()
+        )
+        unknown = sorted(ai_operations - AI_OPERATIONS)
+        if unknown:
+            problems.append(
+                f"AI_OPERATIONS contains unknown operations: "
+                f"{', '.join(unknown)} — the known operations are: "
+                f"{', '.join(sorted(AI_OPERATIONS))}"
+            )
+    else:
+        ai_operations = frozenset()
+
     is_production = app_env_raw == AppEnvironment.PRODUCTION.value
     if is_production and jwt_secret and jwt_secret.lower() not in PLACEHOLDER_SECRETS:
         if len(jwt_secret) < MIN_PRODUCTION_SECRET_LENGTH:
@@ -150,6 +175,7 @@ def _validate(raw: Mapping[str, str]) -> Settings:
         jwt_secret=jwt_secret,
         llm_provider=llm_provider,
         llm_model=llm_model,
+        ai_operations=ai_operations,
     )
 
 

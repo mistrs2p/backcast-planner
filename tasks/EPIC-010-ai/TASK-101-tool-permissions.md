@@ -1,7 +1,7 @@
 # TASK-101 — Tool permissions
 
 ## Status
-READY
+COMPLETED
 
 ## Epic
 EPIC-010-ai — AI
